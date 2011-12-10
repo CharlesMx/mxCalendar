@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<model package="mxcalendars" baseClass="xPDOObject" platform="mysql" defaultEngine="MyISAM">
+    <object class="mxCalendarEvents" table="mxcalendars_events" extends="xPDOSimpleObject">
+        <field key="title" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="description" dbtype="text" phptype="string" null="false" default=""/>
+	<field key="categoryid" dbtype="int" precision="10" phptype="integer" null="false" default="" />
+	<field key="link" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+	<field key="linkrel" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+	<field key="linktarget" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+	<field key="location" dbtype="text" phptype="string" null="false" default=""/>
+	<field key="map" dbtype="boolean" phptype="boolean" null="false" default="0"/>
+	<field key="startdate" dbtype="int" precision="20" phptype="integer" null="true"/>
+	<field key="enddate" dbtype="int" precision="20" phptype="integer" null="true"/>
+	<field key="repeating" dbtype="boolean" phptype="boolean" null="false" default="0"/>
+	<field key="repeattype" dbtype="text" phptype="string" null="true"/>
+	<field key="repeaton" dbtype="varchar" precision="15" phptype="string" null="true"/>
+	<field key="repeatfrequency" dbtype="int" precision="2" phptype="int" null="true"/>
+	<field key="repeatenddate" dbtype="int" precision="20" phptype="int" null="true"/>
+	    
+	<field key="createdon" dbtype="int" precision="20" phptype="integer" null="true"/>
+	<field key="createdby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
+	<field key="editedon" dbtype="int" precision="20" phptype="integer" null="true"/>
+	<field key="editedby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
+ 
+	<aggregate alias="CategoryId" class="mxCalendarCategories" local="categoryid" foreign="id" cardinality="one" owner="foreign"/>
+	<aggregate alias="WebUserGroup" class="mxCalendarEventWUG" local="id" foreign="webusergroup" cardinality="many" owner="foreign"/> 
+        <aggregate alias="CreatedBy" class="modUser" local="createdby" foreign="id" cardinality="one" owner="foreign"/>
+        <aggregate alias="EditedBy" class="modUser" local="editedby" foreign="id" cardinality="one" owner="foreign"/>
+    </object>
+    
+    <object class="mxCalendarEventWUG" table="mxcalendars_wug" extends="xPDOSimpleObject">
+		<field key="eventid" dbtype="int" precision="20" phptype="integer" null="false"/>
+		<field key="webusergroup" dbtype="int" precision="10" phptype="integer" null="false"/>
+		<composite alias="WebUserGroup" class="mxCalendarEvents" local="webusergroup" foreign="modUserGroup" cardinality="many"/>
+		<composite alias="EventId" class="mxCalendarEvents" local="eventid" foreign="id" cardinality="many" owner="local" />
+    </object>
+
+    <object class="mxCalendarCategories" table="mxcalendars_categories" extends="xPDOSimpleObject">
+        <field key="name" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="isdefault" dbtype="boolean" phptype="boolean" null="false" default="0"/>
+        <field key="foregroundcss" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="backgroundcss" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="inlinecss" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="disable" dbtype="boolean" phptype="boolean" null="false" default="0"/>
+        <field key="active" dbtype="boolean" phptype="boolean" null="false" default="1"/>
+
+        <field key="createdon" dbtype="int" precision="20" phptype="integer" null="true"/>
+        <field key="createdby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
+        <field key="editedon" dbtype="int" precision="20" phptype="integer" null="true"/>
+        <field key="editedby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
+
+	<aggregate alias="CategoryId" class="mxCalendar" local="id" foreign="categoryid" cardinality="many" owner="local"/>
+        <aggregate alias="CreatedBy" class="modUser" local="createdby" foreign="id" cardinality="one" owner="foreign"/>
+        <aggregate alias="EditedBy" class="modUser" local="editedby" foreign="id" cardinality="one" owner="foreign"/>
+    </object>
+
+    <object class="mxCalendarSettings" table="mxcalendars_settings" extends="xPDOSimpleObject">
+        <field key="name" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="value" dbtype="text" phptype="string" null="false" default=""/>
+
+        <field key="editedon" dbtype="int" precision="20" phptype="integer" null="true"/>
+        <field key="editedby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
+        <aggregate alias="EditedBy" class="modUser" local="editedby" foreign="id" cardinality="one" owner="foreign"/>
+    </object>
+</model>
