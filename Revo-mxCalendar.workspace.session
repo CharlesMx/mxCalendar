@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Session Name="/var/www/sites/modxrevo/mxcalendars/Revo-mxCalendar.workspace">
-  <int Value="3" Name="m_selectedTab"/>
+  <int Value="6" Name="m_selectedTab"/>
   <wxString Value="/var/www/sites/modxrevo/mxcalendars/Revo-mxCalendar.workspace" Name="m_workspaceName"/>
   <TabInfoArray Name="TabInfoArray">
     <TabInfo>
