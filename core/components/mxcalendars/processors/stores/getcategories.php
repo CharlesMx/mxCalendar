@@ -18,6 +18,7 @@ $c->where(array(
 	'active' => 1,
 ));
 
+$c->sortby('isdefault','ASC');
 $c->sortby('name','ASC');
 $categories = $modx->getCollection('mxCalendarCategories', $c);
 

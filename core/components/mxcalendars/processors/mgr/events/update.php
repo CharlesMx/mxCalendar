@@ -9,13 +9,17 @@ if(!@file_exists(dirname(dirname(__FILE__)).'/mxcHelper.php') ) {
 
 //-- Check for the required calendar ID
 if (empty($scriptProperties['id'])) 
-	return $modx->error->failure($modx->lexicon('mxcalendars.err_ns'));
+	return $modx->error->failure("ID Not found ".$modx->lexicon('mxcalendars.err_ns'));
 
 //-- Now check to make sure that the calendar item exist and can be updated
 $mxcalendar = $modx->getObject('mxCalendarEvents',$scriptProperties['id']);
 if (empty($mxcalendar)) 
 	return $modx->error->failure($modx->lexicon('mxcalendars.err_nf'));
 
+//-- Both date and time are always posted back
+$scriptProperties['startdate'] = tstamptotime($scriptProperties['startdate_date'],$scriptProperties['startdate_time'],true);
+$scriptProperties['enddate'] = tstamptotime($scriptProperties['enddate_date'],$scriptProperties['enddate_time'],true);
+$scriptProperties['repeatenddate'] = tstamptotime($scriptProperties['repeatenddate'],$scriptProperties['enddate_time'],true);
 //-- Set the edited by user id based on authenticated user
 if(empty($scriptProperties['editedby'])){
     $scriptProperties['editedby'] = $modx->getLoginUserID();
@@ -35,7 +39,7 @@ $mxcalendar->fromArray($scriptProperties);
  
 //-- Try to update calendar item
 if ($mxcalendar->save() == false) {
-    return $modx->error->failure($modx->lexicon('mxcalendars.err_save'));
+    return $modx->error->failure('bb: '.$modx->lexicon('mxcalendars.err_save'));
 }
 
 //-- Return success message if no error was found on update (save)

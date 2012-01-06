@@ -17,15 +17,20 @@ $output = '';
  *
 
  $m = $modx->getManager();
+ $created_calendar = $m->removeObjectContainer('mxCalendarEvents');
+ $created_cats = $m->removeObjectContainer('mxCalendarCategories');
+ $created_settings = $m->removeObjectContainer('mxCalendarSettings');
+ $created_eventWUG = $m->removeObjectContainer('mxCalendarEventWUG');
+
  $created_calendar = $m->createObjectContainer('mxCalendarEvents');
  $created_cats = $m->createObjectContainer('mxCalendarCategories');
  $created_settings = $m->createObjectContainer('mxCalendarSettings');
  $created_eventWUG = $m->createObjectContainer('mxCalendarEventWUG');
-
+*/
 return ($created_calendar ? 'Table created calendar.' : 'Table not created.').
         ($created_cats ? 'Table created categories.' : 'Table not created categories.').
         ($created_settings ? 'Table created settings.' : 'Table not created settings.');
-*/
+
 
 $mxcalendars = $modx->getCollection('mxCalendarEvents');
 $output = "<br />Total Events: ".count($mxcalendars);

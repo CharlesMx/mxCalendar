@@ -4,12 +4,12 @@ var mxCalendars = function(config) {
 };
 Ext.extend(mxCalendars,Ext.Component,{
     	initComponent: function() {
-	    this.siteId;
+	    //this.siteId = iteId;
 	    this.stores = {};
 	    this.ajax = new Ext.data.Connection({
 			disableCaching: true,
 			extraParams: {
-				HTTP_MODAUTH: this.siteId
+				//HTTP_MODAUTH: this.siteId
 			}
 		});
     	},

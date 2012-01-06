@@ -10,7 +10,8 @@ $xpdo_meta_map['mxCalendarEvents']= array (
     'link' => '',
     'linkrel' => '',
     'linktarget' => '',
-    'location' => '',
+    'location_name' => '',
+    'location_address' => '',
     'map' => 0,
     'startdate' => NULL,
     'enddate' => NULL,
@@ -19,6 +20,7 @@ $xpdo_meta_map['mxCalendarEvents']= array (
     'repeaton' => NULL,
     'repeatfrequency' => NULL,
     'repeatenddate' => NULL,
+    'repeatdates' => NULL,
     'createdon' => NULL,
     'createdby' => 0,
     'editedon' => NULL,
@@ -73,7 +75,15 @@ $xpdo_meta_map['mxCalendarEvents']= array (
       'null' => false,
       'default' => '',
     ),
-    'location' => 
+    'location_name' => 
+    array (
+      'dbtype' => 'varchar',
+      'precision' => '255',
+      'phptype' => 'string',
+      'null' => false,
+      'default' => '',
+    ),
+    'location_address' => 
     array (
       'dbtype' => 'text',
       'phptype' => 'string',
@@ -110,8 +120,9 @@ $xpdo_meta_map['mxCalendarEvents']= array (
     ),
     'repeattype' => 
     array (
-      'dbtype' => 'text',
-      'phptype' => 'string',
+      'dbtype' => 'int',
+      'precision' => '1',
+      'phptype' => 'integer',
       'null' => true,
     ),
     'repeaton' => 
@@ -133,6 +144,12 @@ $xpdo_meta_map['mxCalendarEvents']= array (
       'dbtype' => 'int',
       'precision' => '20',
       'phptype' => 'int',
+      'null' => true,
+    ),
+    'repeatdates' => 
+    array (
+      'dbtype' => 'text',
+      'phptype' => 'string',
       'null' => true,
     ),
     'createdon' => 

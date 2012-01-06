@@ -106,6 +106,14 @@ $xpdo_meta_map['mxCalendarCategories']= array (
   ),
   'aggregates' => 
   array (
+    'CategoryId' => 
+    array (
+      'class' => 'mxCalendar',
+      'local' => 'id',
+      'foreign' => 'categoryid',
+      'cardinality' => 'many',
+      'owner' => 'local',
+    ),
     'CreatedBy' => 
     array (
       'class' => 'modUser',

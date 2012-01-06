@@ -23,11 +23,14 @@ $_lang['mxcalendars.err_ae'] = 'A calendar item with that name already exists.';
 $_lang['mxcalendars.err_nf'] = 'Calendar item not found.';
 $_lang['mxcalendars.err_ns'] = 'Calendar item not specified.';
 $_lang['mxcalendars.err_ns_name'] = 'Please specify a name for the calendar item.';
+$_lang['mxcalendars.err_ns_title'] = 'Please specify a title for the calendar item.';
 $_lang['mxcalendars.err_remove'] = 'An error occurred while trying to remove the calendar item.';
 $_lang['mxcalendars.err_save'] = 'An error occurred while trying to save the calendar item.';
 $_lang['mxcalendars.err_event_req_name'] = 'Name is required';
 $_lang['mxcalendars.err_event_req_startdate'] = 'Start Date is required';
 $_lang['mxcalendars.err_event_req_starttime'] = 'Start Time is required';
+$_lang['mxcalendars.err_event_req_enddate'] = 'End Date is required';
+$_lang['mxcalendars.err_event_req_endtime'] = 'End Time is required';
 
 
 $_lang['mxcalendars.mxcalendars_remove'] = 'Remove Calendar Item';

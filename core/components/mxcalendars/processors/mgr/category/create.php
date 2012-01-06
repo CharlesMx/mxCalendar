@@ -20,7 +20,14 @@ $scriptProperties['createdon'] = time();
 
 //-- Check for any errors
 if ($modx->error->hasError()) { return $modx->error->failure(); }
- 
+
+if(isset($scriptProperties['active']))
+    $scriptProperties['active']=1;
+if(isset($scriptProperties['disabled']))
+    $scriptProperties['disabled'] = 1;
+if(isset($scriptProperties['isdefault']))
+    $scriptProperties['isdefault']=1;
+
 //-- Get the mxCalendar object and set the values from form
 $mxcalendar = $modx->newObject('mxCalendarCategories');
 $mxcalendar->fromArray($scriptProperties);

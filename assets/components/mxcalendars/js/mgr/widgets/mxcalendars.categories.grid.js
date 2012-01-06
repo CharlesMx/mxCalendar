@@ -66,7 +66,7 @@ mxcCore.grid.categories = function(config) {
 					});
 				},scope:this}
 			}
-		},{
+		},'->',{
 		   text:_('mxcalendars.btn_create_cat')
 		   ,handler: { xtype: 'mxcalendars-window-category-create' ,blankValues: true }
 		}]
@@ -188,10 +188,14 @@ mxcCore.window.CreateCat = function(config) {
             xtype: 'checkbox'
             ,fieldLabel: _('mxcalendars.category_disabled_col_label')
             ,name: 'disabled'
+            ,checked: false
+            ,value: 1
         },{
             xtype: 'checkbox'
             ,fieldLabel: _('mxcalendars.category_active_col_label')
             ,name: 'active'
+            ,checked: true
+            ,value: 1
         }]
     });
     mxcCore.window.CreateCat.superclass.constructor.call(this,config);

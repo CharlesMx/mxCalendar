@@ -7,15 +7,17 @@
 	<field key="link" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
 	<field key="linkrel" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
 	<field key="linktarget" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
-	<field key="location" dbtype="text" phptype="string" null="false" default=""/>
+	<field key="location_name" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="location_address" dbtype="text" phptype="string" null="false" default=""/>
 	<field key="map" dbtype="boolean" phptype="boolean" null="false" default="0"/>
 	<field key="startdate" dbtype="int" precision="20" phptype="integer" null="true"/>
 	<field key="enddate" dbtype="int" precision="20" phptype="integer" null="true"/>
 	<field key="repeating" dbtype="boolean" phptype="boolean" null="false" default="0"/>
-	<field key="repeattype" dbtype="text" phptype="string" null="true"/>
+	<field key="repeattype" dbtype="int" precision="1" phptype="integer" null="true"/>
 	<field key="repeaton" dbtype="varchar" precision="15" phptype="string" null="true"/>
 	<field key="repeatfrequency" dbtype="int" precision="2" phptype="int" null="true"/>
 	<field key="repeatenddate" dbtype="int" precision="20" phptype="int" null="true"/>
+        <field key="repeatdates" dbtype="text" phptype="string" null="true" />
 	    
 	<field key="createdon" dbtype="int" precision="20" phptype="integer" null="true"/>
 	<field key="createdby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
@@ -29,10 +31,10 @@
     </object>
     
     <object class="mxCalendarEventWUG" table="mxcalendars_wug" extends="xPDOSimpleObject">
-		<field key="eventid" dbtype="int" precision="20" phptype="integer" null="false"/>
-		<field key="webusergroup" dbtype="int" precision="10" phptype="integer" null="false"/>
-		<composite alias="WebUserGroup" class="mxCalendarEvents" local="webusergroup" foreign="modUserGroup" cardinality="many"/>
-		<composite alias="EventId" class="mxCalendarEvents" local="eventid" foreign="id" cardinality="many" owner="local" />
+        <field key="eventid" dbtype="int" precision="20" phptype="integer" null="false"/>
+        <field key="webusergroup" dbtype="int" precision="10" phptype="integer" null="false"/>
+        <composite alias="WebUserGroup" class="mxCalendarEvents" local="webusergroup" foreign="modUserGroup" cardinality="many"/>
+        <composite alias="EventId" class="mxCalendarEvents" local="eventid" foreign="id" cardinality="many" owner="local" />
     </object>
 
     <object class="mxCalendarCategories" table="mxcalendars_categories" extends="xPDOSimpleObject">

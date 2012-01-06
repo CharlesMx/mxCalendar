@@ -26,10 +26,10 @@ $xpdo_meta_map['mxCalendarEventWUG']= array (
   ),
   'composites' => 
   array (
-    'EventWUG' => 
+    'WebUserGroup' => 
     array (
       'class' => 'mxCalendarEvents',
-      'local' => 'id',
+      'local' => 'webusergroup',
       'foreign' => 'modUserGroup',
       'cardinality' => 'many',
     ),

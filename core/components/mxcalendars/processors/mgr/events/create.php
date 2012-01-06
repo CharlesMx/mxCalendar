@@ -1,26 +1,27 @@
 <?php
-//-- Validation for the Name field
-if (empty($scriptProperties['name'])) {
-    $modx->error->addField('name',$modx->lexicon('mxcalendars.err_ns_name'));
+//-- A little date helper function
+if(!@file_exists(dirname(dirname(__FILE__)).'/mxcHelper.php') ) {
+    echo 'can not include mxcHelper file.';
 } else {
-    //-- Enforce a duplicate name check
-    /*
-    $alreadyExists = $modx->getObject('mxCalendarEvents',array('name' => $scriptProperties['name']));
-    if ($alreadyExists) {
-        $modx->error->addField('name',$modx->lexicon('mxcalendars.err_ae'));
-    }
-    */
+   include(dirname(dirname(__FILE__)).'/mxcHelper.php');
 }
 
-
-if(empty($scriptProperties['startdate_date'])){
+//-- Server Side Validation of Required Fields
+if (empty($scriptProperties['title']))
+    $modx->error->addField('title',$modx->lexicon('mxcalendars.err_ns_title'));
+if(empty($scriptProperties['startdate_date']))
     $modx->error->addField('startdate_date', $modx->lexicon('mxcalendars.err_event_req_startdate'));
-    return $modx->error->failure(json_encode($_POST));
-}
 if(empty($scriptProperties['startdate_time']))
     $modx->error->addField('startdate_time', $modx->lexicon('mxcalendars.err_event_req_starttime'));
+if(empty($scriptProperties['enddate_date']))
+    $modx->error->addField('enddate_date', $modx->lexicon('mxcalendars.err_event_req_enddate'));
+if(empty($scriptProperties['enddate_time']))
+    $modx->error->addField('enddate_time', $modx->lexicon('mxcalendars.err_event_req_endtime'));
 
-//return $modx->error->failure('Testing error');
+//-- Both date and time are always posted back
+$scriptProperties['startdate'] = tstamptotime($scriptProperties['startdate_date'],$scriptProperties['startdate_time'],true);
+$scriptProperties['enddate'] = tstamptotime($scriptProperties['enddate_date'],$scriptProperties['enddate_time'],true);
+$scriptProperties['repeatenddate'] = tstamptotime($scriptProperties['repeatenddate'],$scriptProperties['enddate_time'],true);
 
 //-- Set the createdby property of the current manager user
 if(empty($scriptProperties['createdby'])){
