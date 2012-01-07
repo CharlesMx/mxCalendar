@@ -27,6 +27,7 @@ $_lang['mxcalendars.err_ns_title'] = 'Please specify a title for the calendar it
 $_lang['mxcalendars.err_remove'] = 'An error occurred while trying to remove the calendar item.';
 $_lang['mxcalendars.err_save'] = 'An error occurred while trying to save the calendar item.';
 $_lang['mxcalendars.err_event_req_name'] = 'Name is required';
+$_lang['mxcalendars.err_event_req_category'] = 'Category is required';
 $_lang['mxcalendars.err_event_req_startdate'] = 'Start Date is required';
 $_lang['mxcalendars.err_event_req_starttime'] = 'Start Time is required';
 $_lang['mxcalendars.err_event_req_enddate'] = 'End Date is required';
