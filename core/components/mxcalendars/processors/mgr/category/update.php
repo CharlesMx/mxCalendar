@@ -9,7 +9,14 @@ if (empty($scriptProperties['id']))
 $mxcalendar = $modx->getObject('mxCalendarCategories',$scriptProperties['id']);
 if (empty($mxcalendar)) 
 	return $modx->error->failure($modx->lexicon('mxcalendars.mxcalendars_err_nf'));
-/*
+
+if(isset($scriptProperties['active']))
+    $scriptProperties['active']=1;
+if(isset($scriptProperties['disable']))
+    $scriptProperties['disable'] = 1;
+if(isset($scriptProperties['isdefault']))
+    $scriptProperties['isdefault']=1;
+
 //-- Set the edited by user id based on authenticated user
 if(empty($scriptProperties['editedby'])){
     $scriptProperties['editedby'] = $modx->getLoginUserID();
@@ -17,7 +24,7 @@ if(empty($scriptProperties['editedby'])){
 
 //-- Set the edited date/time stamp
 $scriptProperties['editedon'] = time();
-*/
+
 
 //-- Set mxcalendar fields
 $mxcalendar->fromArray($scriptProperties);

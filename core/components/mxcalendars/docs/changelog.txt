@@ -1,0 +1,15 @@
+Changelog file for mxCalendar component.
+
+
+==================================== 
+mxCalendar 0.0.2-beta
+==================================== 
+- Bug fix: Issue with the width of the form fields in the repeating event area
+- Bug fix: Added a new install option to automatically create the default category with the provided name
+- Bug fix: PHP Error (< 5.3.0) on display of the snippet with the DateTime class
++ Enhancement: Set the containing window to automatically resize when the repeating event section expands/collapse
+
+==================================== 
+mxCalendar 0.0.1-beta
+==================================== 
+- First release to the beta group

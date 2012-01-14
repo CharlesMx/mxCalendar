@@ -9,6 +9,8 @@ mxcCore.grid.categories = function(config) {
         ,remoteSort: true
         ,anchor: '97%'
         ,autoExpandColumn: 'name'
+        ,save_action: 'mgr/category/updatefromgrid' // Support the inline editing
+	,autosave: true // Support the inline editing
         ,columns: [{
             header: _('id')
             ,dataIndex: 'id'
@@ -47,7 +49,7 @@ mxcCore.grid.categories = function(config) {
             header: _('mxcalendars.category_active_col_label')
             ,dataIndex: 'active'
             ,sortable: true
-            //,editor: { xtype: 'checkbox' }
+            ,editor: { xtype: 'checkbox' }
         }],tbar:[{
 			xtype: 'textfield'
 			,id: 'mxcalendars-search-categories-filter'
@@ -126,24 +128,44 @@ Ext.reg('mxcalendars-grid-categories',mxcCore.grid.categories);
 mxcCore.window.UpdateCat = function(config) {
     config = config || {};
     Ext.applyIf(config,{
-        title: _('mxcalendars.mxcalendars_update')
+        title: ''+_('mxcalendars.label_window_create')
         ,url: mxcCore.config.connectorUrl
+        ,width: 'auto'
         ,baseParams: {
             action: 'mgr/category/update'
         }
-        ,fields: [{
-            xtype: 'hidden'
-            ,name: 'id'
-        },{
+        ,fields: [{xtype:'hidden',name:'id'},{
             xtype: 'textfield'
-            ,fieldLabel: _('mxcalendars.category_name_col_label')
+            ,fieldLabel:_('mxcalendars.category_name_col_label')
             ,name: 'name'
-            ,width: 300
         },{
             xtype: 'checkbox'
             ,fieldLabel: _('mxcalendars.category_isdefault_col_label')
             ,name: 'isdefault'
-            ,width: 300
+        },{
+            xtype: 'textfield'
+            ,fieldLabel: _('mxcalendars.category_foregroundcss_col_label')
+            ,name: 'foregroundcss'
+        },{
+            xtype: 'textfield'
+            ,fieldLabel: _('mxcalendars.category_backgroundcss_col_label')
+            ,name: 'backgroundcss'
+        },{
+            xtype: 'textfield'
+            ,fieldLabel: _('mxcalendars.category_inlinecss_col_label')
+            ,name: 'inlinecss'
+        },{
+            xtype: 'checkbox'
+            ,fieldLabel: _('mxcalendars.category_disabled_col_label')
+            ,name: 'disable'
+            ,checked: false
+            ,value: 1
+        },{
+            xtype: 'checkbox'
+            ,fieldLabel: _('mxcalendars.category_active_col_label')
+            ,name: 'active'
+            ,checked: true
+            ,value: 1
         }]
     });
     mxcCore.window.UpdateCat.superclass.constructor.call(this,config);
@@ -187,7 +209,7 @@ mxcCore.window.CreateCat = function(config) {
         },{
             xtype: 'checkbox'
             ,fieldLabel: _('mxcalendars.category_disabled_col_label')
-            ,name: 'disabled'
+            ,name: 'disable'
             ,checked: false
             ,value: 1
         },{

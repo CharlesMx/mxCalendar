@@ -4,7 +4,7 @@ mxcCore.panel.Home = function(config) {
         border: false
         ,baseCls: 'modx-formpanel'
         ,items: [{
-            html: '<img src="/mxcalendars/assets/components/mxcalendars/images/mxcalendar.png" alt="'+_('mxcalendars.management')+'" />'
+            html: '<img src="../assets/components/mxcalendars/images/mxcalendar.png" alt="'+_('mxcalendars.management')+'" />'
             ,border: false
             ,cls: 'modx-page-header'
         },{
@@ -38,13 +38,13 @@ mxcCore.panel.Home = function(config) {
                         xtype: 'mxcalendars-grid-categories'
                         ,preventRender: true
                     }]
-				},{
+				}/*,{
 				// Third Tab
 				title: _('mxcalendars.tab_settings')
 				,items: [{
 
-                    }]
-				}]
+                                       }]
+				}*/]
         }]
     });
     mxcCore.panel.Home.superclass.constructor.call(this,config);

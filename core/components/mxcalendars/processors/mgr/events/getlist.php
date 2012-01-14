@@ -33,17 +33,28 @@ $c->innerJoin('mxCalendarCategories','CategoryId');
 $c->innerJoin('categoryid','id','mxCalendarEvents.categoryid = CategoryId');
 if (!empty($query)) {
     $c->where(array(
-        'name:LIKE' => '%'.$query.'%',
+        'title:LIKE' => '%'.$query.'%',
         'OR:description:LIKE' => '%'.$query.'%',
+        'OR:CategoryId.name:LIKE'=>'%'.$query.'%',
     ));
 } else {
     if($historical){
         $c->where(array(
-            'enddate:<=' => time()
+            'repeating:=' => 0
+            ,'AND:enddate:<=' => time()
+            ,array(
+                'OR:repeating:='=>1
+                ,'AND:repeatenddate:<=' => time()
+            )
         ));
     } else {
         $c->where(array(
-            'enddate:>=' => time()
+            'repeating:=' => 0
+            ,'AND:enddate:>=' => time()
+            ,array(
+                'OR:repeating:='=>1
+                ,'AND:repeatenddate:>=' => time()
+            )
         ));
     }
 }
@@ -59,14 +70,15 @@ foreach ($mxcalendars as $mxc) {
     //-- Split the single unix time stamp into date and time for UI
     $mxcArray['startdate_date'] = strftime('%m-%d-%Y',$mxc->get('startdate'));  
     $mxcArray['startdate_time'] = strftime('%I:%M %p',$mxc->get('startdate'));
-	$mxcArray['startdate'] = strftime('%m-%d-%Y', $mxc->get('startdate')); //strftime('%m-%d-%Y %I:%M %p',$mxc->get('startdate'));
-	
-	$mxcArray['enddate_date'] = strftime('%m-%d-%Y',$mxc->get('enddate'));  
+    $mxcArray['startdate'] = strftime('%m-%d-%Y', $mxc->get('startdate')); //strftime('%m-%d-%Y %I:%M %p',$mxc->get('startdate'));
+
+    $mxcArray['enddate_date'] = strftime('%m-%d-%Y',$mxc->get('enddate'));  
     $mxcArray['enddate_time'] = strftime('%I:%M %p',$mxc->get('enddate'));
-	$mxcArray['enddate'] = strftime('%m-%d-%Y %I:%M %p',$mxc->get('enddate'));
-        
-        $mxcArray['repeatenddate'] = strftime('%m-%d-%Y',$mxc->get('repeatenddate'));  
-	$list[]= $mxcArray;
+    $mxcArray['enddate'] = strftime('%m-%d-%Y %I:%M %p',$mxc->get('enddate'));
+
+    $ed = $mxc->get('repeatenddate');
+    $mxcArray['repeatenddate'] = !empty($ed) ? strftime('%m-%d-%Y',$mxc->get('repeatenddate')) : null;  
+    $list[]= $mxcArray;
 }
 return $this->outputArray($list,$count);
 

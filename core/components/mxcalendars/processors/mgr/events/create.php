@@ -9,6 +9,8 @@ if(!@file_exists(dirname(dirname(__FILE__)).'/mxcHelper.php') ) {
 //-- Server Side Validation of Required Fields
 if (empty($scriptProperties['title']))
     $modx->error->addField('title',$modx->lexicon('mxcalendars.err_ns_title'));
+if (empty($scriptProperties['categoryid']))
+    $modx->error->addField('categoryid',$modx->lexicon('mxcalendars.err_event_req_category'));
 if(empty($scriptProperties['startdate_date']))
     $modx->error->addField('startdate_date', $modx->lexicon('mxcalendars.err_event_req_startdate'));
 if(empty($scriptProperties['startdate_time']))
@@ -21,7 +23,23 @@ if(empty($scriptProperties['enddate_time']))
 //-- Both date and time are always posted back
 $scriptProperties['startdate'] = tstamptotime($scriptProperties['startdate_date'],$scriptProperties['startdate_time'],true);
 $scriptProperties['enddate'] = tstamptotime($scriptProperties['enddate_date'],$scriptProperties['enddate_time'],true);
-$scriptProperties['repeatenddate'] = tstamptotime($scriptProperties['repeatenddate'],$scriptProperties['enddate_time'],true);
+$scriptProperties['repeatenddate'] = !empty($scriptProperties['repeatenddate'])?tstamptotime($scriptProperties['repeatenddate'],$scriptProperties['enddate_time'],true):null;
+
+//-- Check if we have all the data to create the repeating field information
+if($scriptProperties['repeating']==1 && isset($scriptProperties['repeattype']) && isset($scriptProperties['repeatfrequency']) && !empty($scriptProperties['repeatenddate'])){
+    $repeatDates = _getRepeatDates(
+         $scriptProperties['repeattype']
+         , $scriptProperties['repeatfrequency']
+         ,365
+         , $scriptProperties['startdate']
+         , $scriptProperties['repeatenddate']
+         , explode(',', substr($scriptProperties['repeaton'],1))
+         );
+    $scriptProperties['repeatdates'] = $repeatDates;
+    $scriptProperties['repeatenddate'] = end(explode(',', $repeatDates));
+} else { 
+    //-- return $modx->error->failure("Repeat criteria not meet .<br>".$scriptProperties['repeattype']);
+}
 
 //-- Set the createdby property of the current manager user
 if(empty($scriptProperties['createdby'])){
