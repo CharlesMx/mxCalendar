@@ -102,4 +102,7 @@ $_lang['mxcalendars.btn_create_cat'] = 'Create New Category';
 $_lang['mxcalendars.default_category_search'] = "Search categories...";
 $_lang['mxcalendars.menu_update_category'] = 'Update Category';
 $_lang['mxcalendars.menu_remove_category'] = 'Remove Category';
+
+$_lang['mxcalendars.label_category_heading'] = 'Categories:';
+$_lang['mxcalendars.label_category_viewAll'] = 'View All';
 ?>

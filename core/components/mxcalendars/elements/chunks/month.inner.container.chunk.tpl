@@ -1,9 +1,9 @@
-<div id="calbody" style="width:50%;">
+<div id="calbody" style="">
 
-    <a href="[[+todayLink]]" class="mxcnav sm">[[+todayLabel]]</a>
+    <a href="[[+todayLink]]" class="mxcnav sm" id="mxctodaylnk">[[+todayLabel]]</a>
     <span class="nomargins">
-        <a href="[[+prevLink]]" class="mxcnav">&lt;</a>
-        <a href="[[+nextLink]]" class="mxcnav">&gt;</a>
+        <a href="[[+prevLink]]" class="mxcnav" id="mxcprevlnk">&lt;</a>
+        <a href="[[+nextLink]]" class="mxcnav" id="mxcnextlnk">&gt;</a>
     </span>
     <span class="label">[[+headingLabel:date=`%B %Y`]]</span>
 

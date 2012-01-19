@@ -1,4 +1,4 @@
-<h2 style="font-size: 100%;"><a href="[[+detailURL]]">[[+title]]</a></h2>
+<h2 style="font-size: 100%;">[[+title]]</h2>
 
 <p>[[+startdate:date=`%b %e %l:%M %p`]] - [[+enddate:date=`[[+durDay:notempty=`%b %e `]] %b %e %l:%M %p`]]</p>
 
@@ -9,6 +9,9 @@
 <p>Type: <span style="[[+foregroundcss:notempty=`color:[[+foregroundcss]];`]][[+backgroundcss:notempty=`background-color:[[+backgroundcss]];`]]">[[+category]]</span></p>
 
 <p>Preformatted times:<br />[[+startdate_fdate]] [[+startdate_ftime]] - [[+enddate_fdate]] [[+enddate_ftime]]</p>
+
+<h4>[[+location_name]]</h4>
+[[+map]]
 
 <h6>All possible placeholders:</h6>
 <p>[[+allplaceholders]]</p>

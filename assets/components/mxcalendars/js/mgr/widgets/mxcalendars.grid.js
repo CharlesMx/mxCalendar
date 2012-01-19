@@ -505,13 +505,13 @@ mxcCore.window.CreateCal = function(config) {
 		
                 var repeatDOW = '';
                 var rawRepeatOn = Ext.getCmp('crepeaton').getValue();
-                console.log("RepeatOn: "+rawRepeatOn.join(","));
+                ////console.log("RepeatOn: "+rawRepeatOn.join(","));
                 for (i = 0; i < rawRepeatOn.length; i++) {
                     repeatDOW += ','+rawRepeatOn[i].value;
-                    console.log(rawRepeatOn[i]);
+                    ////console.log(rawRepeatOn[i]);
                 }
                 if(repeatDOW.length){repeatDOW+=',';}
-                console.log("New RepeatON: "+repeatDOW);
+                ////console.log("New RepeatON: "+repeatDOW);
                 var frmData = {
                         title: Ext.getCmp('ctitle').getValue() //req
                         ,description: Ext.getCmp('cdescription').getValue()
@@ -536,7 +536,7 @@ mxcCore.window.CreateCal = function(config) {
                         ,action: 'mgr/events/create'
 		};
                 
-                console.log("frmData: "+frmData);
+                ////console.log("frmData: "+frmData);
                
 		mxcCore.ajax.request({
 			url: mxcCore.config.connectorUrl,
@@ -565,7 +565,7 @@ mxcCore.window.CreateCal = function(config) {
                                 }
 			},
                         failure: function(resp, opts) {
-                           console.log('server-side failure with status code ' + resp.status);
+                           ////console.log('server-side failure with status code ' + resp.status);
                         }                        
 		});
 		
@@ -933,13 +933,13 @@ mxcCore.window.UpdateCal = function(config) {
                     
                 var repeatDOW = '';
                 var rawRepeatOn = Ext.getCmp('repeaton').getValue();
-                console.log("RepeatOn: "+rawRepeatOn.join(","));
+                //console.log("RepeatOn: "+rawRepeatOn.join(","));
                 for (i = 0; i < rawRepeatOn.length; i++) {
                     repeatDOW += ','+rawRepeatOn[i].value;
-                    console.log(rawRepeatOn[i]);
+                    //console.log(rawRepeatOn[i]);
                 }
                 if(repeatDOW.length){repeatDOW+=',';}
-                console.log("New RepeatON: "+repeatDOW);
+                //console.log("New RepeatON: "+repeatDOW);
                 var frmData = {
                         id: Ext.getCmp('id').getValue()
                         ,title: Ext.getCmp('title').getValue()
@@ -965,7 +965,7 @@ mxcCore.window.UpdateCal = function(config) {
                         ,action: 'mgr/events/update'
 		};
                 
-                console.log("frmData: "+frmData);
+                //console.log("frmData: "+frmData);
                
 		mxcCore.ajax.request({
 			url: mxcCore.config.connectorUrl,

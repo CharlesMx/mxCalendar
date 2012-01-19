@@ -2,6 +2,17 @@ Changelog file for mxCalendar component.
 
 
 ==================================== 
+mxCalendar 0.0.3-beta
+==================================== 
+- Bug fix: Issue not allowing multiple instances to render on same page
+- Bug fix: IE8 & IE9 not saving events in the create/update window
+- Bug fix: Date time displayed incorrectly on front-end
+- Enhancement: Ajax load of calendar navigation (previous & next) months including the today link
+- Enhancement: Modal view of event details from calendar or list view
+- Enhancement: Added the category filter list display option and associated templates for UI output
+- Enhancement: Updated templates to render the Google Map (API v3) from location when set
+
+==================================== 
 mxCalendar 0.0.2-beta
 ==================================== 
 - Bug fix: Issue with the width of the form fields in the repeating event area

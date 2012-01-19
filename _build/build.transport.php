@@ -12,7 +12,7 @@ set_time_limit(0);
 /* define package names */
 define('PKG_NAME','mxCalendars');
 define('PKG_NAME_LOWER','mxcalendars');
-define('PKG_VERSION','0.0.2');
+define('PKG_VERSION','0.0.3');
 define('PKG_RELEASE','beta');
  
 /* define build paths */
@@ -79,7 +79,7 @@ $attr = array(
         ),
         'Chunks' => array(
             xPDOTransport::PRESERVE_KEYS => false,
-            xPDOTransport::UPDATE_OBJECT => false,
+            xPDOTransport::UPDATE_OBJECT => true,
             xPDOTransport::UNIQUE_KEY => 'name',
         ),
     ),

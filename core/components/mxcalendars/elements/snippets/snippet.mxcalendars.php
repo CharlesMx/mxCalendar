@@ -7,8 +7,9 @@ include_once($modx->getOption('mxcalendars.core_path',null,$modx->getOption('cor
 
 /* setup default properties */
 $theme = $modx->getOption('theme',$scriptProperties,'default');// default, traditional
-$resourceId = $modx->getOption('detailId', $scriptProperties, $modx->resource->get('id'));
-$displayType = isset($_REQUEST['detail']) ? 'detail' : $modx->getOption('displayType', $scriptProperties, 'calendar'); //calendar,list,mini
+$resourceId = $modx->getOption('resourceId', $scriptProperties, $modx->resource->get('id'));
+$isLocked = $modx->getOption('isLocked', $scriptProperties, false);
+$displayType = isset($_REQUEST['detail']) && !$isLocked ? 'detail' : $modx->getOption('displayType', $scriptProperties, 'calendar'); //calendar,list,mini
 //++ Results query properties
 $eventListStartDate = $modx->getOption('elStartDate',$scriptProperties,'now');
 $eventListEndDate = $modx->getOption('elEndDate',$scriptProperties,'+1 year');
@@ -36,11 +37,34 @@ $tplMonth = $modx->getOption('tplMonth',$scriptProperties,'month.inner.container
 $tplHeading = $modx->getOption('tplHeading',$scriptProperties,'month.inner.container.row.heading');
 //++Display: Detail
 $tplDetail = $modx->getOption('tplDetail',$scriptProperties,'detail');
+//++Display: Categories
+$showCategories = $modx->getOption('showCategories',$scriptProperties,true);
+$tplCategoryWrap = $modx->getOption('tplCategoryWrap',$scriptProperties,'category.container');
+$tplCategoryItem = $modx->getOption('tplCategoryItem',$scriptProperties,'category.container.item');
+$labelCategoryHeading = $modx->getOption('labelCategoryHeading',$scriptProperties,$mxcal->modx->lexicon('mxcalendars.label_category_heading'));
+//@TODO Possibly add to the properties set
+//++Aux Parameters: AJAX, Modal, etc.
+$addJQ = $modx->getOption('addjq', $scriptProperties,true); //-- jQuery is required for the core mxCalendar JS to function
+$jqLibSrc = $modx->getOption('jqLibSrc', $scriptProperties,'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
+$usemxcLib = $modx->getOption('usemxcLib', $scriptProperties,true); //-- Use the stand-a-lone modal windows JS library packaged with mxCalendar
+$ajaxResourceId = $modx->getOption('ajaxResourceId', $scriptProperties, null);
+$modalView = $modx->getOption('modalView', $scriptProperties,false);
+$modalSetWidth = $modx->getOption('modalSetWidth', $scriptProperties,null); //-- Not used as of 0.0.3-beta
+$modalSetHeight =$modx->getOption('modalSetHeight', $scriptProperties,null); //-- Not used as of 0.0.3-beta
+//@TODO Possibly add to the properties set
+//++Location Specific options for Google Maps v3.x
+$gmapLib = $modx->getOption('gmapLib', $scriptProperties, 'http://maps.google.com/maps/api/js?sensor=false');
+$gmapId = $modx->getOption('gmapId',$scriptProperties, 'map');
+$gmapDefaultZoom = $modx->getOption('gmapDefaultZoom', $scriptProperties, '13');
 //++ Used in very limited cases
+$setTimezone = $modx->getOption('setTimezone', $scriptProperties, date_default_timezone_get() );
+$debugTimezone = $modx->getOption('debugTimezone', $scriptProperties, false );
 $debug = $modx->getOption('debug',$scriptProperties,false);
 
-// Lets check the timezone setting so that our date functions return correct dates for location
-$mxcal->setTimeZone();
+//-- Update to the Timezone
+$mxcal->setTimeZone($setTimezone,$debugTimezone);
+//-- Update to the Timezone: Manual fix to adjust timezone to match server settings
+//date_default_timezone_set("Europe/Amsterdam");
 
 
 $elStartDate = strtotime($eventListStartDate);
@@ -89,6 +113,8 @@ switch ($displayType){
         //$whereArr[0]['AND:id:='] = (int)$_REQUEST['detail']; //@TODO Make filter for single events repeating dates
         break;
 }
+if($_REQUEST['cid'] && ($displayType == 'calendar' || $displayType == 'mini'))
+        $whereArr['AND:CategoryId.id:='] = (int)$_REQUEST['cid'];
 $c->where($whereArr);
 $c->sortby($sort,$dir);
 $c->limit($limit,0);
@@ -103,6 +129,17 @@ if($debug) echo "<br />Returned Events: ".count($mxcalendars).'<br />';
 //-- Add mxCalendar Theme CSS to html header (set in snippit properties)
 $modx->regClientCSS($modx->getOption('mxcalendars.assets_url',null,$modx->getOption('assets_url').'components/mxcalendars/').'themes/'.$theme.'/css/mxcalendar.css');
 
+//-- Add the Shadowbox library info if we are using modal
+if($modalView) $mxcal->addShadowBox();
+else $mxcal->disableModal();
+
+//-- Add mxCalendar jQuery Library if enabled
+if($addJQ){
+    $modx->regClientStartupScript($jqLibSrc);
+//-- Only add the required JS files we need
+if(!empty($ajaxResourceId))//-- Also requires a valid jQuery library be loaded
+    $modx->regClientStartupScript($mxcal->config['assetsUrl'].'js/web/mxc-calendar.js');
+}
 foreach ($mxcalendars as $mxc) {
     //-- Convert the object to an array
     $mxcArray = $mxc->toArray();
@@ -142,7 +179,8 @@ foreach ($mxcalendars as $mxc) {
     $mxcArray['durDay']      = !empty($durDay) ? $durDay : null; 
     $mxcArray['durHour']     = !empty($durHour) ? $durHour : null; 
     $mxcArray['durMin']      = !empty($durMin) ? $durMin : null; 
-    $mxcArray['durSec']      = !empty($durSec) ? $durSec : null; 
+    $mxcArray['durSec']      = !empty($durSec) ? $durSec : null;
+    $mxcArray['mxcmodalClass'] = ($modalView && $ajaxResourceId || $_REQUEST['imajax'] ? 'mxcmodal' : '');
     
     $arrEventsDetail[$mxcArray['id']] = $mxcArray;
     $arrEventDates[$mxcArray['id']] = array('date'=>$mxcArray['startdate'], 'eventId'=>$mxcArray['id'],'repeatId'=>0);
@@ -162,10 +200,8 @@ foreach ($mxcalendars as $mxc) {
     //$output .= $mxcal->getChunk($tpl,$mxcArray);
 }
 
-usort($arrEventDates, "custom_sort");
-function custom_sort($a,$b){
-    return $a['date']>$b['date'];
-}
+usort($arrEventDates, "mxcal::custom_sort");
+
 if(count($arrEventDates)){
     if($debug) echo 'Looping through events list of '.count($arrEventDates).' total.<br />';
     $ulimit=0;
@@ -179,7 +215,7 @@ if(count($arrEventDates)){
             $oDetails['startdate_ftime'] = strftime($timeFormat,$oDetails['startdate']);
             $oDetails['enddate_fdate'] = strftime($dateFormat,$oDetails['enddate']);  
             $oDetails['enddate_ftime'] = strftime($timeFormat,$oDetails['enddate']);
-            $oDetails['detailURL'] = $modx->makeUrl($resourceId,'',array('detail' => $e['eventId'], 'r'=>$e['repeatId']));
+            $oDetails['detailURL'] = $modx->makeUrl((!empty($ajaxResourceId) ? $ajaxResourceId : $resourceId),'',array('detail' => $e['eventId'], 'r'=>$e['repeatId']));
             $eventsArr[strftime('%Y-%m-%d', $e['date'])][] = $oDetails;
             $ulimit++;
             if($debug) echo '&nbsp;&nbsp;&nbsp;&nbsp;'.$ulimit.') '.strftime($dateFormat,$e['date']).' '.$e['eventId'].'<br />';
@@ -201,38 +237,19 @@ switch ($displayType){
     case 'calendar':
     case 'mini':
     default:
-        $output = $mxcal->makeEventCalendar($eventsArr,$resourceId,array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading));
+        $output = $mxcal->makeEventCalendar($eventsArr,(!empty($ajaxResourceId) ? $ajaxResourceId : $resourceId),array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading));
+        if($showCategories)
+            $output .= $mxcal->makeCategoryList($labelCategoryHeading, ($_REQUEST['cid'] ? $_REQUEST['cid'] : null),$resourceId, array('tplCategoryWrap'=>$tplCategoryWrap, 'tplCategoryItem'=>$tplCategoryItem));
         break;
     case 'detail':
-        $output .= 'Total Occurances: '.count($eventsArr).'<br />';
+        if($debug) $output .= 'Total Occurances: '.count($eventsArr).'<br />';
         $output .= $mxcal->makeEventDetail($eventsArr,($occurance=$_REQUEST['r']?$_REQUEST['r']:0) , array('tplDetail'=>$tplDetail));
         //$whereArr = array('id:=' => (int)$_REQUEST['detail']);
         //$whereArr[0]['AND:id:='] = (int)$_REQUEST['detail']; //@TODO Make filter for single events repeating dates
         break;
 }
 
-/*
-$output .= '<h2>CATEGORIES LIST TEST</h2>';
-// build category query
-$c = $modx->newQuery('mxCalendarCategories');
-$c->where(array(
-	'name:LIKE' => '%'.$query.'%',
-	'disable' => 0,
-	'active' => 1,
-));
-$c->sortby('name','ASC');
-$mxcalendarsCats = $modx->getCollection('mxCalendarCategories', $c);
-// iterate
-$list = array();
-foreach ($mxcalendarsCats as $mxc) {
-    $list[] = $mxc->toArray();
-}
-$output .= json_encode($list);
-*/
-
-// Now we can set the timezone back if we changed it
-$mxcal->restoreTimeZone();
-
+$mxcal->restoreTimeZone($debugTimezone);
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 if($debug) echo "<br /><small>mxCalendar processed in $time seconds</small><br /><br />\n";

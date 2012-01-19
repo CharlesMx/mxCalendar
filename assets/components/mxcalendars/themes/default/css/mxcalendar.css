@@ -8,7 +8,7 @@ dark = #555555
 */
 
 /* CALENDAR LAYOUT: Clean theme */
-#calbody {
+#calbody, #calbodylist, #mxccategories {
     background-color: transparent;
     color: #555555;
     font-size: 12px;
@@ -16,7 +16,8 @@ dark = #555555
     width: 100%;
     display:block;
 }
-#calbody.list { width: 300px; margin:0; padding:0;  }
+#calbody H6, #calbodylist H6 { margin:0; padding:0; font-size:110%; }
+#calbodylist { width: 100%; margin:0; padding:0;  }
 #calbody .mxcCalMonth { line-height:18px;font-size:16px; margin:10px 0; }
 #calbody table.small {
     
@@ -53,13 +54,15 @@ dark = #555555
 #calbody td .event .description { display:block; font-weight:normal; margin:0 0 8px 0; }
 #calbody td .event .durantion { font-size:.85em;}
 #calbody .event .dayofmonth { font-size:140%; }
-#calbody .mxcnav { float:left; margin:0 15px 0 0; text-decoration:none; padding:0 5px 0 5px; font-size:18; line-height:24px; background-color:#555555; color:#efefef; }
+#calbody .mxcnav { float:left; margin:0 15px 0 0; text-decoration:none; padding:0 5px 0 5px; font-size:18; line-height:24px; background-color:#555555; color:#efefef; border:none; }
 #calbody .mxcnav.sm { font-size:12px; padding:0 7px 0 7px; } 
 #calbody .mxcnav:hover { background-color:#E3E3E3; color:#555555; } 
 #calbody td div span { clear:both; display:block; }
 #calbody .label { font-size: 14px; line-height:24px; margin:0 15px 0 15px; }
 #calbody .nomargins .mxcnav { margin:0 1px; }
-#calbody .monthheading { font-size: 160%; line-height:200%; background-color: #efefef; margin:15px 0 0; padding:0 5px;}
-#calbody .event { padding: 5px; }
-#calbody .event H4 { margin:0; padding:0; line-height: 21px; }
-#calbody a { color: inherit; text-decoration:none; border-bottom:1px dotted;}
+#calbodylist .monthheading { font-size: 160%; line-height:200%; background-color: #efefef; margin:15px 0 0; padding:0 5px;}
+#calbodylist .monthheading.first { margin-top:5px; } 
+#calbodylist .event { padding: 5px; }
+#calbodylist .event H4 { margin:0; padding:0; line-height: 21px; }
+#calbody a, #calbodylist a { color: inherit; text-decoration:none; border-bottom:1px dotted;}
+li.mxcactivecat a { font-weight:bold; text-decoration: none; list-style-image: none; }

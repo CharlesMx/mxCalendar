@@ -181,7 +181,42 @@ $properties = array(
         'options' => '',
             'value' => false,
         'lexicon' => 'mxcalendars:properties',
+    )
+    
+    //-- Category Properties
+    ,array(
+        'name' => 'showCategories',
+        'desc' => 'prop_mxcalendars.desc_showCategories',
+        'type' => 'textfield',
+        'options' => '',
+            'value' => true,
+        'lexicon' => 'mxcalendars:properties',
+    )
+    ,array(
+        'name' => 'tplCategoryWrap',
+        'desc' => 'prop_mxcalendars.desc_tplCategoryWrap',
+        'type' => 'textfield',
+        'options' => '',
+            'value' => 'tplCategoryWrap',
+        'lexicon' => 'mxcalendars:properties',
+    )
+    ,array(
+        'name' => 'tplCategoryItem',
+        'desc' => 'prop_mxcalendars.desc_tplCategoryItem',
+        'type' => 'textfield',
+        'options' => '',
+            'value' => 'tplCategoryItem',
+        'lexicon' => 'mxcalendars:properties',
+    )
+    ,array(
+        'name' => 'tplCategoryItem',
+        'desc' => 'prop_mxcalendars.desc_tplCategoryItem',
+        'type' => 'textfield',
+        'options' => '',
+            'value' => 'tplCategoryItem',
+        'lexicon' => 'mxcalendars:properties',
     ),
+    //--------------//
     
     array(
         'name' => 'sort',

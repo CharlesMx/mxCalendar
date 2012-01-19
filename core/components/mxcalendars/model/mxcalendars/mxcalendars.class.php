@@ -6,6 +6,7 @@ class mxCalendars {
     public $modx;
     public $config = array();
     public $tz;
+    private $scriptProperties = array();
     
     function __construct(modX &$modx,array $config = array()) {
         $this->modx =& $modx;
@@ -44,6 +45,10 @@ class mxCalendars {
 		}
 		return true;
 	}
+        
+        public function setProperties($p=array()){
+            $this->scriptProperties = $p;
+        }
     
 	/*
 	 * GLOBAL HELPER FUNCTIONS: do what we can to making life easier
@@ -102,17 +107,100 @@ class mxCalendars {
 		return $chunk;
 	}
         
+        private function _getMap($address=null, $gmapLib='http://maps.google.com/maps/api/js?sensor=false'){
+            $googleMap = '';
+            //-- Add google Map API
+            if($address){
+                    include_once('google_geoloc.class.inc');
+                    //-- Output the Address results
+                    if(class_exists("geoLocator") && $address){
+                        //-- Split addresses for multiple points on the map
+                        $addressList = explode('|', $address);
+
+                        $mygeoloc = new geoLocator;
+                        //$mygeoloc->host = $this->config['GOOGLE_MAP_HOST'];
+                        //$mygeoloc->apikey = $this->config['GOOGLE_MAP_KEY'];
+                        //$mygeoloc->canvas = $this->config['mxcGoogleMapDisplayCanvasID'];
+                        //$mygeoloc->autofitmap = (count($addressList) > 1 ? true : false);
+
+                        foreach($addressList as $loc){
+                            $mygeoloc->getGEO($loc);
+                        }
+
+                        $googleMap = '<div id="map_canvas" style="width:500px; height:500px;"></div>';
+                          
+                    } else {
+                        $googleMap = 'No class found.';
+                    }
+                    return $googleMap.'<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+                        <script type="text/javascript">
+                                // -- mxCalendar :: location map -- //
+                                function initialize() {
+                                  '.$mygeoloc->mapJSv3.'
+                                };
+
+                                window.onload = initialize;
+
+                        </script>';
+            }
+        }
+        
+        public function addShadowBox(){
+            $shadowPath = $this->config['assetsUrl'].'js/web/shadowbox/sa/';
+            $this->modx->regClientHTMLBlock('<link rel="stylesheet" type="text/css" href="'.$shadowPath.'shadowbox.css">
+                <script type="text/javascript" src="'.$shadowPath.'shadowbox.js"></script>
+                <script type="text/javascript">
+                var modalActive = true;
+                Shadowbox.init({
+                    skipSetup: true
+                });  
+                 window.onload = function() {
+                    Shadowbox.setup(".mxcmodal", {
+                        modal: true,
+                    });
+                };
+                </script>');
+        }
+        public function disableModal(){
+            $this->modx->regClientHTMLBLock('<script>var modalActive = false;</script>');  
+        }
+        
+        public function addLightBox(){
+            $assetsPath = $this->config['assetsUrl'].'js/web/lightbox/';
+            $this->modx->regClientHTMLBlock('<link rel="stylesheet" type="text/css" href="'.$assetsPath.'css/jquery.lightbox-0.5.css" media="screen" />
+                    <script type="text/javascript" src="'.$assetsPath.'js/jquery.lightbox-0.5.min.js"></script>
+                    <script type="text/javascript">
+                    $(function() {
+                            // Use this example, or...
+                            //$("a[@rel*=lightbox]").lightBox(); // Select all links that contains lightbox in the attribute rel
+                            // This, or...
+                            $("a.mxcmodal").lightBox(); // Select all links with lightbox class
+
+                    });
+                    </script>');
+        }
+        
+        
         /*
          * SNIPPET FUNCTIONS
          */
-        public function setTimeZone(){
-            if(date_default_timezone_get() != 'UTC') {
+        public function setTimeZone($newTZ='UTC',$debug=false){
+            if(date_default_timezone_get() != $newTZ) {
                 $this->tz = date_default_timezone_get();
-                date_default_timezone_set('UTC');
+                date_default_timezone_set($newTZ);
+                if($debug) echo 'mxCalendar: TIMEZONE CHANGED: changed timezone for duration of this extra from '.$this->tz.' '.date_default_timezone_get ().' ['.$newTZ.']<br />';
+            } else {
+                if($debug) echo "mxCalendar: TIMEZONE: No Change (".date_default_timezone_get().")<br />";
             }
         }
-        public function restoreTimeZone(){
-            if(!empty($this->tz)) date_default_timezone_set($this->tz);
+        public function restoreTimeZone($debug=false){
+            if(!empty($this->tz)) { 
+                date_default_timezone_set($this->tz);
+                if($debug) echo "mxCalendar: TIMEZONE RESET: ".$this->tz."<br />";
+            }
+        }
+        public function custom_sort($a,$b){
+            return $a['date']>$b['date'];
         }
         //-- Custom function to get somewhat valid duration; it's fuzzy and can be updated to be more accurate
         public function datediff($datefrom, $dateto, $using_timestamps = false)
@@ -164,6 +252,8 @@ class mxCalendars {
                     if($occ == $occurance || ($occurance === 0 && $occ ==0)){
                         $detailPH = $e[0];
                         $detailPH['allplaceholders'] = implode(', ',array_keys($e[0]));
+                        if($e[0]['map'])
+                            $detailPH['map'] = $this->_getMap($e[0]['location_address']);
                         $o = $this->getChunk($tpls->tplDetail,$detailPH);
                             break;
                     }
@@ -184,6 +274,8 @@ class mxCalendars {
                     do {
                         if(strftime('%b',$e[$rvar]['startdate']) != $preHead && !empty($tpls->tplElMonthHeading)){
                             // Load list heading
+                            if($preHead == '')
+                                $e[$rvar]['altmonthheading'] = 'first';
                             $o.= $this->getChunk($tpls->tplElMonthHeading,$e[$rvar]);
                             $preHead = strftime('%b',$e[$rvar]['startdate']);
                         }
@@ -220,14 +312,13 @@ class mxCalendars {
             $endDOW = strftime('%u', strtotime($lastDayOfMonth));
             $tpls=(object)$tpls;
             $out = '';
-            $headings_arr = array(); //@TODO this can be removed
             $startMonthCalDate = $startDOW <= 6 ? strtotime('- '.$startDOW.' day', strtotime($mStartDate)) : strtotime($mStartDate)	;
             $endMonthCalDate = strtotime('+ '.(6 - $endDOW).' day', strtotime($lastDayOfMonth));
             //------//
             $headingLabel = strtotime($mStartDate);
-            $todayLink = $this->modx->makeUrl($resourceId,'',array('dt' => strftime('%Y-%m')));
-            $prevLink = $this->modx->makeUrl($resourceId,'',array('dt' => $prevMonth));
-            $nextLink = $this->modx->makeUrl($resourceId,'',array('dt' => $nextMonth));
+            $todayLink = $this->modx->makeUrl($resourceId,'',array('dt' => strftime('%Y-%m'), 'cid'=>$_REQUEST['cid']));
+            $prevLink = $this->modx->makeUrl($resourceId,'',array('dt' => $prevMonth, 'cid'=>$_REQUEST['cid']));
+            $nextLink = $this->modx->makeUrl($resourceId,'',array('dt' => $nextMonth, 'cid'=>$_REQUEST['cid']));
             
             $chunkEvent = $this->loadChunk($tpls->event);
             $chunkDay = $this->loadChunk($tpls->day);
@@ -310,7 +401,40 @@ class mxCalendars {
             //return $chunkMonth->process($phMonth);
             return $this->getChunk($tpls->month, $phMonth);
         }
-
+        
+        public function makeCategoryList($labelCategory=null,$filteredCategoryId=null,$resourceId=null,$tpls=array()){
+            $output = '';
+            $tpls = (object)$tpls;
+            // build category query
+            $c = $this->modx->newQuery('mxCalendarCategories');
+            $c->where(array(
+                    //'name:LIKE' => '%'.$query.'%',
+                    'disable' => 0,
+                    'active' => 1,
+            ));
+            $c->sortby('name','ASC');
+            $mxcalendarsCats = $this->modx->getCollection('mxCalendarCategories', $c);
+            // iterate
+            // $list = array();
+            // $output .= '<ul><li class="'.(!$filteredCategoryId ? 'mxcactivecat' : '').'"><a href="'.$this->modx->makeUrl($resourceId,'','' ).'">View All</a></li>';
+            $name = $this->modx->lexicon('mxcalendars.label_category_viewAll');
+            $catClass = (!$filteredCategoryId ? 'mxcactivecat' : '');
+            $link = $this->modx->makeUrl($resourceId,'','');
+            $output .= $this->getChunk($tpls->tplCategoryItem, array('class'=> $catClass,'link'=>$link, 'name'=>$name) );
+            foreach ($mxcalendarsCats as $mxc) {
+                // $list[] = $mxc->toArray();
+                $id = $mxc->get('id');;
+                $vals = $mxc->toArray();
+                $vals['link'] = $this->modx->makeUrl($resourceId,'',array('cid' => $id ) );
+                $vals['class'] = ($filteredCategoryId == $id ? 'mxcactivecat' : '');
+                $output .= $this->getChunk($tpls->tplCategoryItem, $vals );
+                // $output .= '<li class="'.($filteredCategoryId == $id ? 'mxcactivecat' : '').'"><a href="'.$catURL.'">'.$mxc->get('name').'</a></li>';
+            }
+            // $output .= json_encode($list);
+            return $this->getChunk($tpls->tplCategoryWrap, array('heading'=>$labelCategory, 'categories'=>$output ));
+            //return $output.'</ul>';
+        }
+        
 }
 
 

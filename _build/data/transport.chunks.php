@@ -109,4 +109,22 @@ $chunks[11]->fromArray(array(
     'snippet' => getChunkContent($sources['elements'].'chunks/month.inner.container.row.day.event.chunk.tpl'),
 ),'',true,true);
 
+//-- Add the individual list item chunk 
+$chunks[12]= $modx->newObject('modChunk');
+$chunks[12]->fromArray(array(
+    'id' => 1,
+    'name' => 'tplCategoryWrap',
+    'description' => 'The outer container for the cateogry listing when enabled for the calendar display.',
+    'snippet' => getChunkContent($sources['elements'].'chunks/category.container.chunk.tpl'),
+),'',true,true);
+
+//-- Add the individual list item chunk 
+$chunks[13]= $modx->newObject('modChunk');
+$chunks[13]->fromArray(array(
+    'id' => 1,
+    'name' => 'tplCategoryItem',
+    'description' => 'The inside container that holds the category output.',
+    'snippet' => getChunkContent($sources['elements'].'chunks/category.container.item.chunk.tpl'),
+),'',true,true);
+
 return $chunks;
