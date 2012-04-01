@@ -18,13 +18,19 @@
 	<field key="repeatfrequency" dbtype="int" precision="2" phptype="int" null="true"/>
 	<field key="repeatenddate" dbtype="int" precision="20" phptype="int" null="true"/>
         <field key="repeatdates" dbtype="text" phptype="string" null="true" />
-	    
+	
+        <field key="context" dbtype="varchar" precision="255" phptype="string" null="false" default="" />
+        <field key="calendar_id" dbtype="int" precision="20" phptype="integer" null="true" default="" />
+        <field key="form_chunk" dbtype="varchar" precision="255" phptype="string" null="false" default="" />
+        
 	<field key="createdon" dbtype="int" precision="20" phptype="integer" null="true"/>
 	<field key="createdby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
 	<field key="editedon" dbtype="int" precision="20" phptype="integer" null="true"/>
 	<field key="editedby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
  
 	<aggregate alias="CategoryId" class="mxCalendarCategories" local="categoryid" foreign="id" cardinality="one" owner="foreign"/>
+        <aggregate alias="CalendarId" class="mxCalendarCalendars" local="calendar_id" foreign="id" cardinality="one" owner="foreign"/>
+        
 	<aggregate alias="WebUserGroup" class="mxCalendarEventWUG" local="id" foreign="webusergroup" cardinality="many" owner="foreign"/> 
         <aggregate alias="CreatedBy" class="modUser" local="createdby" foreign="id" cardinality="one" owner="foreign"/>
         <aggregate alias="EditedBy" class="modUser" local="editedby" foreign="id" cardinality="one" owner="foreign"/>
@@ -56,6 +62,14 @@
         <aggregate alias="EditedBy" class="modUser" local="editedby" foreign="id" cardinality="one" owner="foreign"/>
     </object>
 
+    <object class="mxCalendarCalendars" table="mxcalendars_calendars" extends="xPDOSimpleObject">
+        <field key="name" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="webusergroup" dbtype="int" precision="10" phptype="integer" />
+        <field key="active" dbtype="boolean" phptype="boolean" null="false" default="1"/>
+        
+        <aggregate alias="CalendarId" class="mxCalendarEvents" local="id" foreign="calendar_id" cardinality="many" owner="local"/>
+    </object>
+
     <object class="mxCalendarSettings" table="mxcalendars_settings" extends="xPDOSimpleObject">
         <field key="name" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
         <field key="value" dbtype="text" phptype="string" null="false" default=""/>
@@ -64,4 +78,5 @@
         <field key="editedby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
         <aggregate alias="EditedBy" class="modUser" local="editedby" foreign="id" cardinality="one" owner="foreign"/>
     </object>
+    
 </model>
