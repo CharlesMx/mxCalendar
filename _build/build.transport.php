@@ -12,8 +12,8 @@ set_time_limit(0);
 /* define package names */
 define('PKG_NAME','mxCalendars');
 define('PKG_NAME_LOWER','mxcalendars');
-define('PKG_VERSION','0.0.3');
-define('PKG_RELEASE','beta');
+define('PKG_VERSION','1.1.1');
+define('PKG_RELEASE','pl');
  
 /* define build paths */
 $root = dirname(dirname(__FILE__)).'/';
@@ -96,7 +96,26 @@ $vehicle->resolve('file',array(
     'target' => "return MODX_CORE_PATH . 'components/';",
 ));
 $builder->putVehicle($vehicle);
- 
+
+/* Settings */
+$settings = include $sources['data'].'transport.settings.php';
+if (!is_array($settings)) {
+    $modx->log(modX::LOG_LEVEL_ERROR,'Could not package in settings.');
+} else {
+    $attributes= array(
+        xPDOTransport::UNIQUE_KEY => 'key',
+        xPDOTransport::PRESERVE_KEYS => true,
+        xPDOTransport::UPDATE_OBJECT => false,
+    );
+    foreach ($settings as $setting) {
+        $vehicle = $builder->createVehicle($setting,$attributes);
+        $builder->putVehicle($vehicle);
+    }
+    $modx->log(modX::LOG_LEVEL_INFO,'Packaged in '.count($settings).' System Settings.');
+}
+unset($settings,$setting,$attributes);
+
+
 //-- ADD IN THE CONTEXT MENU ITEMS 
 $modx->log(modX::LOG_LEVEL_INFO,'Packaging in menu...');
 $menu = include $sources['data'].'transport.menu.php';
@@ -114,6 +133,7 @@ $vehicle= $builder->createVehicle($menu,array (
         ),
     ),
 ));
+
 
 $modx->log(modX::LOG_LEVEL_INFO,'Adding in PHP resolvers...');
 $vehicle->resolve('php',array(

@@ -33,6 +33,19 @@ $scriptProperties['startdate'] = tstamptotime($scriptProperties['startdate_date'
 $scriptProperties['enddate'] = tstamptotime($scriptProperties['enddate_date'],$scriptProperties['enddate_time'],true);
 $scriptProperties['repeatenddate'] = !empty($scriptProperties['repeatenddate'])?tstamptotime($scriptProperties['repeatenddate'],$scriptProperties['enddate_time'],true):null;
 
+if($scriptProperties['repeating']==1){
+    //-- Do some error checking just for repeating dates
+    if(empty($scriptProperties['repeattype']))
+        $modx->error->addField('repeattype', $modx->lexicon('mxcalendars.err_event_req_repeattype'));
+    else
+        if(empty($scriptProperties['repeaton']))
+            $modx->error->addField('repeaton', $modx->lexicon('mxcalendars.err_event_req_repeaton'));
+    if(empty($scriptProperties['repeatfrequency']))
+        $modx->error->addField('repeatfrequency', $modx->lexicon('mxcalendars.err_event_req_repeatfrequency'));
+    if(empty($scriptProperties['repeatenddate']))
+        $modx->error->addField('repeatenddate', $modx->lexicon('mxcalendars.err_event_req_repeatenddate'));
+}
+
 //-- Check if we have all the data to create the repeating field information
 if($scriptProperties['repeating']==1 && isset($scriptProperties['repeattype']) && isset($scriptProperties['repeatfrequency']) && !empty($scriptProperties['repeatenddate'])){
     $repeatDates = _getRepeatDates(
@@ -49,6 +62,28 @@ if($scriptProperties['repeating']==1 && isset($scriptProperties['repeattype']) &
     //-- return $modx->error->failure("Repeat criteria not meet .<br>".$scriptProperties['repeattype']);
 }
 
+//-- Category check for required by submission and settings
+if(empty($scriptProperties['categoryid'])){
+
+    $default_cat = $modx->getObject('mxCalendarCategories', array(
+       'isdefault' => 1
+    ));
+    
+    if($default_cat->get('id')){
+        $scriptProperties['categoryid'] = $default_cat->get('id');
+    } else {
+        //-- Get the first published category
+        $default_cat = $modx->getObject('mxCalendarCategories', array(
+           'active' => 1
+        ));
+        if($default_cat->get('id')){
+            $scriptProperties['categoryid'] = $default_cat->get('id');
+        } else {
+            return $modx->error->failure($modx->lexicon('mxcalendars.err_event_req_validcat'));
+        }
+    }
+}
+
 //-- Set the edited by user id based on authenticated user
 if(empty($scriptProperties['editedby'])){
     $scriptProperties['editedby'] = $modx->getLoginUserID();
@@ -56,10 +91,6 @@ if(empty($scriptProperties['editedby'])){
 
 //-- Set the edited date/time stamp
 $scriptProperties['editedon'] = time();
-
-//-- Combine the multiple date and time fields to single unix time stamp
-//$date1=mktime(0, 0, 0, date("m", $date1), date("d", $date1)+1, date("Y", $date1)); 
-//mktime(0, 0, 0, 12, 32, 1997);
 
 
 

@@ -138,7 +138,36 @@ mxcCore.window.UpdateCat = function(config) {
             xtype: 'textfield'
             ,fieldLabel:_('mxcalendars.category_name_col_label')
             ,name: 'name'
-        },{
+        }/*,{
+          xtype: 'combo',
+          displayField: 'name',
+          valueField: 'id',
+          forceSelection: true,
+          store: new Ext.data.JsonStore({
+                  root: 'results',
+                  idProperty: 'id',
+                  url: mxcCore.config.connectorUrl,
+                  baseParams: {
+                        action: 'stores/getcalendars' 
+                  },
+                  fields: [
+                        'id', 'name'
+                  ]
+          }),
+          mode: 'remote',
+          triggerAction: 'all',
+          fieldLabel: _('mxcalendars.grid_col_calendar'),
+          name: 'calendarid',
+          hiddenName: 'calendarid',
+          id: 'ucalendarid',
+          allowBlank: false,
+          typeAhead:true,
+          minChars:1,
+          emptyText:_('mxcalendars.label_select_calendar'),
+          valueNotFoundText:_('mxcalendars.label_select_calendar_err'),
+          anchor:'100%',
+          value: config.record.calendarid
+        }*/,{
             xtype: 'checkbox'
             ,fieldLabel: _('mxcalendars.category_isdefault_col_label')
             ,name: 'isdefault'
@@ -190,7 +219,35 @@ mxcCore.window.CreateCat = function(config) {
             xtype: 'textfield'
             ,fieldLabel:_('mxcalendars.category_name_col_label')
             ,name: 'name'
-        },{
+        }/*,{
+          xtype: 'combo',
+          displayField: 'name',
+          valueField: 'id',
+          forceSelection: true,
+          store: new Ext.data.JsonStore({
+                  root: 'results',
+                  idProperty: 'id',
+                  url: mxcCore.config.connectorUrl,
+                  baseParams: {
+                        action: 'stores/getcalendars' 
+                  },
+                  fields: [
+                        'id', 'name'
+                  ]
+          }),
+          mode: 'remote',
+          triggerAction: 'all',
+          fieldLabel: _('mxcalendars.grid_col_calendar'),
+          name: 'calendarid',
+          hiddenName: 'calendarid',
+          id: 'calendarid',
+          allowBlank: false,
+          typeAhead:true,
+          minChars:1,
+          emptyText:_('mxcalendars.label_select_calendar'),
+          valueNotFoundText:_('mxcalendars.label_select_calendar_err'),
+          anchor:'100%'
+        }*/,{
             xtype: 'checkbox'
             ,fieldLabel: _('mxcalendars.category_isdefault_col_label')
             ,name: 'isdefault'

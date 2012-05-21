@@ -23,6 +23,26 @@ if ($object->xpdo) {
             $created_eventWUG = $m->createObjectContainer('mxCalendarEventWUG');
             $m->createObjectContainer('mxCalendarCalendars');
             
+            //-- Forced Update on Existing Container
+            $m->addField('mxCalendarEvents','context');
+            $m->addField('mxCalendarEvents','calendar_id');
+            $m->addField('mxCalendarEvents','form_chunk');
+
+            $c = $modx->newQuery('mxCalendarCategories');
+            $count = $modx->getCount('mxCalendarCategories',$c);
+            if(!$count){
+                $mxcalendar_cat = $modx->newObject('mxCalendarCategories');
+                $mxcalendar_cat->fromArray(array('name'=>$options['defaultCategoryName'],'isdefault'=>1,'active'=>1));
+                $mxcalendar_cat->save();
+            }
+            
+            $c = $modx->newQuery('mxCalendarCalendars');
+            $count = $modx->getCount('mxCalendarCalendars',$c);
+            if(!$count){
+                $mxcalendar = $modx->newObject('mxCalendarCalendars');
+                $mxcalendar->fromArray(array('name'=>$options['defaultCategoryName'], 'active'=>1));
+                $mxcalendar->save();
+            }
             //-- ADD ANY ADDITIONAL PROPERTIES TO SET
             if(isset($options['addDefaultCat']) && !empty($options['defaultCategoryName'])){
                 $setting = $modx->newObject('mxCalendarCategories');
@@ -67,6 +87,22 @@ if ($object->xpdo) {
             $m->addField('mxCalendarEvents','context');
             $m->addField('mxCalendarEvents','calendar_id');
             $m->addField('mxCalendarEvents','form_chunk');
+            
+            $c = $modx->newQuery('mxCalendarCategories');
+            $count = $modx->getCount('mxCalendarCategories',$c);
+            if(!$count){
+                $mxcalendar_cat = $modx->newObject('mxCalendarCategories');
+                $mxcalendar_cat->fromArray(array('name'=>'Default','isdefault'=>1,'active'=>1));
+                $mxcalendar_cat->save();
+            }
+            
+            $c = $modx->newQuery('mxCalendarCalendars');
+            $count = $modx->getCount('mxCalendarCalendars',$c);
+            if(!$count){
+                $mxcalendar = $modx->newObject('mxCalendarCalendars');
+                $mxcalendar->fromArray(array('name'=>'Default', 'active'=>1));
+                $mxcalendar->save();
+            }
            
             
             //-- Require Category

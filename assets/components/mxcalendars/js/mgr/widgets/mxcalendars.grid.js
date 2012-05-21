@@ -5,7 +5,7 @@ mxcCore.grid.events = function(config) {
         id: 'mxcalendars-grid-events'
         ,url: mxcCore.config.connectorUrl
         ,baseParams: {action: 'mgr/events/getList'}
-        ,fields: ['id','description','title','categoryid','startdate','startdate_date','startdate_time','enddate','enddate_date','enddate_time','repeating','repeattype','repeaton','repeatfrequency','repeatenddate','repeatdates','menu','name','map','link','linkrel','linktarget','location_name','location_address','address']
+        ,fields: ['id','description','title','context','calendar_id','form_chunk','categoryid','startdate','startdate_date','startdate_time','enddate','enddate_date','enddate_time','repeating','repeattype','repeaton','repeatfrequency','repeatenddate','repeatdates','menu','name','map','link','linkrel','linktarget','location_name','location_address','address']
         ,paging: true
         ,remoteSort: true
         ,anchor: '97%'
@@ -24,6 +24,9 @@ mxcCore.grid.events = function(config) {
 			,{header: _('mxcalendars.endtime_col_label'),dataIndex: 'enddate_time',sortable: false,width:60,editor:{xtype:'timefield'}}
 			,{header: _('mxcalendars.repeating_col_label'),dataIndex: 'repeating',sortable: true,width:30}
                         ,{header: _('mxcalendars.repeating_last_occ_col_label'),dataIndex: 'repeatenddate', sortable: true,width:60 }
+                        ,{hidden:true, dataIndex:'context'}
+                        ,{hidden:true, dataIndex:'calendar_id'}
+                        ,{hidden:true, dataIndex:'form_chunk'}
                         ,{hidden:true, dataIndex:'repeating'}
                         ,{hidden:true, dataIndex:'repeattype'}
                         ,{hidden:true, dataIndex:'repeaton'}
@@ -160,7 +163,7 @@ mxcCore.window.CreateCal = function(config) {
         title: _('mxcalendars.event_title_create')
         ,id: 'CreateCal'
         ,url: mxcCore.config.connectorUrl
-        ,width: 'auto'
+        ,width: 870
         ,autoHeight:true
         ,baseParams: {
             action: 'mgr/events/create'
@@ -197,7 +200,36 @@ mxcCore.window.CreateCal = function(config) {
 			{
 			  // Left Column
 			  columnWidth: .5,
-			  items: [{	
+			  items: [{
+                              xtype: 'combo',
+                              displayField: 'key',
+                              valueField: 'key',
+                              forceSelection: true,
+                              store: new Ext.data.JsonStore({
+                                      root: 'results',
+                                      idProperty: 'key',
+                                      url: mxcCore.config.connectorUrl,
+                                      baseParams: {
+                                            action: 'stores/getcontexts' 
+                                      },
+                                      fields: [
+                                            'key',
+                                      ]
+                              }),
+                              mode: 'remote',
+                              triggerAction: 'all',
+                              fieldLabel: _('mxcalendars.grid_col_context'),
+                              name: 'context',
+                              hiddenName: 'context',
+                              id: 'ccontext',
+                              allowBlank: true,
+                              typeAhead:true,
+                              minChars:1,
+                              emptyText:_('mxcalendars.label_select_context'),
+                              valueNotFoundText:_('mxcalendars.label_select_context_err'),
+                              anchor:'100%',
+                              value: config.record.context
+                            },{	
 			    fieldLabel: _('mxcalendars.label_title'),
 			    name: 'title',
                             hiddenname: 'title',
@@ -227,7 +259,7 @@ mxcCore.window.CreateCal = function(config) {
 			      name: 'categoryid',
                               hiddenName: 'categoryid',
                               id: 'ccategoryid',
-			      allowBlank: false,
+			      allowBlank: mxcCore.config.category_required ? true : false,
 			      typeAhead:true,
 			      minChars:1,
 			      emptyText:_('mxcalendars.label_select_category'),
@@ -239,6 +271,35 @@ mxcCore.window.CreateCal = function(config) {
 			  // Right Column
 			  columnWidth: .5,
 			  items: [{
+                              xtype: 'combo',
+                              displayField: 'name',
+                              valueField: 'id',
+                              forceSelection: true,
+                              store: new Ext.data.JsonStore({
+                                      root: 'results',
+                                      idProperty: 'id',
+                                      url: mxcCore.config.connectorUrl,
+                                      baseParams: {
+                                            action: 'stores/getcalendars' 
+                                      },
+                                      fields: [
+                                            'id', 'name'
+                                      ]
+                              }),
+                              mode: 'remote',
+                              triggerAction: 'all',
+                              fieldLabel: _('mxcalendars.grid_col_calendar'),
+                              name: 'calendar_id',
+                              hiddenName: 'calendar_id',
+                              id: 'ccalendar_id',
+                              allowBlank: true,
+                              typeAhead:true,
+                              minChars:1,
+                              emptyText:_('mxcalendars.label_select_calendar'),
+                              valueNotFoundText:_('mxcalendars.label_select_category_err'),
+                              anchor:'100%',
+                              value: config.record.calendar_id
+                                },{
 			    xtype: 'container',
                             labelWidth: '250',
 			    fieldLabel: _('mxcalendars.label_startdate'),
@@ -379,6 +440,7 @@ mxcCore.window.CreateCal = function(config) {
 			    ,name: 'repeatfrequency'
                             ,id: 'crepeatfrequency'
 			    ,xtype: 'combo'
+                            
 			    ,mode: 'local'
 			    ,store: new Ext.data.ArrayStore({
 				    id: 0,
@@ -392,6 +454,16 @@ mxcCore.window.CreateCal = function(config) {
                             ,layout:'anchor'
                             ,anchor: '100% 100%'
                             ,value: config.record.repeatfrequency
+                            ,msgTarget : 'crepeatfrequency'
+                            ,msgDisplay: 'block'
+                            ,listeners: {
+                                render: function(c) {
+                                  Ext.QuickTips.register({
+                                    target: c.getEl(),
+                                    text: _('mxcalendars.tip_repeaton')
+                                  });
+                                }
+                            }
 			},{
 			    fieldLabel: _('mxcalendars.label_repeat_last_occurance')
 			    ,name: 'repeatenddate'
@@ -424,7 +496,7 @@ mxcCore.window.CreateCal = function(config) {
 					title: _('mxcalendars.label_description'),
 					layout: 'fit',
 					items: {
-					    xtype: 'htmleditor'
+					    xtype: mxcCore.config.event_desc_type
 					    ,name: 'description'
                                             ,hiddenName: 'description'
                                             ,id: 'cdescription'
@@ -445,7 +517,7 @@ mxcCore.window.CreateCal = function(config) {
                                             ,id:'clocation_address'
                                             ,value: config.record.location_address
 					},{
-					    fieldLabel: _('mxcalendars.label_display_map')
+					    boxLabel: _('mxcalendars.label_display_map')
 					    ,name:'map'
                                             ,id:'cmap'
 					    ,xtype:'checkbox'
@@ -485,7 +557,40 @@ mxcCore.window.CreateCal = function(config) {
                                             ,anchor: '30%'
 					    ,value: config.record.linktarget
 					}]
-				    }
+				    },{
+                                        title:"Form"
+                                        ,defaults: {width:230}
+                                        ,items: [{
+                                              xtype: 'combo',
+                                              displayField: 'name',
+                                              valueField: 'name',
+                                              forceSelection: true,
+                                              store: new Ext.data.JsonStore({
+                                                      root: 'results',
+                                                      idProperty: 'id',
+                                                      url: mxcCore.config.connectorUrl,
+                                                      baseParams: {
+                                                            action: 'stores/getformchunks' 
+                                                      },
+                                                      fields: [
+                                                            'id','name','description',
+                                                      ]
+                                              }),
+                                              mode: 'remote',
+                                              triggerAction: 'all',
+                                              fieldLabel: _('mxcalendars.grid_col_formchunk'),
+                                              name: 'form_chunk',
+                                              hiddenName: 'form_chunk',
+                                              id: 'cform_chunk',
+                                              allowBlank: true,
+                                              typeAhead:true,
+                                              minChars:1,
+                                              emptyText:_('mxcalendars.label_select_form'),
+                                              value: config.record.form_chunk,
+                                              valueNotFoundText:_('mxcalendars.label_select_form_err'),
+                                              anchor:'100%'
+                                            }]
+                                    }
 				]
 			    }
 			]
@@ -531,12 +636,15 @@ mxcCore.window.CreateCal = function(config) {
                         ,repeaton: repeatDOW //Ext.getCmp('repeaton').getValue()
                         ,repeatfrequency: Ext.getCmp('crepeatfrequency').getValue()
                         ,repeatenddate: Ext.getCmp('crepeatenddate').getValue()
+                        ,context: Ext.getCmp('ccontext').getValue()
+                        ,calendar_id: Ext.getCmp('ccalendar_id').getValue()
+                        ,form_chunk: Ext.getCmp('cform_chunk').getValue()
                         // @TODO move to proper config section
                         ,HTTP_MODAUTH: MODx.siteId
                         ,action: 'mgr/events/create'
 		};
                 
-                ////console.log("frmData: "+frmData);
+                console.log("frmData: "+frmData);
                
 		mxcCore.ajax.request({
 			url: mxcCore.config.connectorUrl,
@@ -586,7 +694,7 @@ mxcCore.window.UpdateCal = function(config) {
         ,layout: 'form'
         ,id: 'UpdateCal'    
         ,url: mxcCore.config.connectorUrl
-        ,width: 'auto'
+        ,width: 870
         ,autoHeight:true
         ,baseParams: {
             action: 'mgr/events/update'
@@ -623,6 +731,35 @@ mxcCore.window.UpdateCal = function(config) {
 			  // Left Column
 			  columnWidth: .5,
 			  items: [{
+                              xtype: 'combo',
+                              displayField: 'key',
+                              valueField: 'key',
+                              forceSelection: true,
+                              store: new Ext.data.JsonStore({
+                                      root: 'results',
+                                      idProperty: 'key',
+                                      url: mxcCore.config.connectorUrl,
+                                      baseParams: {
+                                            action: 'stores/getcontexts' 
+                                      },
+                                      fields: [
+                                            'key',
+                                      ]
+                              }),
+                              mode: 'remote',
+                              triggerAction: 'all',
+                              fieldLabel: _('mxcalendars.grid_col_context'),
+                              name: 'context',
+                              hiddenName: 'context',
+                              id: 'context',
+                              allowBlank: true,
+                              typeAhead:true,
+                              minChars:1,
+                              emptyText:_('mxcalendars.label_select_context'),
+                              valueNotFoundText:_('mxcalendars.label_select_context_err'),
+                              anchor:'100%',
+                              value: config.record.context
+                            },{
 			    xtype: 'hidden'
 			    ,name:'id'
                             ,id: 'id'
@@ -657,7 +794,7 @@ mxcCore.window.UpdateCal = function(config) {
 			      name: 'categoryid',
                               hiddenName: 'categoryid',
                               id: 'categoryid',
-			      allowBlank: false,
+			      allowBlank: mxcCore.config.category_required ? true : false,
 			      typeAhead:true,
 			      minChars:1,
 			      emptyText:_('mxcalendars.label_select_category'),
@@ -669,6 +806,35 @@ mxcCore.window.UpdateCal = function(config) {
 			  // Right Column
 			  columnWidth: .5,
 			  items: [{
+                              xtype: 'combo',
+                              displayField: 'name',
+                              valueField: 'id',
+                              forceSelection: true,
+                              store: new Ext.data.JsonStore({
+                                      root: 'results',
+                                      idProperty: 'id',
+                                      url: mxcCore.config.connectorUrl,
+                                      baseParams: {
+                                            action: 'stores/getcalendars' 
+                                      },
+                                      fields: [
+                                            'id', 'name'
+                                      ]
+                              }),
+                              mode: 'remote',
+                              triggerAction: 'all',
+                              fieldLabel: _('mxcalendars.grid_col_calendar'),
+                              name: 'calendar_id',
+                              hiddenName: 'calendar_id',
+                              id: 'calendar_id',
+                              allowBlank: true,
+                              typeAhead:true,
+                              minChars:1,
+                              emptyText:_('mxcalendars.label_select_calendar'),
+                              valueNotFoundText:_('mxcalendars.label_select_category_err'),
+                              anchor:'100%',
+                              value: config.record.calendar_id
+                            },{
 			    xtype: 'container',
                             labelWidth: '250',
 			    fieldLabel: _('mxcalendars.label_startdate'),
@@ -821,6 +987,16 @@ mxcCore.window.UpdateCal = function(config) {
                             ,layout:'anchor'
                             ,anchor: '100% 100%'
                             ,value: config.record.repeatfrequency
+                            ,msgTarget : 'crepeatfrequency'
+                            ,msgDisplay: 'block'
+                            ,listeners: {
+                                render: function(c) {
+                                  Ext.QuickTips.register({
+                                    target: c.getEl(),
+                                    text: _('mxcalendars.tip_repeaton')
+                                  });
+                                }
+                            }
 			},{
 			    fieldLabel: _('mxcalendars.label_repeat_last_occurance')
 			    ,name: 'repeatenddate'
@@ -852,7 +1028,7 @@ mxcCore.window.UpdateCal = function(config) {
 					title: _('mxcalendars.label_description'),
 					layout: 'fit',
 					items: {
-					    xtype: 'htmleditor'
+					    xtype: mxcCore.config.event_desc_type
 					    ,name: 'description'
                                             ,hiddenName: 'description'
                                             ,id: 'description'
@@ -873,7 +1049,7 @@ mxcCore.window.UpdateCal = function(config) {
                                             ,id:'location_address'
                                             ,value: config.record.location_address
 					},{
-					    fieldLabel: _('mxcalendars.label_display_map')
+					    boxLabel: _('mxcalendars.label_display_map')
 					    ,name:'map'
                                             ,id:'map'
 					    ,xtype:'checkbox'
@@ -913,7 +1089,40 @@ mxcCore.window.UpdateCal = function(config) {
                                             ,anchor: '30%'
 					    ,value: config.record.linktarget
 					}]
-				    }
+				    },{
+                                        title:"Form"
+                                        ,defaults: {width:230}
+                                        ,items: [{
+                                              xtype: 'combo',
+                                              displayField: 'name',
+                                              valueField: 'name',
+                                              forceSelection: true,
+                                              store: new Ext.data.JsonStore({
+                                                      root: 'results',
+                                                      idProperty: 'name',
+                                                      url: mxcCore.config.connectorUrl,
+                                                      baseParams: {
+                                                            action: 'stores/getformchunks' 
+                                                      },
+                                                      fields: [
+                                                            'id','name','description',
+                                                      ]
+                                              }),
+                                              mode: 'remote',
+                                              triggerAction: 'all',
+                                              fieldLabel: _('mxcalendars.grid_col_formchunk'),
+                                              name: 'form_chunk',
+                                              hiddenName: 'form_chunk',
+                                              id: 'form_chunk',
+                                              allowBlank: true,
+                                              typeAhead:true,
+                                              minChars:1,
+                                              emptyText:_('mxcalendars.label_select_form'),
+                                              valueNotFoundText:_('mxcalendars.label_select_form_err'),
+                                              anchor:'100%',
+                                              value: config.record.form_chunk                                              
+                                            }]
+                                    }
 				]
 			    }
 			]
@@ -960,6 +1169,9 @@ mxcCore.window.UpdateCal = function(config) {
                         ,repeaton: repeatDOW //Ext.getCmp('repeaton').getValue()
                         ,repeatfrequency: Ext.getCmp('repeatfrequency').getValue()
                         ,repeatenddate: Ext.getCmp('repeatenddate').getValue()
+                        ,context: Ext.getCmp('context').getValue()
+                        ,calendar_id: Ext.getCmp('calendar_id').getValue()
+                        ,form_chunk: Ext.getCmp('form_chunk').getValue()
                         // @TODO move to proper config section
                         ,HTTP_MODAUTH: MODx.siteId
                         ,action: 'mgr/events/update'
@@ -994,3 +1206,6 @@ mxcCore.window.UpdateCal = function(config) {
 };
 Ext.extend(mxcCore.window.UpdateCal,Ext.Window);
 Ext.reg('mxcalendars-window-mxcalendar-update',mxcCore.window.UpdateCal);
+
+
+Ext.QuickTips.init();

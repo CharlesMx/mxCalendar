@@ -1,5 +1,39 @@
 Changelog file for mxCalendar component.
 
+==================================== 
+mxCalendar 1.1.2-pl 
+====================================
+- Bug fix: Missing trailing zero in monthly calendar dates (10 was just 1; 20 was just 2; etc)
+
+
+==================================== 
+mxCalendar 1.1.1-pl 
+====================================
+- Bug fix: Detail view not displaying repeating events content
+- Bug fix: Parameter for modalView being ignored
+- Bug fix: Trailing zeros on dates missing
+- Bug fix: Upgrade not adding in new schema updates
+- Bug fix: Removed unused fields from forms
+- Bug fix: Mixed results when using "false" or "true" in paramete as they always returned true; recommended to use digits/integers [0=False,1=True]
+- Misc: Several small changes to the packaged templates (chunks)
+
+==================================== 
+mxCalendar 1.1.0-pl 
+====================================
+- Bug fix [34]: Sorting event list was not filtering the returned events based on the actual start/end dates
+- Bug fix [34]: CRT Parameter warning log, issue with strftime() format types across platforms (*nix, IIS)
+- Bug fix: Modal view template, tplDetailModal, was not loading when in AJAX page (requires ajax page to have the "resourceId" property set)
+- Enhancement: Ability to set the event description form type between html editor (htmleditor) and text area (textarea)
+- Enhancement: Ability to change the category requirement for event input
+- Enhancement: Added "Context" filtering per event (contextFilter [string; comma seperated list])
+- Enhancement: Added "Calendar" grouping for filtering events (calendarFilter [string; comma seperated id list])
+- Enhancement: Ability to attach a specific chunk (form) to the calendar event; does a match on chunk name so you can easily filter out by using standard formated names in chunks (ex: form_ContactForm, form_Registration) and match on "form_"
+
+==================================== 
+mxCalendar 1.0.0-pl
+==================================== 
+- Enhancement: Speed improvements for the prev/next navigation
+- Enhancement: Tooltip to the repeat every field (will extend more tooltips in future releases)
 
 ==================================== 
 mxCalendar 0.0.3-beta

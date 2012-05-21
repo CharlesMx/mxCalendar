@@ -8,7 +8,7 @@ include_once($modx->getOption('mxcalendars.core_path',null,$modx->getOption('cor
 /* setup default properties */
 $theme = $modx->getOption('theme',$scriptProperties,'default');// default, traditional
 $resourceId = $modx->getOption('resourceId', $scriptProperties, $modx->resource->get('id'));
-$isLocked = $modx->getOption('isLocked', $scriptProperties, false);
+$isLocked = $modx->getOption('isLocked', $scriptProperties, 0);
 $displayType = isset($_REQUEST['detail']) && !$isLocked ? 'detail' : $modx->getOption('displayType', $scriptProperties, 'calendar'); //calendar,list,mini
 //++ Results query properties
 $eventListStartDate = $modx->getOption('elStartDate',$scriptProperties,'now');
@@ -25,8 +25,8 @@ $dateFormat = $modx->getOption('dateformat', $scriptProperties, '%Y-%m-%d');
 $timeFormat = $modx->getOption('timeformat', $scriptProperties, '%H:%M %p');
 $dateSeperator = $modx->getOption('dateseperator',$scriptProperties, '/');
 //++ Display: Calendar properties
-$activeMonthOnlyEvents = $modx->getOption('activeMonthOnlyEvents', $scriptProperties, false);
-$hightlightToday = $modx->getOption('hightlightToday', $scriptProperties, true);
+$activeMonthOnlyEvents = $modx->getOption('activeMonthOnlyEvents', $scriptProperties, 0);
+$highlightToday = $modx->getOption('highlightToday', $scriptProperties, 1);
 $todayClass = $modx->getOption('todayClass', $scriptProperties, 'today');
 $noEventsClass = $modx->getOption('noEventClass', $scriptProperties, 'mxcDayNoEvents');
 $hasEventsClass = $modx->getOption('hasEventsClass', $scriptProperties,'mxcEvents');
@@ -37,34 +37,54 @@ $tplMonth = $modx->getOption('tplMonth',$scriptProperties,'month.inner.container
 $tplHeading = $modx->getOption('tplHeading',$scriptProperties,'month.inner.container.row.heading');
 //++Display: Detail
 $tplDetail = $modx->getOption('tplDetail',$scriptProperties,'detail');
+$tplDetailModal = $modx->getOption('tplDetailModal', $scriptProperties, 'detail.modal');
 //++Display: Categories
-$showCategories = $modx->getOption('showCategories',$scriptProperties,true);
+$showCategories = $modx->getOption('showCategories',$scriptProperties,1);
 $tplCategoryWrap = $modx->getOption('tplCategoryWrap',$scriptProperties,'category.container');
 $tplCategoryItem = $modx->getOption('tplCategoryItem',$scriptProperties,'category.container.item');
 $labelCategoryHeading = $modx->getOption('labelCategoryHeading',$scriptProperties,$mxcal->modx->lexicon('mxcalendars.label_category_heading'));
 //@TODO Possibly add to the properties set
-//++Aux Parameters: AJAX, Modal, etc.
-$addJQ = $modx->getOption('addjq', $scriptProperties,true); //-- jQuery is required for the core mxCalendar JS to function
+//++Aux Parameters: AJAX, Modal, etc.*
+$addJQ = $modx->getOption('addjq', $scriptProperties,1); //-- jQuery is required for the core mxCalendar JS to function
 $jqLibSrc = $modx->getOption('jqLibSrc', $scriptProperties,'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
-$usemxcLib = $modx->getOption('usemxcLib', $scriptProperties,true); //-- Use the stand-a-lone modal windows JS library packaged with mxCalendar
+$usemxcLib = $modx->getOption('usemxcLib', $scriptProperties,1); //-- Use the stand-a-lone modal windows JS library packaged with mxCalendar
 $ajaxResourceId = $modx->getOption('ajaxResourceId', $scriptProperties, null);
-$modalView = $modx->getOption('modalView', $scriptProperties,false);
-$modalSetWidth = $modx->getOption('modalSetWidth', $scriptProperties,null); //-- Not used as of 0.0.3-beta
-$modalSetHeight =$modx->getOption('modalSetHeight', $scriptProperties,null); //-- Not used as of 0.0.3-beta
+$modalView = $modx->getOption('modalView', $scriptProperties,1);
+$modalSetWidth = $modx->getOption('modalSetWidth', $scriptProperties,null); //-- Ver > 0.0.3-beta
+$modalSetHeight =$modx->getOption('modalSetHeight', $scriptProperties,null); //-- Ver > 0.0.3-beta
 //@TODO Possibly add to the properties set
 //++Location Specific options for Google Maps v3.x
 $gmapLib = $modx->getOption('gmapLib', $scriptProperties, 'http://maps.google.com/maps/api/js?sensor=false');
 $gmapId = $modx->getOption('gmapId',$scriptProperties, 'map');
 $gmapDefaultZoom = $modx->getOption('gmapDefaultZoom', $scriptProperties, '13');
+$gmapAPIKey = $modx->getOption('gmapAPIKey', $scriptProperties, 'null');
+//++ Holiday Support
+$holidays = $modx->getOption('holidays', $scriptProperties, "{'us':{''}}");
+$holidayDisplayEvents = $modx->getOption('holidayDisplayEvents', $scriptProperties, 1);
 //++ Used in very limited cases
 $setTimezone = $modx->getOption('setTimezone', $scriptProperties, date_default_timezone_get() );
-$debugTimezone = $modx->getOption('debugTimezone', $scriptProperties, false );
-$debug = $modx->getOption('debug',$scriptProperties,false);
+$debugTimezone = $modx->getOption('debugTimezone', $scriptProperties, 0 );
+$debug = $modx->getOption('debug',$scriptProperties,0);
+
+//++ Calendar Options (ver >= 1.1.0-pl)
+$calendarFilter = isset($_REQUEST['calf']) ? $_REQUEST['calf'] : $modx->getOption('calendarFilter', $scriptProperties, null); //-- Defaults to show all calendars
+//++ Context Options (ver >= 1.1.0-pl)
+$contextFilter = isset($_REQUEST['conf']) ? $_REQUEST['conf'] : $modx->getOption('contextFilter',$scriptProperties, ','.$modx->context->key);//-- Defaults to current context + (blank for all)
+//++ Form Chunk Filter match name
+$formFilter = $modx->getOption('formFilter',$scriptProperties,'form_');
 
 //-- Update to the Timezone
 $mxcal->setTimeZone($setTimezone,$debugTimezone);
 //-- Update to the Timezone: Manual fix to adjust timezone to match server settings
 //date_default_timezone_set("Europe/Amsterdam");
+
+//-- Create tables
+// $m = $modx->getManager();
+// $m->removeObjectContainer('mxCalendarCalendars');
+// $m->createObjectContainer('mxCalendarCalendars');
+// $m->addField('mxCalendarEvents','context');
+// $m->addField('mxCalendarEvents','calendar_id');
+// $m->addField('mxCalendarEvents','form_chunk');
 
 
 $elStartDate = strtotime($eventListStartDate);
@@ -106,15 +126,29 @@ switch ($displayType){
         $dr = $mxcal->getEventCalendarDateRange($activeMonthOnlyEvents);
         $elStartDate = $dr['start'];
         $elEndDate = $dr['end'];
-        $whereArr = array(array('repeating:=' => 0,'AND:enddate:>=' => $elStartDate,'AND:enddate:<=' => $elEndDate,array('OR:repeating:='=>1,'AND:repeatenddate:>=' => $elStartDate)) );//,'AND:repeatenddate:<=' => $dr['end']
+        $whereArr = array(array(
+                        'repeating:=' => 0,
+                        'AND:enddate:>=' => $elStartDate,
+                        'AND:enddate:<=' => $elEndDate
+                        ,array('OR:repeating:='=>1,
+                                'AND:repeatenddate:>=' => $elStartDate)
+                    ) );//,'AND:repeatenddate:<=' => $dr['end']
         break;
     case 'detail':
-        $whereArr = array('id:=' => (int)$_REQUEST['detail']);
+        $whereArr = array(array('id' => (int)$_REQUEST['detail']));
         //$whereArr[0]['AND:id:='] = (int)$_REQUEST['detail']; //@TODO Make filter for single events repeating dates
         break;
 }
+
+//-- ADD IN THE CONTEXT AND CALENDAR PROPERTY FILTERS
+$whereArr['AND:context:IN'] = explode(',',$contextFilter);
+if(!empty($calendarFilter))
+    $whereArr['AND:calendar_id:IN'] = explode(',',$calendarFilter);
+
+                        
 if($_REQUEST['cid'] && ($displayType == 'calendar' || $displayType == 'mini'))
         $whereArr['AND:CategoryId.id:='] = (int)$_REQUEST['cid'];
+
 $c->where($whereArr);
 $c->sortby($sort,$dir);
 $c->limit($limit,0);
@@ -130,8 +164,9 @@ if($debug) echo "<br />Returned Events: ".count($mxcalendars).'<br />';
 $modx->regClientCSS($modx->getOption('mxcalendars.assets_url',null,$modx->getOption('assets_url').'components/mxcalendars/').'themes/'.$theme.'/css/mxcalendar.css');
 
 //-- Add the Shadowbox library info if we are using modal
-if($modalView) $mxcal->addShadowBox();
-else $mxcal->disableModal();
+if((bool)$modalView === true && (bool)$usemxcLib === true) {
+    $mxcal->addShadowBox();
+} else { $mxcal->disableModal(); }
 
 //-- Add mxCalendar jQuery Library if enabled
 if($addJQ){
@@ -145,10 +180,10 @@ foreach ($mxcalendars as $mxc) {
     $mxcArray = $mxc->toArray();
 	
     //-- Split the single unix time stamp into date and time for preformatted UI
-    $mxcArray['startdate_fdate'] = strftime($dateFormat,$mxc->get('startdate'));  
-    $mxcArray['startdate_ftime'] = strftime($timeFormat,$mxc->get('startdate'));
-    $mxcArray['enddate_fdate'] = strftime($dateFormat,$mxc->get('enddate'));  
-    $mxcArray['enddate_ftime'] = strftime($timeFormat,$mxc->get('enddate'));
+    $mxcArray['startdate_fdate'] = $mxcal->getFormatedDate($dateFormat,$mxc->get('startdate'));
+    $mxcArray['startdate_ftime'] = $mxcal->getFormatedDate($timeFormat,$mxc->get('startdate'));
+    $mxcArray['enddate_fdate'] = $mxcal->getFormatedDate($dateFormat,$mxc->get('enddate'));
+    $mxcArray['enddate_ftime'] = $mxcal->getFormatedDate($timeFormat,$mxc->get('enddate'));
 
     
     $eStart    = new DateTime(date('Y-m-d H:i:s',$mxc->get('startdate'))); 
@@ -200,7 +235,16 @@ foreach ($mxcalendars as $mxc) {
     //$output .= $mxcal->getChunk($tpl,$mxcArray);
 }
 
-usort($arrEventDates, "mxcal::custom_sort");
+// Obtain a list of columns
+foreach ($arrEventDates as $key => $row) {
+    $date[$key]  = $row['date'];
+    $event[$key] = $row['eventId'];
+}
+
+// Sort the data with volume descending, edition ascending
+// Add $data as the last parameter, to sort by the common key
+array_multisort($date, SORT_ASC, $event, SORT_ASC, $arrEventDates);
+
 
 if(count($arrEventDates)){
     if($debug) echo 'Looping through events list of '.count($arrEventDates).' total.<br />';
@@ -210,17 +254,17 @@ if(count($arrEventDates)){
             $oDetails = $arrEventsDetail[$e['eventId']]; //Get original event (parent) details
             $oDetails['startdate'] = $e['date'];
             $oDetails['enddate'] = strtotime('+'.($arrEventsDetail[$e['eventId']]['durDay'] ? $arrEventsDetail[$e['eventId']]['durDay'].' days ' :'').($arrEventsDetail[$e['eventId']]['durHour'] ? $arrEventsDetail[$e['eventId']]['durHour'].' hour ' :'').($arrEventsDetail[$e['eventId']]['durMin'] ? $arrEventsDetail[$e['eventId']]['durMin'].' minute' :''), $e['date']);//$e['date'];//repeatenddate
-            //if( (($oDetails['startdate']   >= $elStartDate || $oDetails['enddate'] >= $elStartDate)&& $oDetails['enddate']<=$elEndDate ) ){
-            $oDetails['startdate_fdate'] = strftime($dateFormat,$oDetails['startdate']);  
-            $oDetails['startdate_ftime'] = strftime($timeFormat,$oDetails['startdate']);
-            $oDetails['enddate_fdate'] = strftime($dateFormat,$oDetails['enddate']);  
-            $oDetails['enddate_ftime'] = strftime($timeFormat,$oDetails['enddate']);
-            $oDetails['detailURL'] = $modx->makeUrl((!empty($ajaxResourceId) ? $ajaxResourceId : $resourceId),'',array('detail' => $e['eventId'], 'r'=>$e['repeatId']));
-            $eventsArr[strftime('%Y-%m-%d', $e['date'])][] = $oDetails;
-            $ulimit++;
-            if($debug) echo '&nbsp;&nbsp;&nbsp;&nbsp;'.$ulimit.') '.strftime($dateFormat,$e['date']).' '.$e['eventId'].'<br />';
-            if($ulimit >= $limit && $displayType=='list' ) break;
-            //}
+            if(( (($oDetails['startdate']   >= $elStartDate || $oDetails['enddate'] >= $elStartDate)&& $oDetails['enddate']<=$elEndDate) || $displayType=='detail' ) ){
+                $oDetails['startdate_fdate'] = $mxcal->getFormatedDate($dateFormat,$oDetails['startdate']);
+                $oDetails['startdate_ftime'] = $mxcal->getFormatedDate($timeFormat,$oDetails['startdate']);
+                $oDetails['enddate_fdate'] = $mxcal->getFormatedDate($dateFormat,$oDetails['enddate']);
+                $oDetails['enddate_ftime'] = $mxcal->getFormatedDate($timeFormat,$oDetails['enddate']);
+                $oDetails['detailURL'] = $modx->makeUrl((!empty($ajaxResourceId) && (bool)$modalView === true ? $ajaxResourceId : $resourceId),'',array('detail' => $e['eventId'], 'r'=>$e['repeatId']));
+                $eventsArr[strftime('%Y-%m-%d', $e['date'])][] = $oDetails;
+                $ulimit++;
+                if($debug) echo '&nbsp;&nbsp;&nbsp;&nbsp;'.$ulimit.'['.$limit.']) '.strftime($dateFormat,$e['date']).' '.$e['eventId'].'<br />';
+                if($ulimit >= $limit && $displayType=='list' ) break;
+            }
     }
 } else {
     if($debug) echo 'No valid dates returned.';
@@ -229,7 +273,6 @@ if(count($arrEventDates)){
 $modx->setPlaceholders(array('dateseperator'=>$dateSeperator));
 
 //----- NOW GET THE DISPLAY TYPE ------//
-// Create the where clause by display type to limit the returned records
 switch ($displayType){
     case 'list':
         $output = $mxcal->makeEventList($eventListLimit, $eventsArr, array('tplElItem'=>$tplElItem, 'tplElMonthHeading'=>$tplElMonthHeading, 'tplElWrap'=>$tplElWrap));
@@ -237,12 +280,14 @@ switch ($displayType){
     case 'calendar':
     case 'mini':
     default:
-        $output = $mxcal->makeEventCalendar($eventsArr,(!empty($ajaxResourceId) ? $ajaxResourceId : $resourceId),array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading));
-        if($showCategories)
-            $output .= $mxcal->makeCategoryList($labelCategoryHeading, ($_REQUEST['cid'] ? $_REQUEST['cid'] : null),$resourceId, array('tplCategoryWrap'=>$tplCategoryWrap, 'tplCategoryItem'=>$tplCategoryItem));
+        $output = $mxcal->makeEventCalendar($eventsArr,(!empty($ajaxResourceId) && $modalView? $ajaxResourceId : $resourceId),array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading), $contextFilter, $calendarFilter, $highlightToday);
+        if($showCategories == true)
+            $modx->setPlaceholder('categories', $mxcal->makeCategoryList($labelCategoryHeading, ($_REQUEST['cid'] ? $_REQUEST['cid'] : null),$resourceId, array('tplCategoryWrap'=>$tplCategoryWrap, 'tplCategoryItem'=>$tplCategoryItem)));
         break;
     case 'detail':
-        if($debug) $output .= 'Total Occurances: '.count($eventsArr).'<br />';
+        if($debug) $output .= 'Total Occurances: '.count($eventsArr).' for Event ID: '.$_REQUEST['detail'].'<br />';
+        if(isset($resourceId) && $modx->resource->get('id') != $resourceId)
+                $tplDetail = $tplDetailModal;
         $output .= $mxcal->makeEventDetail($eventsArr,($occurance=$_REQUEST['r']?$_REQUEST['r']:0) , array('tplDetail'=>$tplDetail));
         //$whereArr = array('id:=' => (int)$_REQUEST['detail']);
         //$whereArr[0]['AND:id:='] = (int)$_REQUEST['detail']; //@TODO Make filter for single events repeating dates

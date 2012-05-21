@@ -13,38 +13,44 @@ mxcCore.panel.Home = function(config) {
             ,defaults: { border: false,autoHeight: true }
             ,border: true
             ,items: [{
+                //-- Events Tab
                 title: _('mxcalendars.tab_events')
                 ,defaults: { autoHeight: true }
                 ,items: [
-					// ADD DESCRIPTION INFORMATION
-					{
-						html: '<p>'+_('mxcalendars.management_desc')+'</p><br />'
-						,border: false
-					},
-					// ADD THE GRID CONTROLLER
-					{
-					   xtype: 'mxcalendars-grid-events'
-					   ,preventRender: true
-					}
-					]
-				},{
-				// Second Tab
-				title: _('mxcalendars.tab_categories')
+                        // ADD DESCRIPTION INFORMATION
+                        {
+                                html: '<p>'+_('mxcalendars.management_desc')+'</p><br />'
+                                ,border: false
+                        },
+                        // ADD THE GRID CONTROLLER
+                        {
+                           xtype: 'mxcalendars-grid-events'
+                           ,preventRender: true
+                        }
+                        ]
+                },{
+                //-- Categories Tab
+                title: _('mxcalendars.tab_categories')
                 ,defaults: { autoHeight: true }
-				,items: [{
+                    ,items: [{
                         html: '<p>'+_('mxcalendars.category_desc')+'</p><br />'
                        ,border: false
                     },{
                         xtype: 'mxcalendars-grid-categories'
                         ,preventRender: true
                     }]
-				}/*,{
-				// Third Tab
-				title: _('mxcalendars.tab_settings')
-				,items: [{
-
-                                       }]
-				}*/]
+                },{
+                //-- Calendars Tab
+                title: _('mxcalendars.tab_calendars')
+                ,items: [{
+                        html: '<p>'+_('mxcalendars.calendar_desc')+'</p><br />'
+                       ,border: false
+                    },{
+                        xtype: 'mxcalendars-grid-calendars'
+                        ,preventRender: true
+                    }]
+                }
+            ]
         }]
     });
     mxcCore.panel.Home.superclass.constructor.call(this,config);

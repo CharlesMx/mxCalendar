@@ -216,6 +216,14 @@ $properties = array(
             'value' => 'tplCategoryItem',
         'lexicon' => 'mxcalendars:properties',
     ),
+    array(
+        'name' => 'gmapAPIKey',
+        'desc' => 'prop_mxcalendars.desc_googleMapAPIKey',
+        'type' => 'textfield',
+        'options'=>'',
+        'value'=>'gmapAPIkey',
+        'lexicon'=>'mxcalendars:properties'
+    ),
     //--------------//
     
     array(

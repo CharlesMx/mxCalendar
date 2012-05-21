@@ -7,12 +7,15 @@ class mxCalendars {
     public $config = array();
     public $tz;
     private $scriptProperties = array();
+    private $dowMatch = array('Mon'=>1,'Tue'=>2,'Wed'=>3,'Thu'=>4,'Fri'=>5,'Sat'=>6,'Sun'=>7);
     
     function __construct(modX &$modx,array $config = array()) {
         $this->modx =& $modx;
         
         $basePath = $this->modx->getOption('mxcalendars.core_path',$config,$this->modx->getOption('core_path').'components/mxcalendars/');
         $assetsUrl = $this->modx->getOption('mxcalendars.assets_url',$config,$this->modx->getOption('assets_url').'components/mxcalendars/');
+        $descriptionEditorMode = $this->modx->getOption('mxcalendars.event_desc_type','htmleditor');
+        $categoryRequired = $this->modx->getOption('mxcalendars.category_required','true');
         $this->config = array_merge(array(
             'basePath' => $basePath,
             'corePath' => $basePath,
@@ -23,6 +26,8 @@ class mxCalendars {
             'cssUrl' => $assetsUrl.'css/',
             'assetsUrl' => $assetsUrl,
             'connectorUrl' => $assetsUrl.'connector.php',
+            'category_required' => $categoryRequired,
+            'event_desc_type' => $descriptionEditorMode            
         ),$config);
         $this->modx->addPackage('mxcalendars',$this->config['modelPath']);
         $this->modx->getService('lexicon','modLexicon');
@@ -199,6 +204,9 @@ class mxCalendars {
                 if($debug) echo "mxCalendar: TIMEZONE RESET: ".$this->tz."<br />";
             }
         }
+        public function getFormatedDate($f,$t){
+            return str_replace('%O', date('S', $t),strftime($f,$t));
+        }
         public function custom_sort($a,$b){
             return $a['date']>$b['date'];
         }
@@ -245,16 +253,19 @@ class mxCalendars {
                 return $diff;
         }
         public function makeEventDetail($events=array(),$occurance=0, $tpls=array()){
+            $o = '';
             $tpls = (object)$tpls;
             if(count($events)){
                 $occ=0;
                 foreach($events AS $e){
-                    if($occ == $occurance || ($occurance === 0 && $occ ==0)){
+                    if($debug) $o .= 'Check: '.$occ.'<br />';
+                    if($occ == $occurance || ($occurance == 0 && $occ ==0)){
                         $detailPH = $e[0];
                         $detailPH['allplaceholders'] = implode(', ',array_keys($e[0]));
-                        if($e[0]['map'])
+                        if($e[0]['map']){
                             $detailPH['map'] = $this->_getMap($e[0]['location_address']);
-                        $o = $this->getChunk($tpls->tplDetail,$detailPH);
+                        }
+                        $o .= $this->getChunk($tpls->tplDetail,$detailPH);
                             break;
                     }
                     $occ++;
@@ -294,31 +305,32 @@ class mxCalendars {
             $mStartDate = strftime('%Y-%m',strtotime($startDate)) . '-01 00:00:01';
             $nextMonth = strftime('%Y-%m', strtotime('+1 month',strtotime($mStartDate)));
             $prevMonth = strftime('%Y-%m', strtotime('-1 month',strtotime($mStartDate)));
-            $startDOW = strftime('%u', strtotime($mStartDate));
+            $startDOW = $this->dowMatch[strftime('%a', strtotime($mStartDate))];
             $lastDayOfMonth = strftime('%Y-%m',strtotime($mStartDate)) . '-'.date('t',strtotime($mStartDate)) .' 23:59:59';
             $startMonthCalDate = $startDOW <= 6 ? strtotime('- '.$startDOW.' day', strtotime($mStartDate)) : strtotime($mStartDate)	;
             $endMonthCalDate = strtotime('+ 6 weeks', $startMonthCalDate);
             if($debug) echo 'Active Month Only: '.$mStartDate.' :: '.$lastDayOfMonth.'  All displayed dates: '.strftime('%Y-%m-%d',$startMonthCalDate).' :: '.strftime('%Y-%m-%d',$endMonthCalDate).'<br />';
             if($activeMonthOnlyEvents) return array('start'=>strtotime($mStartDate), 'end'=>strtotime($lastDayOfMonth)); else return array('start'=>$startMonthCalDate, 'end'=>$endMonthCalDate);
         }
-        public function makeEventCalendar($events=array(),$resourceId=null,$tpls=array('event'=>'month.inner.container.row.day.eventclean','day'=>'month.inner.container.row.day','week'=>'month.inner.container.row','month'=>'month.inner.container','heading'=>'month.inner.container.row.heading')){
+        public function makeEventCalendar($events=array(),$resourceId=null,$tpls=array('event'=>'month.inner.container.row.day.eventclean','day'=>'month.inner.container.row.day','week'=>'month.inner.container.row','month'=>'month.inner.container','heading'=>'month.inner.container.row.heading'), $calFilter=null, $conFilter=null, $highlightToday=true){
             $startDate = $_REQUEST['dt'] ? $_REQUEST['dt'] : strftime('%Y-%m-%d');
             $mStartDate = strftime('%Y-%m',strtotime($startDate)) . '-01 00:00:01';
             $mCurMonth = strftime('%m', strtotime($mStartDate));
             $nextMonth = strftime('%Y-%m', strtotime('+1 month',strtotime($mStartDate)));
             $prevMonth = strftime('%Y-%m', strtotime('-1 month',strtotime($mStartDate)));
-            $startDOW = strftime('%u', strtotime($mStartDate));
+            $startDOW = $this->dowMatch[strftime('%a', strtotime($mStartDate))];
             $lastDayOfMonth = strftime('%Y-%m',strtotime($mStartDate)) . '-'.date('t',strtotime($mStartDate)) .' 23:59:59';
-            $endDOW = strftime('%u', strtotime($lastDayOfMonth));
+            $endDOW = $this->dowMatch[strftime('%a', strtotime($lastDayOfMonth))];
             $tpls=(object)$tpls;
             $out = '';
             $startMonthCalDate = $startDOW <= 6 ? strtotime('- '.$startDOW.' day', strtotime($mStartDate)) : strtotime($mStartDate)	;
             $endMonthCalDate = strtotime('+ '.(6 - $endDOW).' day', strtotime($lastDayOfMonth));
             //------//
             $headingLabel = strtotime($mStartDate);
-            $todayLink = $this->modx->makeUrl($resourceId,'',array('dt' => strftime('%Y-%m'), 'cid'=>$_REQUEST['cid']));
-            $prevLink = $this->modx->makeUrl($resourceId,'',array('dt' => $prevMonth, 'cid'=>$_REQUEST['cid']));
-            $nextLink = $this->modx->makeUrl($resourceId,'',array('dt' => $nextMonth, 'cid'=>$_REQUEST['cid']));
+            $globalParams = array('conf'=>$conFilter, 'calf'=>$calFilter);
+            $todayLink = $this->modx->makeUrl($resourceId,'', array_merge($globalParams, array('dt' => strftime('%Y-%m'), 'cid'=>$_REQUEST['cid'])));
+            $prevLink = $this->modx->makeUrl($resourceId,'', array_merge($globalParams, array('dt' => $prevMonth, 'cid'=>$_REQUEST['cid'])));
+            $nextLink = $this->modx->makeUrl($resourceId,'', array_merge($globalParams, array('dt' => $nextMonth, 'cid'=>$_REQUEST['cid'])));
             
             $chunkEvent = $this->loadChunk($tpls->event);
             $chunkDay = $this->loadChunk($tpls->day);
@@ -353,7 +365,8 @@ class mxCalendars {
                 do{
                     // Get the week's days
                     $iDay = strtotime('+ '.$diw.' day', $iWeek);
-                    if($debug) echo strftime('%a %b %e', $iDay).'<br />';
+                    $thisMonth = strftime('%m', $iDay);
+                    if($debug) echo strftime('%a %b %d', $iDay).'<br />';
                     $eventList = '';
                     if(count($events[strftime('%Y-%m-%d', $iDay)])){
                         //-- Echo each event item
@@ -362,15 +375,15 @@ class mxCalendars {
                         foreach($e AS $el){
                             if($debug) echo '&nbsp;&nbsp;<span style="color:green;">++</span>&nbsp;&nbsp;'.$el['title'].'<br />';
                             //$eventList.=$chunkEvent->process($el);
+                            //@TODO -- FIX: Add check for display of current month
                             $eventList.=$this->getChunk($tpls->event, $el);
                         }
                     } else { if($debug) echo '&nbsp;&nbsp;<span style="color:red;">--&nbsp;&nbsp;'.strftime('%m-%d', $iDay).'</span><br />'; }
                     //-- Set additional day placeholders for day
-                    $thisMonth = strftime('%m', $iDay);
-                    $isToday = strftime('%m-%d') == strftime('%m-%d', $iDay) ? 'today ' : '';
+                    $isToday = (strftime('%m-%d') == strftime('%m-%d', $iDay) && $highlightToday==true ? 'today ' : '');
                     $phDay = array(
-                        'dayOfMonth'=>(strftime('%e',$iDay) == 1 ? strftime('%b %e',$iDay) : strftime('%e',$iDay))
-                        ,'dayOfMonthID'=>strftime('%A%d',$iDay)
+                        'dayOfMonth'=> str_replace('0', ' ', (strftime('%d',$iDay) == 1 ? strftime('%b %d',$iDay) : strftime('%d',$iDay)))
+                        ,'dayOfMonthID'=>'dom-'.strftime('%A%d',$iDay)
                         ,'events'=>$eventList 
                         ,'class'=>($mCurMonth == $thisMonth ? $isToday.(!empty($eventList) ? 'hasEvents' : 'noEvents') : 'ncm')
                         );

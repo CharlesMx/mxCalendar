@@ -127,4 +127,13 @@ $chunks[13]->fromArray(array(
     'snippet' => getChunkContent($sources['elements'].'chunks/category.container.item.chunk.tpl'),
 ),'',true,true);
 
+//-- Add the modal detail item chunk 
+$chunks[14]= $modx->newObject('modChunk');
+$chunks[14]->fromArray(array(
+    'id' => 1,
+    'name' => 'tplDetailModal',
+    'description' => 'The template file for use with the AJAX modal detail view.',
+    'snippet' => getChunkContent($sources['elements'].'chunks/detail.modal.chunk.tpl'),
+),'',true,true);
+
 return $chunks;

@@ -10,7 +10,7 @@ $(function() {
     var mxcCalPrev;
     var mxcCalNext;
     var urlParams = {};
-    var mxcHistory = {};
+    var mxcHistory = [];
     (function () {
         var e,
             a = /\+/g,  // Regex for replacing addition symbol with a space
@@ -23,19 +23,40 @@ $(function() {
     })();
     
     function ajaxmxc(){
-        mxcCalPrev = document.getElementById("mxcprevlnk");
         mxcCalNext = document.getElementById("mxcnextlnk");
-        if(mxcCalPrev) 
-            $.get(mxcCalPrev.href+"&imajax=1", {},
-               function(data){
-                 mxcCalPreContent = data;
-               });
-        if(mxcCalNext) 
-            $.get(mxcCalNext.href+"&imajax=1", {},
-               function(data){
-                 mxcCalNexContent = data;
-               });
-        
+        mxcCalPrev = document.getElementById("mxcprevlnk");
+        if(mxcCalNext) {
+            ajaxObj = '';
+            nidx = mxcCalNext.href.indexOf("dt=");
+            if(nidx != -1){
+                ajaxObj = mxcCalNext.href.substring((nidx + 3),(nidx + 10));
+                if(!mxcHistory[ajaxObj]){
+                    $.get(mxcCalNext.href+"&imajax=1", {},
+                       function(data){
+                         mxcCalNexContent = data;
+                         mxcHistory[ajaxObj] = data;
+                       });
+                } else {
+                    mxcCalNexContent = mxcHistory[ajaxObj];
+                }     
+            }
+        }
+        if(mxcCalPrev) {
+            ajaxObjP = '';
+            nidxp = mxcCalPrev.href.indexOf("dt=");
+            if(nidxp != -1){
+                ajaxObjP = mxcCalPrev.href.substring((nidxp + 3),(nidxp + 10));
+                if(!mxcHistory[ajaxObjP]){
+                    $.get(mxcCalPrev.href+"&imajax=1", {},
+                       function(data){
+                         mxcCalPreContent = data;
+                         mxcHistory[ajaxObjP] = data;
+                       });
+                } else {
+                    mxcCalPreContent = mxcHistory[ajaxObjP];
+                }     
+            }
+        }
         if(modalActive){
             Shadowbox.teardown('.mxcmodal');
             Shadowbox.clearCache();
@@ -49,25 +70,34 @@ $(function() {
         if(url)
         history.pushState(stateObj, "Calendar", url);
     }
-    $("#mxcnextlnk").live("click",function(){
-        $("#calbody").parent().html(mxcCalNexContent);
+    $("#mxcnextlnk").live("click",function(event){
+        event.preventDefault();
+        $("#calbody").html(mxcCalNexContent);
         //addHistory(mxcCalNext);
         ajaxmxc();
-        return false;
     });
-    $("#mxcprevlnk").live("click",function(){
-        $("#calbody").parent().html(mxcCalPreContent);
+    $("#mxcprevlnk").live("click",function(event){
+        event.preventDefault();
+        $("#calbody").html(mxcCalPreContent);
         //addHistory(mxcCalPrev);
         ajaxmxc();
-        return false;
     });
-    $("#mxctodaylnk").live("click",function(){
-        $("#calbody").parent().html(todayContent);
-        ajaxmxc();
-        return false;
+    $("#mxctodaylnk").live("click",function(event){
+        event.preventDefault();
+        if(todayContent != ''){
+            $("#calbody").html(todayContent);
+            ajaxmxc();
+        } else {
+            $.get(this.href+"&imajax=1", {},
+               function(data){
+                 todayContent = data;
+                 $("#calbody").html(todayContent);
+                 ajaxmxc();
+               });
+        }
     })
     //-- Get today's content
-    if(document.getElementById("mxctodaylnk") != null)
+    if(document.getElementById("mxctodaylnk") != null && todayContent == '')
     $.get(document.getElementById("mxctodaylnk").href+"&imajax=1", {},
        function(data){
          todayContent = data;

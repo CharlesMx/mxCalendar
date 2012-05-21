@@ -1,5 +1,4 @@
 <h2 style="font-size: 100%;">[[+title]]</h2>
-<p>TEST: [[+startdate_fdate]]</p>
 
 <p>[[+startdate:date=`%b %e %l:%M %p`]] - [[+enddate:date=`[[+durDay:notempty=`%b %e `]] %b %e %l:%M %p`]]</p>
 

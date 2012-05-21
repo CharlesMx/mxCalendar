@@ -12,14 +12,21 @@ $_lang['mxcalendars.event_title_remove'] = 'Remove Event';
 $_lang['mxcalendars.tab_events'] = 'Events';
 $_lang['mxcalendars.tab_categories'] = 'Categories';
 $_lang['mxcalendars.tab_settings'] = 'Global Settings';
+$_lang['mxcalendars.tab_calendars'] = 'Calendars';
+$_lang['mxcalendars.grid_col_context'] = 'Site (context)';
 $_lang['mxcalendars.grid_col_title'] = 'Title';
 $_lang['mxcalendars.grid_col_category'] = 'Category';
 $_lang['mxcalendars.grid_col_start'] = 'Start Date/Time';
 $_lang['mxcalendars.grid_col_end'] = 'End Date/Time';
 $_lang['mxcalendars.grid_col_repeate'] = 'Repeat/Reoccuring';
+$_lang['mxcalendars.grid_col_formchunk'] = 'Form';
 $_lang['mxcalendars.txt_search_default'] = 'Search ...';
 $_lang['mxcalendars.btn_display_past_events'] = 'Show Past Events';
 $_lang['mxcalendars.btn_create'] = 'Create New Calendar Item';
+$_lang['mxcalendars.label_product'] = 'Product';
+$_lang['mxcalendars.label_industry'] = 'Industry';
+$_lang['mxcalendars.label_select_context'] = 'Select a site (context) or blank for all';
+$_lang['mxcalendars.label_select_calendar'] = 'Select a calendar';
 $_lang['mxcalendars.label_today'] = 'Today';
 $_lang['mxcalendars.label_repeating_event'] = 'Repeating Event';
 $_lang['mxcalendars.label_repeat_type'] = 'Occurs';
@@ -47,6 +54,7 @@ $_lang['mxcalendars.label_daily'] = 'Daily';
 $_lang['mxcalendars.label_weekly'] = 'Weekly';
 $_lang['mxcalendars.label_monthly'] = 'Monthly';
 $_lang['mxcalendars.label_yearly'] = 'Yearly';
+$_lang['mxcalendars.label_forms'] = 'Form';
 $_lang['mxcalendars.err_ae'] = 'A calendar item with that name already exists.';
 $_lang['mxcalendars.err_nf'] = 'Item id not found in submission.';
 $_lang['mxcalendars.err_ns'] = 'Record not found for update.';
@@ -60,6 +68,12 @@ $_lang['mxcalendars.err_event_req_startdate'] = 'Start Date is required';
 $_lang['mxcalendars.err_event_req_starttime'] = 'Start Time is required';
 $_lang['mxcalendars.err_event_req_enddate'] = 'End Date is required';
 $_lang['mxcalendars.err_event_req_endtime'] = 'End Time is required';
+$_lang['mxcalendars.label_select_context_err'] = 'All Sites';
+$_lang['mxcalendars.err_event_req_repeattype'] = 'Repeat type is required for repeating events';
+$_lang['mxcalendars.err_event_req_repeatfrequency'] = 'Repeat Every, frequency, is required for repeating events';
+$_lang['mxcalendars.err_event_req_repeatenddate'] = 'Repeat End Date is required for repeating events';
+$_lang['mxcalendars.err_event_req_repeaton'] = 'Occurs on selection is required for weekly repeating events';
+$_lang['mxcalendars.err_event_req_validcat'] = 'No valid category id was found for default or published, please ensure you have a valid category created.';
 
 
 $_lang['mxcalendars.mxcalendars_remove_confirm'] = 'Are you sure you want to remove this calendar item?';
@@ -82,8 +96,13 @@ $_lang['mxcalendars.label_enddate'] = 'End Date/Time';
 $_lang['mxcalendars.label_duplicate'] = 'Duplicate';
 $_lang['mxcalendars.label_select_category'] = 'Select a category';
 $_lang['mxcalendars.label_select_category_err'] = 'Select a valid category';
+
+$_lang['mxcalendars.label_select_form'] = 'Select a form';
+$_lang['mxcalendars.label_select_form_err'] = 'Select a valid form chunk';
+
 $_lang['mxcalendars.btn_show_past_events'] = 'Show Past Events';
 $_lang['mxcalendars.btn_show_upcoming_events'] = 'Show Upcoming Events';
+$_lang['mxcalendars.tip_repeaton'] = 'Repeat every ___ (days|weeks|months|years).<br /><br />Set the repeating date frequency for type (daily, weekly, mothly, yearly) selected above';
 //$_lang['mxcalendars.'] = '';
 
 //-- Category Management
@@ -105,4 +124,28 @@ $_lang['mxcalendars.menu_remove_category'] = 'Remove Category';
 
 $_lang['mxcalendars.label_category_heading'] = 'Categories:';
 $_lang['mxcalendars.label_category_viewAll'] = 'View All';
+
+//-- Settings friendly names
+$_lang['mxcalendars.set_category_required'] = 'Category required for event';
+$_lang['mxcalendars.set_event_desc_type'] = 'Description field type';
+
+//-- Calendar Management
+$_lang['mxcalendars.calendar_desc'] = 'Manage calendar\'s that events can be assigned to, create as many as you need.';
+
+$_lang['mxcalendars.err_ac'] = 'Error saving the calendar, please try again.';
+$_lang['mxcalendars.calendar_name_col_label'] = 'Name';
+$_lang['mxcalendars.calendar_name_col_active'] = 'Active';
+$_lang['mxcalendars.calendar_default_calendar_search'] = 'Search ...';
+$_lang['mxcalendars.calendar_btn_create'] = 'Create New Calendar';
+
+
+$_lang['mxcalendars.calendar_context_menu_update'] = 'Update';
+$_lang['mxcalendars.calendar_context_menu_remove'] = 'Remove';
+
+$_lang['mxcalendars.label_select_calendar'] = 'Select Calendar';
+$_lang['mxcalendars.label_select_calendar_err'] = 'Calendar not found';
+$_lang['mxcalendars.grid_col_calendar'] = 'Calendar';
+
+
+
 ?>

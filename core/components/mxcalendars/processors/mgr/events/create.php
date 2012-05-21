@@ -9,8 +9,8 @@ if(!@file_exists(dirname(dirname(__FILE__)).'/mxcHelper.php') ) {
 //-- Server Side Validation of Required Fields
 if (empty($scriptProperties['title']))
     $modx->error->addField('title',$modx->lexicon('mxcalendars.err_ns_title'));
-if (empty($scriptProperties['categoryid']))
-    $modx->error->addField('categoryid',$modx->lexicon('mxcalendars.err_event_req_category'));
+//if (empty($scriptProperties['categoryid']))
+//    $modx->error->addField('categoryid',$modx->lexicon('mxcalendars.err_event_req_category'));
 if(empty($scriptProperties['startdate_date']))
     $modx->error->addField('startdate_date', $modx->lexicon('mxcalendars.err_event_req_startdate'));
 if(empty($scriptProperties['startdate_time']))
@@ -24,6 +24,20 @@ if(empty($scriptProperties['enddate_time']))
 $scriptProperties['startdate'] = tstamptotime($scriptProperties['startdate_date'],$scriptProperties['startdate_time'],true);
 $scriptProperties['enddate'] = tstamptotime($scriptProperties['enddate_date'],$scriptProperties['enddate_time'],true);
 $scriptProperties['repeatenddate'] = !empty($scriptProperties['repeatenddate'])?tstamptotime($scriptProperties['repeatenddate'],$scriptProperties['enddate_time'],true):null;
+
+
+if($scriptProperties['repeating']==1){
+    //-- Do some error checking just for repeating dates
+    if(empty($scriptProperties['repeattype']))
+        $modx->error->addField('repeattype', $modx->lexicon('mxcalendars.err_event_req_repeattype'));
+    else
+        if(empty($scriptProperties['repeaton']))
+            $modx->error->addField('repeaton', $modx->lexicon('mxcalendars.err_event_req_repeaton'));
+    if(empty($scriptProperties['repeatfrequency']))
+        $modx->error->addField('repeatfrequency', $modx->lexicon('mxcalendars.err_event_req_repeatfrequency'));
+    if(empty($scriptProperties['repeatenddate']))
+        $modx->error->addField('repeatenddate', $modx->lexicon('mxcalendars.err_event_req_repeatenddate'));
+}
 
 //-- Check if we have all the data to create the repeating field information
 if($scriptProperties['repeating']==1 && isset($scriptProperties['repeattype']) && isset($scriptProperties['repeatfrequency']) && !empty($scriptProperties['repeatenddate'])){
@@ -39,6 +53,28 @@ if($scriptProperties['repeating']==1 && isset($scriptProperties['repeattype']) &
     $scriptProperties['repeatenddate'] = end(explode(',', $repeatDates));
 } else { 
     //-- return $modx->error->failure("Repeat criteria not meet .<br>".$scriptProperties['repeattype']);
+}
+
+//-- Category check for required by submission and settings
+if(empty($scriptProperties['categoryid'])){
+
+    $default_cat = $modx->getObject('mxCalendarCategories', array(
+       'isdefault' => 1
+    ));
+    
+    if($default_cat->get('id')){
+        $scriptProperties['categoryid'] = $default_cat->get('id');
+    } else {
+        //-- Get the first published category
+        $default_cat = $modx->getObject('mxCalendarCategories', array(
+           'active' => 1
+        ));
+        if($default_cat->get('id')){
+            $scriptProperties['categoryid'] = $default_cat->get('id');
+        } else {
+            return $modx->error->failure($modx->lexicon('mxcalendars.err_event_req_validcat'));
+        }
+    }
 }
 
 //-- Set the createdby property of the current manager user
