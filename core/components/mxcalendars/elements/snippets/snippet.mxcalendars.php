@@ -243,6 +243,7 @@ foreach ($arrEventDates as $key => $row) {
 
 // Sort the data with volume descending, edition ascending
 // Add $data as the last parameter, to sort by the common key
+if(count($arrEventDates))
 array_multisort($date, SORT_ASC, $event, SORT_ASC, $arrEventDates);
 
 
