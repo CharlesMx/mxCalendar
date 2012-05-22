@@ -86,13 +86,18 @@ $mxcal->setTimeZone($setTimezone,$debugTimezone);
 // $m->addField('mxCalendarEvents','calendar_id');
 // $m->addField('mxCalendarEvents','form_chunk');
 
+if($debug)
+var_dump($scriptProperties);
 
 $elStartDate = strtotime($eventListStartDate);
 if($elStartDate ===false){
+    if($debug) echo 'Could note convert <strong>elStartDate</strong> value of "'.$elStartDate.'" to proper time stamp.<br />';
     $elStartDate = time();
+    
 }
 $elEndDate = strtotime($eventListEndDate);
 if($elEndDate ===false){
+    if($debug) echo 'Could note convert <strong>elEndDate</strong> value of "'.$elEndDate.'" to proper time stamp.<br />';
     $elEndDate = time();
 }
 
@@ -105,7 +110,7 @@ $output = '';
 
 $time_start = microtime(true);
 $mxcalendars = $modx->getCollection('mxCalendarEvents');
-if($debug) $output = "<br />Total Events: ".count($mxcalendars); else $output='';
+if($debug) $output .= "<br />Total Events: ".count($mxcalendars); else $output='';
 $whereArr = array();
 $eventsArr = array();
 
@@ -132,7 +137,7 @@ switch ($displayType){
                         'AND:enddate:<=' => $elEndDate
                         ,array('OR:repeating:='=>1,
                                 'AND:repeatenddate:>=' => $elStartDate)
-                    ) );//,'AND:repeatenddate:<=' => $dr['end']
+                    ) );
         break;
     case 'detail':
         $whereArr = array(array('id' => (int)$_REQUEST['detail']));
