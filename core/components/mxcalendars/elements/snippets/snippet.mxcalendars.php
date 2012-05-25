@@ -13,13 +13,14 @@ $displayType = isset($_REQUEST['detail']) && !$isLocked ? 'detail' : $modx->getO
 //++ Results query properties
 $eventListStartDate = $modx->getOption('elStartDate',$scriptProperties,'now');
 $eventListEndDate = $modx->getOption('elEndDate',$scriptProperties,'+1 year');
-$tplElItem = $modx->getOption('tplListItem',$scriptProperties,'el.itemclean');
+$tplElItem = $modx->getOption('tplListItem',$addJQscriptProperties,'el.itemclean');
 $tplElMonthHeading = $modx->getOption('tplListHeading',$scriptProperties,'el.listheading');
 $tplElWrap = $modx->getOption('tplListWrap',$scriptProperties,'el.wrap');
 $eventListLimit = $modx->getOption('eventListlimit',$scriptProperties,'5');
 $sort = $modx->getOption('sort',$scriptProperties,'startdate');
 $dir = $modx->getOption('dir',$scriptProperties,'ASC');
 $limit = $modx->getOption('limit',$scriptProperties,'99');
+$limitstart = $modx->getOption('limitstart', $scriptProperties, 0);
 //++ Text|Date Formatting properties
 $dateFormat = $modx->getOption('dateformat', $scriptProperties, '%Y-%m-%d');
 $timeFormat = $modx->getOption('timeformat', $scriptProperties, '%H:%M %p');
@@ -45,7 +46,7 @@ $tplCategoryItem = $modx->getOption('tplCategoryItem',$scriptProperties,'categor
 $labelCategoryHeading = $modx->getOption('labelCategoryHeading',$scriptProperties,$mxcal->modx->lexicon('mxcalendars.label_category_heading'));
 //@TODO Possibly add to the properties set
 //++Aux Parameters: AJAX, Modal, etc.*
-$addJQ = $modx->getOption('addjq', $scriptProperties,1); //-- jQuery is required for the core mxCalendar JS to function
+$addJQ = $modx->getOption('addJQ', $scriptProperties,1); //-- jQuery is required for the core mxCalendar JS to function
 $jqLibSrc = $modx->getOption('jqLibSrc', $scriptProperties,'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
 $usemxcLib = $modx->getOption('usemxcLib', $scriptProperties,1); //-- Use the stand-a-lone modal windows JS library packaged with mxCalendar
 $ajaxResourceId = $modx->getOption('ajaxResourceId', $scriptProperties, null);
@@ -156,10 +157,10 @@ if($_REQUEST['cid'] && ($displayType == 'calendar' || $displayType == 'mini'))
 
 $c->where($whereArr);
 $c->sortby($sort,$dir);
-$c->limit($limit,0);
+$c->limit($limit,$limitstart);
 
 $c->prepare();
-if($debug) echo 'Filtering calendar date SQL range with: '.strftime('%m/%d/%Y', $elStartDate).' through '.strftime('%m/%d/%Y', $elEndDate).'<br /><br />';
+if($debug) echo '<br /><br />Filtering calendar date SQL range with: '.strftime('%m/%d/%Y', $elStartDate).' through '.strftime('%m/%d/%Y', $elEndDate).'<br /><br />';
 if($debug) echo 'SQL: '.$c->toSql().'<br /><br />';
 
 $mxcalendars = $modx->getCollection('mxCalendarEvents',$c);
@@ -174,7 +175,7 @@ if((bool)$modalView === true && (bool)$usemxcLib === true) {
 } else { $mxcal->disableModal(); }
 
 //-- Add mxCalendar jQuery Library if enabled
-if($addJQ){
+if($addJQ && $addJQ !== 'false'){
     $modx->regClientStartupScript($jqLibSrc);
 //-- Only add the required JS files we need
 if(!empty($ajaxResourceId))//-- Also requires a valid jQuery library be loaded
