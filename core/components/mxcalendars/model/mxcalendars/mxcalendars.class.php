@@ -144,7 +144,9 @@ class mxCalendars {
                                   '.$mygeoloc->mapJSv3.'
                                 };
 
-                                window.onload = initialize;
+                                if (window.attachEvent) {window.attachEvent(\'onload\', initialize);}
+                                else if (window.addEventListener) {window.addEventListener(\'load\', initialize, false);}
+                                else {document.addEventListener(\'load\', initialize, false);}
 
                         </script>';
             }
