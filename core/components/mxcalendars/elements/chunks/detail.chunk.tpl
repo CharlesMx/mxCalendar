@@ -13,6 +13,3 @@
 
 <h4>[[+location_name]]</h4>
 [[+map]]
-
-<h6>All possible placeholders:</h6>
-<p>[[+allplaceholders]]</p>
