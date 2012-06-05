@@ -112,7 +112,7 @@ class mxCalendars {
 		return $chunk;
 	}
         
-        private function _getMap($address=null, $gmapLib='http://maps.google.com/maps/api/js?sensor=false'){
+        private function _getMap($address=null,$width='500px',$height='500px', $gmapLib='http://maps.google.com/maps/api/js?sensor=false'){
             $googleMap = '';
             //-- Add google Map API
             if($address){
@@ -132,7 +132,7 @@ class mxCalendars {
                             $mygeoloc->getGEO($loc);
                         }
 
-                        $googleMap = '<div id="map_canvas" style="width:500px; height:500px;"></div>';
+                        $googleMap = '<div id="map_canvas" style="width:'.$width.'; height:'.$height.';"></div>';
                           
                     } else {
                         $googleMap = 'No class found.';
@@ -254,7 +254,7 @@ class mxCalendars {
                 
                 return $diff;
         }
-        public function makeEventDetail($events=array(),$occurance=0, $tpls=array()){
+        public function makeEventDetail($events=array(),$occurance=0, $tpls=array(),$mapWidth,$mapHeight){
             $o = '';
             $tpls = (object)$tpls;
             if(count($events)){
@@ -265,7 +265,7 @@ class mxCalendars {
                         $detailPH = $e[0];
                         $detailPH['allplaceholders'] = implode(', ',array_keys($e[0]));
                         if($e[0]['map']){
-                            $detailPH['map'] = $this->_getMap($e[0]['location_address']);
+                            $detailPH['map'] = $this->_getMap($e[0]['location_address'],$mapWidth,$mapHeight);
                         }
                         $o .= $this->getChunk($tpls->tplDetail,$detailPH);
                             break;
@@ -383,8 +383,12 @@ class mxCalendars {
                     } else { if($debug) echo '&nbsp;&nbsp;<span style="color:red;">--&nbsp;&nbsp;'.strftime('%m-%d', $iDay).'</span><br />'; }
                     //-- Set additional day placeholders for day
                     $isToday = (strftime('%m-%d') == strftime('%m-%d', $iDay) && $highlightToday==true ? 'today ' : '');
+                    $dayMonthName = strftime('%b',$iDay);
+                    $dayMonthDay =  strftime('%d',$iDay);
+                    $dayMonthDay = (strftime('%d',$iDay) == 1 ? strftime('%b ',$iDay).( substr($dayMonthDay,0,1) == '0' ? ' '.substr($dayMonthDay,1) : $dayMonthDay ) : ( substr($dayMonthDay,0,1) == '0' ? ' '.substr($dayMonthDay,1) : $dayMonthDay ));
                     $phDay = array(
-                        'dayOfMonth'=> str_replace('0', ' ', (strftime('%d',$iDay) == 1 ? strftime('%b %d',$iDay) : strftime('%d',$iDay)))
+                        //'dayOfMonth'=> str_replace('0', ' ', (strftime('%d',$iDay) == 1 ? strftime('%b %d',$iDay) : strftime('%d',$iDay)))
+                        'dayOfMonth' => $dayMonthDay
                         ,'dayOfMonthID'=>'dom-'.strftime('%A%d',$iDay)
                         ,'events'=>$eventList 
                         ,'class'=>($mCurMonth == $thisMonth ? $isToday.(!empty($eventList) ? 'hasEvents' : 'noEvents') : 'ncm')

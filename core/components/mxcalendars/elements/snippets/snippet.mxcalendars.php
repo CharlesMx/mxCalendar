@@ -13,7 +13,8 @@ $displayType = isset($_REQUEST['detail']) && !$isLocked ? 'detail' : $modx->getO
 //++ Results query properties
 $eventListStartDate = $modx->getOption('elStartDate',$scriptProperties,'now');
 $eventListEndDate = $modx->getOption('elEndDate',$scriptProperties,'+1 year');
-$tplElItem = $modx->getOption('tplListItem',$addJQscriptProperties,'el.itemclean');
+$elDirectional = $modx->getOption('elDirectional',$scriptProperties, false);
+$tplElItem = $modx->getOption('tplListItem',$scriptProperties,'el.itemclean');
 $tplElMonthHeading = $modx->getOption('tplListHeading',$scriptProperties,'el.listheading');
 $tplElWrap = $modx->getOption('tplListWrap',$scriptProperties,'el.wrap');
 $eventListLimit = $modx->getOption('eventListlimit',$scriptProperties,'5');
@@ -39,6 +40,8 @@ $tplHeading = $modx->getOption('tplHeading',$scriptProperties,'month.inner.conta
 //++Display: Detail
 $tplDetail = $modx->getOption('tplDetail',$scriptProperties,'detail');
 $tplDetailModal = $modx->getOption('tplDetailModal', $scriptProperties, 'detail.modal');
+$mapWidth = $modx->getOption('mapWidth', $scriptProperties, '500px');
+$mapHeight = $modx->getOption('mapHeight', $scriptProperties, '500px');
 //++Display: Categories
 $showCategories = $modx->getOption('showCategories',$scriptProperties,1);
 $tplCategoryWrap = $modx->getOption('tplCategoryWrap',$scriptProperties,'category.container');
@@ -94,7 +97,7 @@ $elStartDate = strtotime($eventListStartDate);
 if($elStartDate ===false){
     if($debug) echo 'Could note convert <strong>elStartDate</strong> value of "'.$elStartDate.'" to proper time stamp.<br />';
     $elStartDate = time();
-    
+
 }
 $elEndDate = strtotime($eventListEndDate);
 if($elEndDate ===false){
@@ -124,7 +127,25 @@ $c->select(array(
 // Create the where clause by display type to limit the returned records
 switch ($displayType){
     case 'list':
-        $whereArr = array(array('repeating:=' => 0,'AND:enddate:>=' => $elStartDate,'AND:enddate:<=' => $elEndDate,array('OR:repeating:='=>1,'AND:repeatenddate:>=' => $elStartDate)) );
+        
+        if(!$elDirectional){
+            $whereArr = array(array('repeating:=' => 0,'AND:enddate:>=' => $elStartDate,'AND:enddate:<=' => $elEndDate,array('OR:repeating:='=>1,'AND:repeatenddate:>=' => $elStartDate)) );
+        } else {
+            SWITCH($elDirectional){
+                default:
+                case 'f':
+                case 'future':
+                case 'forward':
+                    $whereArr = array(array('repeating:=' => 0,array('AND:enddate:>=' => $elStartDate,'OR:enddate:>=' => $elStartDate),array('OR:repeating:='=>1,'AND:repeatenddate:>=' => $elStartDate)) );
+                    break;
+                case 'b':
+                case 'p':
+                case 'past':
+                case 'backward':
+                    $whereArr = array(array('repeating:=' => 0,array('AND:enddate:<=' => $elStartDate,'OR:enddate:<=' => $elStartDate),array('OR:repeating:='=>1,'AND:repeatenddate:<=' => $elStartDate)) );
+                    break;
+            }
+        }
         break;
     case 'calendar':
     case 'mini':
@@ -249,9 +270,12 @@ foreach ($arrEventDates as $key => $row) {
 
 // Sort the data with volume descending, edition ascending
 // Add $data as the last parameter, to sort by the common key
-if(count($arrEventDates))
-array_multisort($date, SORT_ASC, $event, SORT_ASC, $arrEventDates);
-
+if(count($arrEventDates)){
+    if($dir == 'ASC')
+        array_multisort($date, SORT_ASC, $event, SORT_ASC, $arrEventDates);
+    else
+        array_multisort($date, SORT_DESC, $event, SORT_DESC, $arrEventDates);
+}
 
 if(count($arrEventDates)){
     if($debug) echo 'Looping through events list of '.count($arrEventDates).' total.<br />';
@@ -261,7 +285,7 @@ if(count($arrEventDates)){
             $oDetails = $arrEventsDetail[$e['eventId']]; //Get original event (parent) details
             $oDetails['startdate'] = $e['date'];
             $oDetails['enddate'] = strtotime('+'.($arrEventsDetail[$e['eventId']]['durDay'] ? $arrEventsDetail[$e['eventId']]['durDay'].' days ' :'').($arrEventsDetail[$e['eventId']]['durHour'] ? $arrEventsDetail[$e['eventId']]['durHour'].' hour ' :'').($arrEventsDetail[$e['eventId']]['durMin'] ? $arrEventsDetail[$e['eventId']]['durMin'].' minute' :''), $e['date']);//$e['date'];//repeatenddate
-            if(( (($oDetails['startdate']   >= $elStartDate || $oDetails['enddate'] >= $elStartDate)&& $oDetails['enddate']<=$elEndDate) || $displayType=='detail' ) ){
+            if(( ( ($oDetails['startdate']>=$elStartDate || $oDetails['enddate'] >= $elStartDate) && $oDetails['enddate']<=$elEndDate) || $displayType=='detail' || $elDirectional ) ){
                 $oDetails['startdate_fdate'] = $mxcal->getFormatedDate($dateFormat,$oDetails['startdate']);
                 $oDetails['startdate_ftime'] = $mxcal->getFormatedDate($timeFormat,$oDetails['startdate']);
                 $oDetails['enddate_fdate'] = $mxcal->getFormatedDate($dateFormat,$oDetails['enddate']);
@@ -295,7 +319,7 @@ switch ($displayType){
         if($debug) $output .= 'Total Occurances: '.count($eventsArr).' for Event ID: '.$_REQUEST['detail'].'<br />';
         if(isset($resourceId) && $modx->resource->get('id') != $resourceId)
                 $tplDetail = $tplDetailModal;
-        $output .= $mxcal->makeEventDetail($eventsArr,($occurance=$_REQUEST['r']?$_REQUEST['r']:0) , array('tplDetail'=>$tplDetail));
+        $output .= $mxcal->makeEventDetail($eventsArr,($occurance=$_REQUEST['r']?$_REQUEST['r']:0) , array('tplDetail'=>$tplDetail),$mapWidth,$mapHeight);
         //$whereArr = array('id:=' => (int)$_REQUEST['detail']);
         //$whereArr[0]['AND:id:='] = (int)$_REQUEST['detail']; //@TODO Make filter for single events repeating dates
         break;

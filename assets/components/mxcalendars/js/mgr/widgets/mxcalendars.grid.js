@@ -315,7 +315,8 @@ mxcCore.window.CreateCal = function(config) {
 				    xtype     : 'datefield',
 				    name      : 'startdate_date',
                                     id        : 'cstartdate_date',
-                                    format    : 'm-d-Y',
+                                    //format    : 'm-d-Y',
+                                    format    : 'Y-m-d',
 				    fieldLabel: 'Start',
 				    padding: '0 5 0 0',
 				    allowBlank: false,
@@ -326,6 +327,7 @@ mxcCore.window.CreateCal = function(config) {
 				    xtype     : 'timefield',
 				    name      : 'startdate_time',
                                     id        : 'cstartdate_time',
+                                    format    : 'H:i', //24 hour
 				    fieldLabel: 'Time',
 				    margin: '0 5 0 0',
 				    allowBlank: false,

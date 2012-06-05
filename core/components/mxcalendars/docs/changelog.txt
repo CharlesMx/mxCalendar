@@ -3,7 +3,13 @@ Changelog file for mxCalendar component.
 ==================================== 
 mxCalendar 1.1.2-pl 
 ====================================
-- Bug fix: Missing trailing zero in monthly calendar dates (10 was just 1; 20 was just 2; etc)
+- Bug fix: (#41) Missing trailing zero in monthly calendar dates (10 was just 1; 20 was just 2; etc)
+- Bug fix: (#40) No event warning notification from the parser
+- Bug fix: typo in case for addJQ not being capitalized properly in the snippet
+- Bug fix: google map initializer to render maps
+- Enhancement: New property/parameter "elDirectional" to simply look forward or backward from the start date for events, no using an end date
+- Enhancement: New system setting to change the date format display for the manager view
+- 
 
 
 ==================================== 
