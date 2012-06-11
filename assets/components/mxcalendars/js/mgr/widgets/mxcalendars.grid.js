@@ -5,7 +5,7 @@ mxcCore.grid.events = function(config) {
         id: 'mxcalendars-grid-events'
         ,url: mxcCore.config.connectorUrl
         ,baseParams: {action: 'mgr/events/getList'}
-        ,fields: ['id','description','title','context','calendar_id','form_chunk','categoryid','startdate','startdate_date','startdate_time','enddate','enddate_date','enddate_time','repeating','repeattype','repeaton','repeatfrequency','repeatenddate','repeatdates','menu','name','map','link','linkrel','linktarget','location_name','location_address','address']
+        ,fields: ['id','description','title','context','calendar_id','form_chunk','categoryid',{name:'startdate', type: 'date', dateFormat:'timestamp'},'startdate_date','startdate_time',{name:'enddate', type: 'date', dateFormat:'timestamp'},'enddate_date','enddate_time','repeating','repeattype','repeaton','repeatfrequency',{name:'repeatenddate', type: 'date', dateFormat:'timestamp'},'repeatdates','menu','name','map','link','linkrel','linktarget','location_name','location_address','address']
         ,paging: true
         ,remoteSort: true
         ,anchor: '97%'
@@ -18,12 +18,12 @@ mxcCore.grid.events = function(config) {
 			,{header: _('mxcalendars.name'),dataIndex: 'title',sortable: true,width:110,editor: {xtype: 'textfield'}}
 			,{header: _('mxcalendars.categoryid_col_label'),dataIndex: 'name',sortable: true,width:80}
 			//,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate',sortable: true}
-			,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate_date',sortable: true,width:60}
-			,{header: _('mxcalendars.starttime_col_label'), dataIndex: 'startdate_time', sortable:false,width:60,editor:{xtype:'timefield'}}
-			,{header: _('mxcalendars.enddate_col_label'),dataIndex: 'enddate_date',sortable: true,width:60}
-			,{header: _('mxcalendars.endtime_col_label'),dataIndex: 'enddate_time',sortable: false,width:60,editor:{xtype:'timefield'}}
+			,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate',sortable: true,width:60, xtype : 'datecolumn',format: "Y-m-d", editable:false, editor:{xtype:'datefield', format:mxcCore.config.mgr_dateformat}}
+			,{header: _('mxcalendars.starttime_col_label'), dataIndex: 'startdate_time', sortable:false,width:60}
+			,{header: _('mxcalendars.enddate_col_label'),dataIndex: 'enddate',sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat, editable:false, editor:{xtype:'datefield',format:mxcCore.config.mgr_dateformat}}
+			,{header: _('mxcalendars.endtime_col_label'),dataIndex: 'enddate_time',sortable: false,width:60}
 			,{header: _('mxcalendars.repeating_col_label'),dataIndex: 'repeating',sortable: true,width:30}
-                        ,{header: _('mxcalendars.repeating_last_occ_col_label'),dataIndex: 'repeatenddate', sortable: true,width:60 }
+                        ,{header: _('mxcalendars.repeating_last_occ_col_label'),dataIndex: 'repeatenddate', sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat}
                         ,{hidden:true, dataIndex:'context'}
                         ,{hidden:true, dataIndex:'calendar_id'}
                         ,{hidden:true, dataIndex:'form_chunk'}
@@ -315,8 +315,7 @@ mxcCore.window.CreateCal = function(config) {
 				    xtype     : 'datefield',
 				    name      : 'startdate_date',
                                     id        : 'cstartdate_date',
-                                    //format    : 'm-d-Y',
-                                    format    : 'Y-m-d',
+                                    format    : mxcCore.config.mgr_dateformat,
 				    fieldLabel: 'Start',
 				    padding: '0 5 0 0',
 				    allowBlank: false,
@@ -327,7 +326,7 @@ mxcCore.window.CreateCal = function(config) {
 				    xtype     : 'timefield',
 				    name      : 'startdate_time',
                                     id        : 'cstartdate_time',
-                                    format    : 'H:i', //24 hour
+                                    format    : mxcCore.config.mgr_timeformat,
 				    fieldLabel: 'Time',
 				    margin: '0 5 0 0',
 				    allowBlank: false,
@@ -350,7 +349,7 @@ mxcCore.window.CreateCal = function(config) {
 				    xtype     : 'datefield',
 				    name      : 'enddate_date',
                                     id: 'cenddate_date',
-                                    format    : 'm-d-Y',
+                                    format    : mxcCore.config.mgr_dateformat,
 				    fieldLabel: 'End',
 				    padding: '0 5 0 0',
 				    allowBlank: false,
@@ -361,6 +360,7 @@ mxcCore.window.CreateCal = function(config) {
 				    xtype     : 'timefield',
 				    name      : 'enddate_time',
                                     id        : 'cenddate_time',
+                                    format    : mxcCore.config.mgr_timeformat,
 				    fieldLabel: 'End Time',
 				    margin: '0 5 0 0',
 				    allowBlank: false,
