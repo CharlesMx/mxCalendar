@@ -27,7 +27,9 @@ class mxCalendars {
             'assetsUrl' => $assetsUrl,
             'connectorUrl' => $assetsUrl.'connector.php',
             'category_required' => $categoryRequired,
-            'event_desc_type' => $descriptionEditorMode            
+            'event_desc_type' => $descriptionEditorMode,
+            'mgr_dateformat' => $this->modx->getOption('mxcalendars.mgr_dateformat', '', 'm/d/Y'),
+            'mgr_timeformat' => $this->modx->getOption('mxcalendars.mgr_timeformat', '', 'g:i a'),
         ),$config);
         $this->modx->addPackage('mxcalendars',$this->config['modelPath']);
         $this->modx->getService('lexicon','modLexicon');
@@ -342,7 +344,7 @@ class mxCalendars {
             $heading = '';
             for($i=0;$i<7;$i++){
                     if($debug) echo '&nbsp;&nbsp;'.strftime('%A ', strtotime('+ '.$i.' day', $startMonthCalDate)).'<br />';
-                    $heading.=$this->getChunk($tpls->heading, array('dayOfWeekId'=>'','dayOfWeekClass'=>'mxcdow', 'dayOfWeek'=>strftime('%a ', strtotime('+ '.$i.' day', $startMonthCalDate))));
+                    $heading.=$this->getChunk($tpls->heading, array('dayOfWeekId'=>'','dayOfWeekClass'=>'mxcdow', 'dayOfWeek'=>$this->modx->lexicon(strftime('%A ', strtotime('+ '.$i.' day', $startMonthCalDate))) ));
             }
             //-- Set additional day placeholders for week
             $phHeading = array(
