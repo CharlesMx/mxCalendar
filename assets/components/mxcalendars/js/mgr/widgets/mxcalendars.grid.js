@@ -18,10 +18,10 @@ mxcCore.grid.events = function(config) {
 			,{header: _('mxcalendars.name'),dataIndex: 'title',sortable: true,width:110,editor: {xtype: 'textfield'}}
 			,{header: _('mxcalendars.categoryid_col_label'),dataIndex: 'name',sortable: true,width:80}
 			//,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate',sortable: true}
-			,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate',sortable: true,width:60, xtype : 'datecolumn',format: "Y-m-d", editable:false, editor:{xtype:'datefield', format:mxcCore.config.mgr_dateformat}}
-			,{header: _('mxcalendars.starttime_col_label'), dataIndex: 'startdate_time', sortable:false,width:60}
+			,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate',sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat, editable:false, editor:{xtype:'datefield', format:mxcCore.config.mgr_dateformat}}
+			,{header: _('mxcalendars.starttime_col_label'), dataIndex: 'startdate_time', sortable:false,width:60, editor:{ xtype:'timefield', format: mxcCore.config.mgr_timeformat}}
 			,{header: _('mxcalendars.enddate_col_label'),dataIndex: 'enddate',sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat, editable:false, editor:{xtype:'datefield',format:mxcCore.config.mgr_dateformat}}
-			,{header: _('mxcalendars.endtime_col_label'),dataIndex: 'enddate_time',sortable: false,width:60}
+			,{header: _('mxcalendars.endtime_col_label'),dataIndex: 'enddate_time',sortable: false,width:60, editor:{ xtype:'timefield', format: mxcCore.config.mgr_timeformat}}
 			,{header: _('mxcalendars.repeating_col_label'),dataIndex: 'repeating',sortable: true,width:30}
                         ,{header: _('mxcalendars.repeating_last_occ_col_label'),dataIndex: 'repeatenddate', sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat}
                         ,{hidden:true, dataIndex:'context'}
@@ -473,7 +473,7 @@ mxcCore.window.CreateCal = function(config) {
                             ,width:120
                             ,layout:'anchor'
                             ,anchor: '100% 100%'
-                            ,format    : 'm-d-Y'
+                            ,format    : mxcCore.config.mgr_dateformat
 			    ,allowBlank:false
 			    ,xtype: 'datefield'
                             ,value: config.record.repeatenddate
@@ -852,7 +852,7 @@ mxcCore.window.UpdateCal = function(config) {
 				    xtype     : 'datefield',
 				    name      : 'startdate_date',
                                     id        : 'startdate_date',
-                                    format    : 'm-d-Y',
+                                    format    : mxcCore.config.mgr_dateformat,
 				    fieldLabel: 'Start',
 				    padding: '0 5 0 0',
 				    allowBlank: false,
@@ -863,6 +863,7 @@ mxcCore.window.UpdateCal = function(config) {
 				    xtype     : 'timefield',
 				    name      : 'startdate_time',
                                     id        : 'startdate_time',
+                                    format    : mxcCore.config.mgr_timeformat,
 				    fieldLabel: 'Time',
 				    margin: '0 5 0 0',
 				    allowBlank: false,
@@ -885,7 +886,7 @@ mxcCore.window.UpdateCal = function(config) {
 				    xtype     : 'datefield',
 				    name      : 'enddate_date',
                                     id: 'enddate_date',
-                                    format    : 'm-d-Y',
+                                    format    : mxcCore.config.mgr_dateformat,
 				    fieldLabel: 'End',
 				    padding: '0 5 0 0',
 				    allowBlank: false,
@@ -896,6 +897,7 @@ mxcCore.window.UpdateCal = function(config) {
 				    xtype     : 'timefield',
 				    name      : 'enddate_time',
                                     id        : 'enddate_time',
+                                    format    : mxcCore.config.mgr_timeformat,
 				    fieldLabel: 'End Time',
 				    margin: '0 5 0 0',
 				    allowBlank: false,
@@ -1003,7 +1005,7 @@ mxcCore.window.UpdateCal = function(config) {
 			    fieldLabel: _('mxcalendars.label_repeat_last_occurance')
 			    ,name: 'repeatenddate'
                             ,id: 'repeatenddate'
-                            ,format    : 'm-d-Y'
+                            ,format    : mxcCore.config.mgr_dateformat
 			    ,allowBlank:false
 			    ,xtype: 'datefield'
                             ,value: config.record.repeatenddate

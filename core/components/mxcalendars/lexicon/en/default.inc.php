@@ -128,6 +128,8 @@ $_lang['mxcalendars.label_category_viewAll'] = 'View All';
 //-- Settings friendly names
 $_lang['mxcalendars.set_category_required'] = 'Category required for event';
 $_lang['mxcalendars.set_event_desc_type'] = 'Description field type';
+$_lang['mxcalendars.set_mgr_dateformat'] = 'Date Format';
+$_lang['mxcalendars.set_mgr_timeformat'] = 'Time Format';
 
 //-- Calendar Management
 $_lang['mxcalendars.calendar_desc'] = 'Manage calendar\'s that events can be assigned to, create as many as you need.';

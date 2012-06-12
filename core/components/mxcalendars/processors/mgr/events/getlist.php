@@ -63,21 +63,25 @@ $c->sortby($sort,$dir);
 if ($isLimit) $c->limit($limit,$start);
 $mxcalendars = $modx->getIterator('mxCalendarEvents', $c);
  
+//-- Get Settings Date and Time formats
+$dateFormat = $modx->getOption('mxcalendars.mgr_dateformat', '', 'm/d/Y');
+$timeFormat = $modx->getOption('mxcalendars.mgr_timeformat', '', 'g:i a');
+
 /* iterate */
 $list = array();
 foreach ($mxcalendars as $mxc) {
     $mxcArray = $mxc->toArray();
     //-- Split the single unix time stamp into date and time for UI
-    $mxcArray['startdate_date'] = strftime('%m-%d-%Y',$mxc->get('startdate'));  
-    $mxcArray['startdate_time'] = strftime('%I:%M %p',$mxc->get('startdate'));
-    $mxcArray['startdate'] = strftime('%m-%d-%Y', $mxc->get('startdate')); //strftime('%m-%d-%Y %I:%M %p',$mxc->get('startdate'));
+    $mxcArray['startdate_date'] = date($dateFormat,$mxc->get('startdate'));  
+    $mxcArray['startdate_time'] = date($timeFormat,$mxc->get('startdate'));
+    $mxcArray['startdate'] = $mxc->get('startdate');
 
-    $mxcArray['enddate_date'] = strftime('%m-%d-%Y',$mxc->get('enddate'));  
-    $mxcArray['enddate_time'] = strftime('%I:%M %p',$mxc->get('enddate'));
-    $mxcArray['enddate'] = strftime('%m-%d-%Y %I:%M %p',$mxc->get('enddate'));
+    $mxcArray['enddate_date'] = date($dateFormat,$mxc->get('enddate'));  
+    $mxcArray['enddate_time'] = date($timeFormat,$mxc->get('enddate'));
+    $mxcArray['enddate'] = $mxc->get('enddate');
 
     $ed = $mxc->get('repeatenddate');
-    $mxcArray['repeatenddate'] = !empty($ed) ? strftime('%m-%d-%Y',$mxc->get('repeatenddate')) : null;  
+    $mxcArray['repeatenddate'] = !empty($ed) ? $mxc->get('repeatenddate') : null;  
     $list[]= $mxcArray;
 }
 return $this->outputArray($list,$count);

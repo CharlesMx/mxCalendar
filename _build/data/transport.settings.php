@@ -7,6 +7,8 @@ $s = array(
     'mxcalendars' => array(
         'category_required' => true,
         'event_desc_type' => 'htmleditor',
+        'mgr_dateformat'=>'m/d/Y',
+        'mgr_timeformat'=>'g:i a'
     )
 );
 

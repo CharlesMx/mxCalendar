@@ -1,6 +1,6 @@
 --------------------
 Extra: mxCalendar 
-Version: 1.1.1-pl
+Version: 1.1.2-pl
 --------------------
 GNU GENERAL PUBLIC LICENSE
    Version 2, June 1991
