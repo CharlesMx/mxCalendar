@@ -24,14 +24,13 @@ mxcCore.grid.events = function(config) {
 			,{header: _('mxcalendars.endtime_col_label'),dataIndex: 'enddate_time',sortable: false,width:60, editor:{ xtype:'timefield', format: mxcCore.config.mgr_timeformat}}
 			,{header: _('mxcalendars.repeating_col_label'),dataIndex: 'repeating',sortable: true,width:30}
                         ,{header: _('mxcalendars.repeating_last_occ_col_label'),dataIndex: 'repeatenddate', sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat}
-                        ,{hidden:true, dataIndex:'context'}
-                        ,{hidden:true, dataIndex:'calendar_id'}
-                        ,{hidden:true, dataIndex:'form_chunk'}
+                        ,{hidden:true, header: _('mxcalendars.grid_col_context'), dataIndex:'context'}
+                        ,{hidden:true, header: _('mxcalendars.grid_col_calendar'), dataIndex:'calendar_id'}
+                        ,{hidden:true, header: _('mxcalendars.label_forms'), dataIndex:'form_chunk'}
                         ,{hidden:true, dataIndex:'repeating'}
                         ,{hidden:true, dataIndex:'repeattype'}
                         ,{hidden:true, dataIndex:'repeaton'}
                         ,{hidden:true, dataIndex:'repeatfrequency'}
-                        ,{hidden:true, dataIndex:'name'}
                         ,{hidden:true, dataIndex:'map'}
                         ,{hidden:true, dataIndex:'link'}
                         ,{hidden:true, dataIndex:'linkrel'}

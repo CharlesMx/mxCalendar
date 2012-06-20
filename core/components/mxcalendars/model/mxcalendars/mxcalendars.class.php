@@ -316,7 +316,7 @@ class mxCalendars {
             if($debug) echo 'Active Month Only: '.$mStartDate.' :: '.$lastDayOfMonth.'  All displayed dates: '.strftime('%Y-%m-%d',$startMonthCalDate).' :: '.strftime('%Y-%m-%d',$endMonthCalDate).'<br />';
             if($activeMonthOnlyEvents) return array('start'=>strtotime($mStartDate), 'end'=>strtotime($lastDayOfMonth)); else return array('start'=>$startMonthCalDate, 'end'=>$endMonthCalDate);
         }
-        public function makeEventCalendar($events=array(),$resourceId=null,$tpls=array('event'=>'month.inner.container.row.day.eventclean','day'=>'month.inner.container.row.day','week'=>'month.inner.container.row','month'=>'month.inner.container','heading'=>'month.inner.container.row.heading'), $calFilter=null, $conFilter=null, $highlightToday=true){
+        public function makeEventCalendar($events=array(),$resourceId=null,$tpls=array('event'=>'month.inner.container.row.day.eventclean','day'=>'month.inner.container.row.day','week'=>'month.inner.container.row','month'=>'month.inner.container','heading'=>'month.inner.container.row.heading'), $conFilter=null, $calFilter=null, $highlightToday=true){
             $startDate = $_REQUEST['dt'] ? $_REQUEST['dt'] : strftime('%Y-%m-%d');
             $mStartDate = strftime('%Y-%m',strtotime($startDate)) . '-01 00:00:01';
             $mCurMonth = strftime('%m', strtotime($mStartDate));

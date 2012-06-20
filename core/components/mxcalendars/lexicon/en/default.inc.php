@@ -96,6 +96,7 @@ $_lang['mxcalendars.label_enddate'] = 'End Date/Time';
 $_lang['mxcalendars.label_duplicate'] = 'Duplicate';
 $_lang['mxcalendars.label_select_category'] = 'Select a category';
 $_lang['mxcalendars.label_select_category_err'] = 'Select a valid category';
+$_lang['mxcalendars.label_calendar_id'] = 'Calendar ID';
 
 $_lang['mxcalendars.label_select_form'] = 'Select a form';
 $_lang['mxcalendars.label_select_form_err'] = 'Select a valid form chunk';
