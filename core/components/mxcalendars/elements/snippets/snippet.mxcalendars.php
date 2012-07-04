@@ -191,8 +191,8 @@ if($debug) echo "<br />Returned Events: ".count($mxcalendars).'<br />';
 $modx->regClientCSS($modx->getOption('mxcalendars.assets_url',null,$modx->getOption('assets_url').'components/mxcalendars/').'themes/'.$theme.'/css/mxcalendar.css');
 
 //-- Add the Shadowbox library info if we are using modal
-if((bool)$modalView === true && (bool)$usemxcLib === true) {
-    $mxcal->addShadowBox();
+if(($modalView == 'true' || $modalView == 1) && ($usemxcLib == 'true' || $usemxcLib == 1)) {
+    $mxcal->addShadowBox($modalSetWidth,$modalSetHeight);
 } else { $mxcal->disableModal(); }
 
 //-- Add mxCalendar jQuery Library if enabled
@@ -270,11 +270,13 @@ foreach ($arrEventDates as $key => $row) {
 
 // Sort the data with volume descending, edition ascending
 // Add $data as the last parameter, to sort by the common key
-if(count($arrEventDates)){
+if(count($arrEventDates) && $displayType == 'list'){
     if($dir == 'ASC')
         array_multisort($date, SORT_ASC, $event, SORT_ASC, $arrEventDates);
     else
         array_multisort($date, SORT_DESC, $event, SORT_DESC, $arrEventDates);
+} else {
+    array_multisort($date, SORT_ASC, $event, SORT_ASC, $arrEventDates);
 }
 
 if(count($arrEventDates)){
