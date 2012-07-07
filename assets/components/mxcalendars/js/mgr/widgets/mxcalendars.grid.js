@@ -160,10 +160,12 @@ mxcCore.window.CreateCal = function(config) {
     config = config || {};
     Ext.applyIf(config,{
         title: _('mxcalendars.event_title_create')
+        ,autoHeight: false
+        ,height: Ext.getBody().getViewSize().height*.85
+        ,autoScroll: true
         ,id: 'CreateCal'
         ,url: mxcCore.config.connectorUrl
         ,width: 870
-        ,autoHeight:true
         ,baseParams: {
             action: 'mgr/events/create'
         }
@@ -691,12 +693,14 @@ mxcCore.window.UpdateCal = function(config) {
     config = config || {};
     this.ale = Ext.applyIf(config,{
         title: _('mxcalendars.event_title_update')
+        ,autoHeight: false
+        ,height: Ext.getBody().getViewSize().height*.85
+        ,autoScroll: true
         ,xtype: 'form'
         ,layout: 'form'
         ,id: 'UpdateCal'    
         ,url: mxcCore.config.connectorUrl
         ,width: 870
-        ,autoHeight:true
         ,baseParams: {
             action: 'mgr/events/update'
         }
