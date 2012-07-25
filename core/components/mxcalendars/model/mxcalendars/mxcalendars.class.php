@@ -143,7 +143,7 @@ class mxCalendars {
                         <script type="text/javascript">
                                 // -- mxCalendar :: location map -- //
                                 function initialize() {
-                                  '.$mygeoloc->mapJSv3.'
+
                                 };
 
                                 if (window.attachEvent) {window.attachEvent(\'onload\', initialize);}
@@ -154,14 +154,16 @@ class mxCalendars {
             }
         }
         
-        public function addShadowBox(){
+        public function addShadowBox($initialWidth,$initialHeight){
             $shadowPath = $this->config['assetsUrl'].'js/web/shadowbox/sa/';
             $this->modx->regClientHTMLBlock('<link rel="stylesheet" type="text/css" href="'.$shadowPath.'shadowbox.css">
                 <script type="text/javascript" src="'.$shadowPath.'shadowbox.js"></script>
                 <script type="text/javascript">
                 var modalActive = true;
                 Shadowbox.init({
-                    skipSetup: true
+                    skipSetup: true,
+                    '.(!empty($initialHeight)? 'initialHeight: "'.$initialHeight.'",' : '').'
+                    '.(!empty($initialWidth) ? 'initialWidth: "'.$initialWidth.'",' : '').'
                 });  
                  window.onload = function() {
                     Shadowbox.setup(".mxcmodal", {
