@@ -1,6 +1,20 @@
 Changelog file for mxCalendar component.
 
 ==================================== 
+mxCalendar 1.1.5-pl 
+====================================
+- Added labels to the hidden columns for Events
+- Enabled Events grid inline edit of Category, Calendar, and Context
+- Made the Calendar and Context visible by default in the Events tab grid
+
+==================================== 
+mxCalendar 1.1.4-pl 
+====================================
+- Bug fix: calendar editor cut off on larger displays
+- bug fix issue #48
+
+
+==================================== 
 mxCalendar 1.1.3-pl 
 ====================================
 - Bug fix: Calendar and Context filter were crossed thus ajax request and use of parameters gave unexpected listings or none at all

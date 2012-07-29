@@ -1,4 +1,3 @@
-
 mxcCore.grid.events = function(config) {
     config = config || {};
     Ext.applyIf(config,{
@@ -16,7 +15,9 @@ mxcCore.grid.events = function(config) {
 			// add the grid columns to the display
 			 {header: _('id'),dataIndex: 'id',sortable: true,width:40}
 			,{header: _('mxcalendars.name'),dataIndex: 'title',sortable: true,width:110,editor: {xtype: 'textfield'}}
-			,{header: _('mxcalendars.categoryid_col_label'),dataIndex: 'name',sortable: true,width:80}
+                        ,{header: _('mxcalendars.grid_col_context'), dataIndex:'context',editor: { xtype: 'mxc-combo-context', renderer: true }}
+                        ,{header: _('mxcalendars.grid_col_calendar'), dataIndex:'calendar_id',editor: { xtype: 'mxc-combo-calendar', renderer: true }}
+                        ,{header: _('mxcalendars.categoryid_col_label'),dataIndex: 'categoryid',sortable: true,width:80,editor: { xtype: 'mxc-combo-categories', renderer: true }}
 			//,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate',sortable: true}
 			,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate',sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat, editable:false, editor:{xtype:'datefield', format:mxcCore.config.mgr_dateformat}}
 			,{header: _('mxcalendars.starttime_col_label'), dataIndex: 'startdate_time', sortable:false,width:60, editor:{ xtype:'timefield', format: mxcCore.config.mgr_timeformat}}
@@ -24,20 +25,18 @@ mxcCore.grid.events = function(config) {
 			,{header: _('mxcalendars.endtime_col_label'),dataIndex: 'enddate_time',sortable: false,width:60, editor:{ xtype:'timefield', format: mxcCore.config.mgr_timeformat}}
 			,{header: _('mxcalendars.repeating_col_label'),dataIndex: 'repeating',sortable: true,width:30}
                         ,{header: _('mxcalendars.repeating_last_occ_col_label'),dataIndex: 'repeatenddate', sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat}
-                        ,{hidden:true, header: _('mxcalendars.grid_col_context'), dataIndex:'context'}
-                        ,{hidden:true, header: _('mxcalendars.grid_col_calendar'), dataIndex:'calendar_id'}
                         ,{hidden:true, header: _('mxcalendars.label_forms'), dataIndex:'form_chunk'}
-                        ,{hidden:true, dataIndex:'repeating'}
-                        ,{hidden:true, dataIndex:'repeattype'}
-                        ,{hidden:true, dataIndex:'repeaton'}
-                        ,{hidden:true, dataIndex:'repeatfrequency'}
-                        ,{hidden:true, dataIndex:'map'}
-                        ,{hidden:true, dataIndex:'link'}
-                        ,{hidden:true, dataIndex:'linkrel'}
-                        ,{hidden:true, dataIndex:'linktarget'}
-                        ,{hidden:true, dataIndex:'location_name'}
-                        ,{hidden:true, dataIndex:'location_address'}
-                        ,{hidden:true, dataIndex:'address'}
+                        ,{hidden:true, header: _('mxcalendars.label_repeating_event'), dataIndex:'repeating'}
+                        ,{hidden:true, header: _('mxcalendars.label_repeat_type'), dataIndex:'repeattype'}
+                        ,{hidden:true, header: _('mxcalendars.label_repeaton'), dataIndex:'repeaton'}
+                        ,{hidden:true, header: _('mxcalendars.label_repeat_frequency'), dataIndex:'repeatfrequency'}
+                        ,{hidden:true, header: _('mxcalendars.label_display_map'), dataIndex:'map'}
+                        ,{hidden:true, header: _('mxcalendars.label_link'), dataIndex:'link'}
+                        ,{hidden:true, header: _('mxcalendars.label_link_rel'), dataIndex:'linkrel'}
+                        ,{hidden:true, header: _('mxcalendars.label_link_target'), dataIndex:'linktarget'}
+                        ,{hidden:true, header: _('mxcalendars.label_location')+' '+_('mxcalendars.label_name'), dataIndex:'location_name'}
+                        ,{hidden:true, header: _('mxcalendars.label_address'), dataIndex:'location_address'}
+                        ,{hidden:true, header: _('mxcalendars.label_location')+' '+_('mxcalendars.label_address'), dataIndex:'address'}
 		],tbar:[{
 			xtype: 'textfield'
 			,id: 'mxcalendars-search-filter'
