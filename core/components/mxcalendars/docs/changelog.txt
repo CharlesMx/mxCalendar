@@ -1,6 +1,11 @@
 Changelog file for mxCalendar component.
 
 ==================================== 
+mxCalendar 1.1.6-pl 
+====================================
+- Added support for context filtering using ACLs
+
+==================================== 
 mxCalendar 1.1.5-pl 
 ====================================
 - Added labels to the hidden columns for Events

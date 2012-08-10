@@ -30,6 +30,7 @@ class mxCalendars {
             'event_desc_type' => $descriptionEditorMode,
             'mgr_dateformat' => $this->modx->getOption('mxcalendars.mgr_dateformat', '', 'm/d/Y'),
             'mgr_timeformat' => $this->modx->getOption('mxcalendars.mgr_timeformat', '', 'g:i a'),
+            'isAdministrator' => $this->modx->user->isMember('Administrator'),
         ),$config);
         $this->modx->addPackage('mxcalendars',$this->config['modelPath']);
         $this->modx->getService('lexicon','modLexicon');
@@ -162,13 +163,16 @@ class mxCalendars {
                 var modalActive = true;
                 Shadowbox.init({
                     skipSetup: true,
-                    '.(!empty($initialHeight)? 'initialHeight: "'.$initialHeight.'",' : '').'
-                    '.(!empty($initialWidth) ? 'initialWidth: "'.$initialWidth.'",' : '').'
-                });  
+                }); 
+                
+                var sbOptions = {
+                    modal: true,
+                    '.(!empty($initialHeight)? 'initialHeight: '.$initialHeight.',height: '.$initialHeight.',' : '').'
+                    '.(!empty($initialWidth) ? 'initialWidth: '.$initialWidth.',width: '.$initialWidth.',' : '').'
+                };
+                
                  window.onload = function() {
-                    Shadowbox.setup(".mxcmodal", {
-                        modal: true,
-                    });
+                    Shadowbox.setup(".mxcmodal", sbOptions);
                 };
                 </script>');
         }
@@ -318,7 +322,7 @@ class mxCalendars {
             if($debug) echo 'Active Month Only: '.$mStartDate.' :: '.$lastDayOfMonth.'  All displayed dates: '.strftime('%Y-%m-%d',$startMonthCalDate).' :: '.strftime('%Y-%m-%d',$endMonthCalDate).'<br />';
             if($activeMonthOnlyEvents) return array('start'=>strtotime($mStartDate), 'end'=>strtotime($lastDayOfMonth)); else return array('start'=>$startMonthCalDate, 'end'=>$endMonthCalDate);
         }
-        public function makeEventCalendar($events=array(),$resourceId=null,$tpls=array('event'=>'month.inner.container.row.day.eventclean','day'=>'month.inner.container.row.day','week'=>'month.inner.container.row','month'=>'month.inner.container','heading'=>'month.inner.container.row.heading'), $conFilter=null, $calFilter=null, $highlightToday=true){
+        public function makeEventCalendar($events=array(),$resourceId=null,$ajaxMonthResourceId=null,$tpls=array('event'=>'month.inner.container.row.day.eventclean','day'=>'month.inner.container.row.day','week'=>'month.inner.container.row','month'=>'month.inner.container','heading'=>'month.inner.container.row.heading'), $conFilter=null, $calFilter=null, $highlightToday=true){
             $startDate = $_REQUEST['dt'] ? $_REQUEST['dt'] : strftime('%Y-%m-%d');
             $mStartDate = strftime('%Y-%m',strtotime($startDate)) . '-01 00:00:01';
             $mCurMonth = strftime('%m', strtotime($mStartDate));
@@ -334,9 +338,9 @@ class mxCalendars {
             //------//
             $headingLabel = strtotime($mStartDate);
             $globalParams = array('conf'=>$conFilter, 'calf'=>$calFilter);
-            $todayLink = $this->modx->makeUrl($resourceId,'', array_merge($globalParams, array('dt' => strftime('%Y-%m'), 'cid'=>$_REQUEST['cid'])));
-            $prevLink = $this->modx->makeUrl($resourceId,'', array_merge($globalParams, array('dt' => $prevMonth, 'cid'=>$_REQUEST['cid'])));
-            $nextLink = $this->modx->makeUrl($resourceId,'', array_merge($globalParams, array('dt' => $nextMonth, 'cid'=>$_REQUEST['cid'])));
+            $todayLink = $this->modx->makeUrl($ajaxMonthResourceId,'', array_merge($globalParams, array('dt' => strftime('%Y-%m'), 'cid'=>$_REQUEST['cid'])));
+            $prevLink = $this->modx->makeUrl($ajaxMonthResourceId,'', array_merge($globalParams, array('dt' => $prevMonth, 'cid'=>$_REQUEST['cid'])));
+            $nextLink = $this->modx->makeUrl($ajaxMonthResourceId,'', array_merge($globalParams, array('dt' => $nextMonth, 'cid'=>$_REQUEST['cid'])));
             
             $chunkEvent = $this->loadChunk($tpls->event);
             $chunkDay = $this->loadChunk($tpls->day);
@@ -459,6 +463,3 @@ class mxCalendars {
         }
         
 }
-
-
-?>

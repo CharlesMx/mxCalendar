@@ -22,7 +22,37 @@ $c->sortby('Box.name','ASC');
 $c->limit(5,5);
 $boxes = $xpdo->getCollection('Box',$c);
 */ 
- 
+ //$user->isMember('UserGroupName')
+
+//-- Restrict Access Based on User Group Access
+$userContextACL_arr = array();
+$userid = $modx->user->get('id');
+
+$ug = $modx->newQuery('modUserGroup');
+$ug->where(array(
+    'name:LIKE' => 'mxcmanager-%',
+));
+$mxc_groups = $modx->getIterator('modUserGroup', $ug);
+if(count($mxc_groups)){
+    foreach($mxc_groups AS $mxg){
+        $check = $modx->user->isMember($mxg->get('name'));
+        if($check){
+            $webContextAccess = $modx->newQuery('modAccessContext');
+            $webContextAccess->where(array(
+                'principal' => $mxg->get('id'),
+            ));
+            $mxc_cntx = $modx->getIterator('modAccessContext', $webContextAccess);
+
+            if(count($mxc_cntx)){
+                foreach($mxc_cntx AS $acl){
+                    $userContextACL_arr[] = $acl->get('target');
+                }
+            }
+        } 
+    }
+}
+
+
 /* build query */
 $c = $modx->newQuery('mxCalendarEvents');
 $c->select(array(
@@ -58,6 +88,10 @@ if (!empty($query)) {
         ));
     }
 }
+if(count($mxc_groups)){
+    $c->where(array('context:IN' => $userContextACL_arr));
+}
+
 $count = $modx->getCount('mxCalendarEvents',$c);
 $c->sortby($sort,$dir);
 if ($isLimit) $c->limit($limit,$start);

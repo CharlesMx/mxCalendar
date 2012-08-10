@@ -25,19 +25,21 @@ $(function() {
     function ajaxmxc(){
         mxcCalNext = document.getElementById("mxcnextlnk");
         mxcCalPrev = document.getElementById("mxcprevlnk");
+        $("#mxcnextlnk, #mxcprevlnk").addClass("loading");
         if(mxcCalNext) {
             ajaxObj = '';
             nidx = mxcCalNext.href.indexOf("dt=");
             if(nidx != -1){
                 ajaxObj = mxcCalNext.href.substring((nidx + 3),(nidx + 10));
                 if(!mxcHistory[ajaxObj]){
-                    $.get(mxcCalNext.href+"&imajax=1", {},
+                    $.get(mxcCalNext.href+"&imajax=1 #calbody", {},
                        function(data){
                          mxcCalNexContent = data;
-                         mxcHistory[ajaxObj] = data;
+                         $("#mxcnextlnk").removeClass("loading");
                        });
                 } else {
                     mxcCalNexContent = mxcHistory[ajaxObj];
+                    $("#mxcnextlnk").removeClass("loading");
                 }     
             }
         }
@@ -47,22 +49,22 @@ $(function() {
             if(nidxp != -1){
                 ajaxObjP = mxcCalPrev.href.substring((nidxp + 3),(nidxp + 10));
                 if(!mxcHistory[ajaxObjP]){
-                    $.get(mxcCalPrev.href+"&imajax=1", {},
+                    $.get(mxcCalPrev.href+"&imajax=1 #calbody", {},
                        function(data){
                          mxcCalPreContent = data;
                          mxcHistory[ajaxObjP] = data;
+                         $("#mxcprevlnk").removeClass("loading");
                        });
                 } else {
                     mxcCalPreContent = mxcHistory[ajaxObjP];
+                    $("#mxcprevlnk").removeClass("loading");
                 }     
             }
         }
         if(modalActive){
             Shadowbox.teardown('.mxcmodal');
             Shadowbox.clearCache();
-            Shadowbox.setup(".mxcmodal", {
-                            modal: true
-            });
+            Shadowbox.setup(".mxcmodal", sbOptions);
         }
     }
     function addHistory(url){
@@ -72,15 +74,19 @@ $(function() {
     }
     $("#mxcnextlnk").live("click",function(event){
         event.preventDefault();
-        $("#calbody").html(mxcCalNexContent);
-        //addHistory(mxcCalNext);
-        ajaxmxc();
+        if(!$("#mxcnextlnk, #mxcprevlnk").hasClass('loading')){
+            $("#calbody").html(mxcCalNexContent);
+            //addHistory(mxcCalNext);
+            ajaxmxc();
+        }
     });
     $("#mxcprevlnk").live("click",function(event){
         event.preventDefault();
-        $("#calbody").html(mxcCalPreContent);
-        //addHistory(mxcCalPrev);
-        ajaxmxc();
+        if(!$("#mxcnextlnk, #mxcprevlnk").hasClass('loading')){
+            $("#calbody").html(mxcCalPreContent);
+            //addHistory(mxcCalPrev);
+            ajaxmxc();
+        }
     });
     $("#mxctodaylnk").live("click",function(event){
         event.preventDefault();

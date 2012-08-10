@@ -53,6 +53,7 @@ $addJQ = $modx->getOption('addJQ', $scriptProperties,1); //-- jQuery is required
 $jqLibSrc = $modx->getOption('jqLibSrc', $scriptProperties,'https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js');
 $usemxcLib = $modx->getOption('usemxcLib', $scriptProperties,1); //-- Use the stand-a-lone modal windows JS library packaged with mxCalendar
 $ajaxResourceId = $modx->getOption('ajaxResourceId', $scriptProperties, null);
+$ajaxMonthResourceId =  $modx->getOption('ajaxMonthResourceId', $scriptProperties, null);
 $modalView = $modx->getOption('modalView', $scriptProperties,1);
 $modalSetWidth = $modx->getOption('modalSetWidth', $scriptProperties,null); //-- Ver > 0.0.3-beta
 $modalSetHeight =$modx->getOption('modalSetHeight', $scriptProperties,null); //-- Ver > 0.0.3-beta
@@ -187,20 +188,22 @@ if($debug) echo 'SQL: '.$c->toSql().'<br /><br />';
 $mxcalendars = $modx->getCollection('mxCalendarEvents',$c);
 if($debug) echo "<br />Returned Events: ".count($mxcalendars).'<br />';
 
-//-- Add mxCalendar Theme CSS to html header (set in snippit properties)
-$modx->regClientCSS($modx->getOption('mxcalendars.assets_url',null,$modx->getOption('assets_url').'components/mxcalendars/').'themes/'.$theme.'/css/mxcalendar.css');
+if($modx->resource->get('id') != $ajaxResourceId && $modx->resource->get('id') != $ajaxMonthResourceId) {
+    //-- Add mxCalendar Theme CSS to html header (set in snippit properties)
+    $modx->regClientCSS($modx->getOption('mxcalendars.assets_url',null,$modx->getOption('assets_url').'components/mxcalendars/').'themes/'.$theme.'/css/mxcalendar.css');
 
-//-- Add the Shadowbox library info if we are using modal
-if(($modalView == 'true' || $modalView == 1) && ($usemxcLib == 'true' || $usemxcLib == 1)) {
-    $mxcal->addShadowBox($modalSetWidth,$modalSetHeight);
-} else { $mxcal->disableModal(); }
+    //-- Add the Shadowbox library info if we are using modal
+    if(($modalView == 'true' || $modalView == 1) && ($usemxcLib == 'true' || $usemxcLib == 1)) {
+        $mxcal->addShadowBox($modalSetWidth,$modalSetHeight);
+    } else { $mxcal->disableModal(); }
 
-//-- Add mxCalendar jQuery Library if enabled
-if($addJQ && $addJQ !== 'false'){
-    $modx->regClientStartupScript($jqLibSrc);
-//-- Only add the required JS files we need
-if(!empty($ajaxResourceId))//-- Also requires a valid jQuery library be loaded
-    $modx->regClientStartupScript($mxcal->config['assetsUrl'].'js/web/mxc-calendar.js');
+    //-- Add mxCalendar jQuery Library if enabled
+    if($addJQ && $addJQ !== 'false'){
+        $modx->regClientStartupScript($jqLibSrc);
+    //-- Only add the required JS files we need
+    if(!empty($ajaxResourceId) && $modx->resource->get('id') != $ajaxResourceId && $modx->resource->get('id') != $ajaxMonthResourceId)//-- Also requires a valid jQuery library be loaded
+        $modx->regClientStartupScript($mxcal->config['assetsUrl'].'js/web/mxc-calendar.js');
+    }
 }
 foreach ($mxcalendars as $mxc) {
     //-- Convert the object to an array
@@ -276,7 +279,7 @@ if(count($arrEventDates) && $displayType == 'list'){
     else
         array_multisort($date, SORT_DESC, $event, SORT_DESC, $arrEventDates);
 } else {
-    array_multisort($date, SORT_ASC, $event, SORT_ASC, $arrEventDates);
+    //array_multisort($date, SORT_ASC, $event, SORT_ASC, $arrEventDates);
 }
 
 if(count($arrEventDates)){
@@ -313,9 +316,7 @@ switch ($displayType){
     case 'calendar':
     case 'mini':
     default:
-        $output = $mxcal->makeEventCalendar($eventsArr,(!empty($ajaxResourceId) && $modalView? $ajaxResourceId : $resourceId),array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading), $contextFilter, $calendarFilter, $highlightToday);
-        if($showCategories == true)
-            $modx->setPlaceholder('categories', $mxcal->makeCategoryList($labelCategoryHeading, ($_REQUEST['cid'] ? $_REQUEST['cid'] : null),$resourceId, array('tplCategoryWrap'=>$tplCategoryWrap, 'tplCategoryItem'=>$tplCategoryItem)));
+        $output = $mxcal->makeEventCalendar($eventsArr,(!empty($ajaxResourceId) && $modalView? $ajaxResourceId : $resourceId),(!empty( $ajaxMonthResourceId) ?  $ajaxMonthResourceId : (!empty($ajaxResourceId) ? $ajaxResourceId : $resourceId) ),array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading), $contextFilter, $calendarFilter, $highlightToday);
         break;
     case 'detail':
         if($debug) $output .= 'Total Occurances: '.count($eventsArr).' for Event ID: '.$_REQUEST['detail'].'<br />';
@@ -326,6 +327,10 @@ switch ($displayType){
         //$whereArr[0]['AND:id:='] = (int)$_REQUEST['detail']; //@TODO Make filter for single events repeating dates
         break;
 }
+
+//-- Always allow the category list placeholder to be set
+if($showCategories == true)
+    $modx->setPlaceholder('categories', $mxcal->makeCategoryList($labelCategoryHeading, ($_REQUEST['cid'] ? $_REQUEST['cid'] : null),$resourceId, array('tplCategoryWrap'=>$tplCategoryWrap, 'tplCategoryItem'=>$tplCategoryItem)));
 
 $mxcal->restoreTimeZone($debugTimezone);
 $time_end = microtime(true);

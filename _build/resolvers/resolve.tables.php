@@ -11,7 +11,6 @@ if ($object->xpdo) {
     switch ($options[xPDOTransport::PACKAGE_ACTION]) {
 
         case xPDOTransport::ACTION_INSTALL:
-        case xPDOTransport::ACTION_UPGRADE:
             $modx =& $object->xpdo;
             $modelPath = $modx->getOption('mxcalendars.core_path',null,$modx->getOption('core_path').'components/mxcalendars/').'model/';
             $modx->addPackage('mxcalendars',$modelPath);
@@ -23,11 +22,6 @@ if ($object->xpdo) {
             $created_settings = $m->createObjectContainer('mxCalendarSettings');
             $created_eventWUG = $m->createObjectContainer('mxCalendarEventWUG');
             $m->createObjectContainer('mxCalendarCalendars');
-            
-            //-- Forced Update on Existing Container
-            $m->addField('mxCalendarEvents','context');
-            $m->addField('mxCalendarEvents','calendar_id');
-            $m->addField('mxCalendarEvents','form_chunk');
 
             $c = $modx->newQuery('mxCalendarCategories');
             $count = $modx->getCount('mxCalendarCategories',$c);
@@ -83,7 +77,9 @@ if ($object->xpdo) {
             $success= true;
             break;
             
-        
+        case xPDOTransport::ACTION_UPGRADE:
+            $success = true;
+            break;
         case xPDOTransport::ACTION_UNINSTALL:
             $success= true;
             break;
