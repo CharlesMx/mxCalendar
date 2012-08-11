@@ -347,9 +347,6 @@ class mxCalendars {
             $chunkWeek = $this->loadChunk($tpls->week);
             $chunkMonth = $this->loadChunk($tpls->month);
             
-            $this->modx->getService('lexicon','modLexicon');
-            $this->modx->lexicon->load('mxcalendars:default');
-            
             $heading = '';
             for($i=0;$i<7;$i++){
                     if($debug) echo '&nbsp;&nbsp;'.strftime('%A ', strtotime('+ '.$i.' day', $startMonthCalDate)).'<br />';
