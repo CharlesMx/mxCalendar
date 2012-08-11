@@ -117,6 +117,7 @@ class mxCalendars {
         
         private function _getMap($address=null,$width='500px',$height='500px', $gmapLib='http://maps.google.com/maps/api/js?sensor=false'){
             $googleMap = '';
+            $gmapLocations = '';
             //-- Add google Map API
             if($address){
                     include_once('google_geoloc.class.inc');
@@ -136,7 +137,7 @@ class mxCalendars {
                         }
 
                         $googleMap = '<div id="map_canvas" style="width:'.$width.'; height:'.$height.';"></div>';
-                          
+                        $gmapLocations = $mygeoloc->mapJSv3;  
                     } else {
                         $googleMap = 'No class found.';
                     }
@@ -144,7 +145,7 @@ class mxCalendars {
                         <script type="text/javascript">
                                 // -- mxCalendar :: location map -- //
                                 function initialize() {
-
+                                    //'.$gmapLocations.'
                                 };
 
                                 if (window.attachEvent) {window.attachEvent(\'onload\', initialize);}

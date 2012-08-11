@@ -2,8 +2,8 @@
 if(!class_exists("geoLocator")){
     class geoLocator
     {
-     protected $request;
-     public $apikey,$glat,$glong,$address,$db,$canvas,$autofitmap;
+     protected $request,$requestFull;
+     public $mapJSv3,$apikey,$glat,$glong,$address,$db,$canvas,$autofitmap;
      // Debug Varible to output/trouble shooting
      var $debug = true;
         public function __construct()
@@ -13,15 +13,11 @@ if(!class_exists("geoLocator")){
             // Google Maps API key
             $this->apikey = '';
             // Google Maps HOST (USER MAP API)
-            $this->host = 'maps.google.com';
+            $this->host = 'maps.googleapis.com';
             // Google Maps Zoom Level
             $this->mapZoom = 15;
             // Google Maps Address to get geo-location for
             $this->address = '';
-            if($this->apikey)
-            $this->request = 'http://'.$this->host.'/maps/geo?q=%s&output=xml&key='.$this->apikey;
-            else
-            $this->request = 'http://'.$this->host.'/maps/geo?q=%s&output=xml';
             // The return value
             $this->output = '';
             // The map JS Output
@@ -38,7 +34,7 @@ if(!class_exists("geoLocator")){
         {
             if(empty($address)){
                 //-- Couuld place Default address here 
-                echo '<br />No address provided.<br />';
+                //echo '<br />No address provided.<br />';
                 exit;
             }
             else
@@ -46,24 +42,22 @@ if(!class_exists("geoLocator")){
                 
                 
             // Desired address
-            $reqAddress= sprintf($this->request,$address);
+            $fullurl = 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&sensor=true';
+            $string .= file_get_contents($fullurl); // get json content
+            $json_a = json_decode($string); //json decoder
 
-                $xml = simplexml_load_file(urlencode($reqAddress)) or die("url not loading");
-                $status = $xml->Response->Status->code;
                 if($this->debug){
-                    $this->output .= '<br />URL: '.$reqAddress.'<br />';
-                    if($this->debug) var_dump($status);
+                    $this->output .= '<br />URL: '.$fullurl.'<br />';
+                    var_dump($string);
                     $this->output .=  '<br />';
                 }
                 
-                if (strcmp($status, "200") == 0) {
+                if (strcmp($json_a->status, "OK") == 0) {
                   // Successful geocode
                   $geocode_pending = false;
-                  $coordinates = $xml->Response->Placemark->Point->coordinates;
-                  $coordinatesSplit = explode(",", $coordinates);
                   // Format: Longitude, Latitude
-                  $lat = $coordinatesSplit[1];
-                  $lng = $coordinatesSplit[0];
+                  $lat = $json_a->results[0]->geometry->location->lat; //$coordinatesSplit[1];
+                  $lng = $json_a->results[0]->geometry->location->lng; //$coordinatesSplit[0];
                   
                   $this->output .=  '<a href="#" onClick="animate('.$lat.', '.$lng.'); return false">Longitude: '.$lng.'  Latitude: '.$lat.'</a><br />';
                   
