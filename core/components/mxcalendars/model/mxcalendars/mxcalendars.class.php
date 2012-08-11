@@ -349,8 +349,8 @@ class mxCalendars {
             
             $heading = '';
             for($i=0;$i<7;$i++){
-                    if($debug) echo '&nbsp;&nbsp;'.strftime('%A ', strtotime('+ '.$i.' day', $startMonthCalDate)).'<br />';
-                    $thisDOW = trim( 'mxcalendars.label_'.strtolower(strftime('%A', strtotime('+ '.$i.' day', $startMonthCalDate))) );
+                    if($debug) echo '&nbsp;&nbsp;'.strftime('%A', strtotime('+ '.$i.' day', $startMonthCalDate)).'<br />';
+                    $thisDOW = trim('mxcalendars.label_'.strtolower(strftime('%A', strtotime('+ '.$i.' day', $startMonthCalDate))));
                     $heading.=$this->getChunk($tpls->heading, array('dayOfWeekId'=>'','dayOfWeekClass'=>'mxcdow', 'dayOfWeek'=> $this->modx->lexicon($thisDOW) ));
             }
             //-- Set additional day placeholders for week
