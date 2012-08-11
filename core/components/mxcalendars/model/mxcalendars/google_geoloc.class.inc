@@ -3,7 +3,7 @@ if(!class_exists("geoLocator")){
     class geoLocator
     {
      protected $request,$requestFull;
-     public $mapJSv3,$apikey,$glat,$glong,$address,$db,$canvas,$autofitmap;
+     public $mapJSv3,$apikey,$glat,$glong,$address,$db,$canvas,$autofitmap,$region;
      // Debug Varible to output/trouble shooting
      var $debug = true;
         public function __construct()
@@ -14,6 +14,8 @@ if(!class_exists("geoLocator")){
             $this->apikey = '';
             // Google Maps HOST (USER MAP API)
             $this->host = 'maps.googleapis.com';
+            // Google Maps API Region Biasing
+            $this->region = '';
             // Google Maps Zoom Level
             $this->mapZoom = 15;
             // Google Maps Address to get geo-location for
@@ -42,7 +44,7 @@ if(!class_exists("geoLocator")){
                 
                 
             // Desired address
-            $fullurl = 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&sensor=true';
+            $fullurl = 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&sensor=true'. (!empty($this->region) ? '&region='.$this->region : '');
             $string .= file_get_contents($fullurl); // get json content
             $json_a = json_decode($string); //json decoder
 

@@ -115,7 +115,7 @@ class mxCalendars {
 		return $chunk;
 	}
         
-        private function _getMap($address=null,$width='500px',$height='500px', $gmapLib='http://maps.google.com/maps/api/js?sensor=false'){
+        private function _getMap($address=null,$gmapRegion='',$width='500px',$height='500px', $gmapLib='http://maps.google.com/maps/api/js?sensor=false'){
             $googleMap = '';
             $gmapLocations = '';
             //-- Add google Map API
@@ -127,6 +127,7 @@ class mxCalendars {
                         $addressList = explode('|', $address);
 
                         $mygeoloc = new geoLocator;
+                        $mygeoloc->region = $gmapRegion;
                         //$mygeoloc->host = $this->config['GOOGLE_MAP_HOST'];
                         //$mygeoloc->apikey = $this->config['GOOGLE_MAP_KEY'];
                         //$mygeoloc->canvas = $this->config['mxcGoogleMapDisplayCanvasID'];
@@ -263,7 +264,7 @@ class mxCalendars {
                 
                 return $diff;
         }
-        public function makeEventDetail($events=array(),$occurance=0, $tpls=array(),$mapWidth,$mapHeight){
+        public function makeEventDetail($events=array(),$occurance=0, $tpls=array(),$mapWidth,$mapHeight,$gmapRegion=''){
             $o = '';
             $tpls = (object)$tpls;
             if(count($events)){
@@ -274,7 +275,7 @@ class mxCalendars {
                         $detailPH = $e[0];
                         $detailPH['allplaceholders'] = implode(', ',array_keys($e[0]));
                         if($e[0]['map']){
-                            $detailPH['map'] = $this->_getMap($e[0]['location_address'],$mapWidth,$mapHeight);
+                            $detailPH['map'] = $this->_getMap($e[0]['location_address'],$gmapRegion,$mapWidth,$mapHeight);
                         }
                         $o .= $this->getChunk($tpls->tplDetail,$detailPH);
                             break;

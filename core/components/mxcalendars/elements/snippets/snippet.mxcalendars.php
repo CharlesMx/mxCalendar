@@ -63,6 +63,7 @@ $gmapLib = $modx->getOption('gmapLib', $scriptProperties, 'http://maps.google.co
 $gmapId = $modx->getOption('gmapId',$scriptProperties, 'map');
 $gmapDefaultZoom = $modx->getOption('gmapDefaultZoom', $scriptProperties, '13');
 $gmapAPIKey = $modx->getOption('gmapAPIKey', $scriptProperties, 'null');
+$gmapRegion = $modx->getOption('gmapRegion', $scriptProperties, '');
 //++ Holiday Support
 $holidays = $modx->getOption('holidays', $scriptProperties, "{'us':{''}}");
 $holidayDisplayEvents = $modx->getOption('holidayDisplayEvents', $scriptProperties, 1);
@@ -322,7 +323,7 @@ switch ($displayType){
         if($debug) $output .= 'Total Occurances: '.count($eventsArr).' for Event ID: '.$_REQUEST['detail'].'<br />';
         if(isset($resourceId) && $modx->resource->get('id') != $resourceId)
                 $tplDetail = $tplDetailModal;
-        $output .= $mxcal->makeEventDetail($eventsArr,($occurance=$_REQUEST['r']?$_REQUEST['r']:0) , array('tplDetail'=>$tplDetail),$mapWidth,$mapHeight);
+        $output .= $mxcal->makeEventDetail($eventsArr,($occurance=$_REQUEST['r']?$_REQUEST['r']:0) , array('tplDetail'=>$tplDetail),$mapWidth,$mapHeight,$gmapRegion);
         //$whereArr = array('id:=' => (int)$_REQUEST['detail']);
         //$whereArr[0]['AND:id:='] = (int)$_REQUEST['detail']; //@TODO Make filter for single events repeating dates
         break;
