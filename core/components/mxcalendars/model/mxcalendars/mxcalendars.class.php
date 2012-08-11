@@ -347,10 +347,14 @@ class mxCalendars {
             $chunkWeek = $this->loadChunk($tpls->week);
             $chunkMonth = $this->loadChunk($tpls->month);
             
+            $this->modx->getService('lexicon','modLexicon');
+            $this->modx->lexicon->load('mxcalendars:default');
+            
             $heading = '';
             for($i=0;$i<7;$i++){
                     if($debug) echo '&nbsp;&nbsp;'.strftime('%A ', strtotime('+ '.$i.' day', $startMonthCalDate)).'<br />';
-                    $heading.=$this->getChunk($tpls->heading, array('dayOfWeekId'=>'','dayOfWeekClass'=>'mxcdow', 'dayOfWeek'=>$this->modx->lexicon(strftime('%A ', strtotime('+ '.$i.' day', $startMonthCalDate))) ));
+                    $thisDOW = trim( 'mxcalendars.label_'.strtolower(strftime('%A', strtotime('+ '.$i.' day', $startMonthCalDate))) );
+                    $heading.=$this->getChunk($tpls->heading, array('dayOfWeekId'=>'','dayOfWeekClass'=>'mxcdow', 'dayOfWeek'=> $this->modx->lexicon($thisDOW) ));
             }
             //-- Set additional day placeholders for week
             $phHeading = array(
