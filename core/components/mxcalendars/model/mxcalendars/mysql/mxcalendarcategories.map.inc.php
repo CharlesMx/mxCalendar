@@ -1,7 +1,9 @@
 <?php
 $xpdo_meta_map['mxCalendarCategories']= array (
   'package' => 'mxcalendars',
+  'version' => NULL,
   'table' => 'mxcalendars_categories',
+  'extends' => 'xPDOSimpleObject',
   'fields' => 
   array (
     'name' => '',
@@ -108,7 +110,7 @@ $xpdo_meta_map['mxCalendarCategories']= array (
   array (
     'CategoryId' => 
     array (
-      'class' => 'mxCalendar',
+      'class' => 'mxCalendarEvents',
       'local' => 'id',
       'foreign' => 'categoryid',
       'cardinality' => 'many',

@@ -32,6 +32,7 @@ $_lang['prop_mxcalendars.desc_tplmonth'] = '';
 $_lang['prop_mxcalendars.desc_tplheading'] = '';
 $_lang['prop_mxcalendars.desc_debug'] = '';
 $_lang['prop_mxcalendars.desc_googleMapAPIKey'] = 'Set your personal Google Map V3 API Key for tracking and extending beyound the anonymous limits for api request';
+$_lang['prop_mxcalendars.desc_googleMapRegion'] = 'Allows you set to set the region biasing for Google Map API based on the CcTLD (http://en.wikipedia.org/wiki/CcTLD)';
 
 $_lang['prop_mxcalendars.tpl'] = '';
 

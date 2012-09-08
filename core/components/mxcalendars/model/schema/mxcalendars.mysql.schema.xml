@@ -19,6 +19,11 @@
 	<field key="repeatenddate" dbtype="int" precision="20" phptype="int" null="true"/>
         <field key="repeatdates" dbtype="text" phptype="string" null="true" />
 	
+        <field key="source" dbtype="varchar" precision="32" phptype="string" null="false" default="local" />
+        <field key="feeds_id" dbtype="int" precision="20" phptype="integer" null="true" default="" />
+        <field key="feeds_uid" dbtype="varchar" precision="255" phptype="string" null="true" default="" />
+        <field key="lastedit" dbtype="int" precision="20" phptype="integer" null="true"/>
+                        
         <field key="context" dbtype="varchar" precision="255" phptype="string" null="false" default="" />
         <field key="calendar_id" dbtype="int" precision="20" phptype="integer" null="true" default="" />
         <field key="form_chunk" dbtype="varchar" precision="255" phptype="string" null="false" default="" />
@@ -27,9 +32,11 @@
 	<field key="createdby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
 	<field key="editedon" dbtype="int" precision="20" phptype="integer" null="true"/>
 	<field key="editedby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
+        <field key="active" dbtype="boolean" phptype="boolean" null="false" default="1"/>
  
 	<aggregate alias="CategoryId" class="mxCalendarCategories" local="categoryid" foreign="id" cardinality="one" owner="foreign"/>
         <aggregate alias="CalendarId" class="mxCalendarCalendars" local="calendar_id" foreign="id" cardinality="one" owner="foreign"/>
+        <aggregate alias="eventfeed" class="mxCalendarFeed" local="feeds_id" foreign="id" cardinality="one" owner="foreign"/>
         
 	<aggregate alias="WebUserGroup" class="mxCalendarEventWUG" local="id" foreign="webusergroup" cardinality="many" owner="foreign"/> 
         <aggregate alias="CreatedBy" class="modUser" local="createdby" foreign="id" cardinality="one" owner="foreign"/>
@@ -57,7 +64,7 @@
         <field key="editedon" dbtype="int" precision="20" phptype="integer" null="true"/>
         <field key="editedby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
 
-	<aggregate alias="CategoryId" class="mxCalendar" local="id" foreign="categoryid" cardinality="many" owner="local"/>
+	<aggregate alias="CategoryId" class="mxCalendarEvents" local="id" foreign="categoryid" cardinality="many" owner="local"/>
         <aggregate alias="CreatedBy" class="modUser" local="createdby" foreign="id" cardinality="one" owner="foreign"/>
         <aggregate alias="EditedBy" class="modUser" local="editedby" foreign="id" cardinality="one" owner="foreign"/>
     </object>
@@ -77,6 +84,25 @@
         <field key="editedon" dbtype="int" precision="20" phptype="integer" null="true"/>
         <field key="editedby" dbtype="int" precision="10" attributes="unsigned" phptype="integer" null="false" default="0" />
         <aggregate alias="EditedBy" class="modUser" local="editedby" foreign="id" cardinality="one" owner="foreign"/>
+    </object>
+    
+    <object class="mxCalendarFeed" table="mxcalendars_feeds" extends="xPDOSimpleObject">
+        <field key="feed" dbtype="varchar" precision="255" phptype="string" null="false" default="" />
+        <field key="type" dbtype="varchar" precision="32" phptype="string" null="false" default="" />
+        <field key="defaultcategoryid" dbtype="int" precision="10" phptype="integer" null="false" default="" />
+        <field key="timerint" dbtype="int" precision="11" phptype="integer" null="false" default="0" />
+        <field key="timermeasurement" dbtype="varchar" precision="32" phptype="string" null="false" default="" />
+        <field key="lastrunon" dbtype="int" precision="20" phptype="integer" null="false" default="0"/>
+        <field key="nextrunon" dbtype="int" precision="20" phptype="integer" null="false" default="0"/>
+        <field key="active" dbtype="boolean" phptype="boolean" null="false" default="1"/>
+        
+        <aggregate alias="eventfeed" class="mxCalendarEvents" local="id" foreign="feeds_id" cardinality="many" owner="local"/>
+    </object>
+    
+    <object class="mxCalendarLog" table="mxcalendars_log" extends="xPDOSimpleObject">
+        <field key="itemtype" dbtype="varchar" precision="35" phptype="string" null="false" default="" />
+        <field key="log" dbtype="text" phptype="string" null="false" default=""/>
+        <field key="datetime" dbtype="int" precision="20" phptype="integer" null="true"/>
     </object>
     
 </model>

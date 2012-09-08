@@ -68,13 +68,14 @@ $_lang['mxcalendars.err_event_req_startdate'] = 'Start Date is required';
 $_lang['mxcalendars.err_event_req_starttime'] = 'Start Time is required';
 $_lang['mxcalendars.err_event_req_enddate'] = 'End Date is required';
 $_lang['mxcalendars.err_event_req_endtime'] = 'End Time is required';
+$_lang['mxcalendars.err_event_req_context'] = 'Context is required';
 $_lang['mxcalendars.label_select_context_err'] = 'All Sites';
 $_lang['mxcalendars.err_event_req_repeattype'] = 'Repeat type is required for repeating events';
 $_lang['mxcalendars.err_event_req_repeatfrequency'] = 'Repeat Every, frequency, is required for repeating events';
 $_lang['mxcalendars.err_event_req_repeatenddate'] = 'Repeat End Date is required for repeating events';
 $_lang['mxcalendars.err_event_req_repeaton'] = 'Occurs on selection is required for weekly repeating events';
 $_lang['mxcalendars.err_event_req_validcat'] = 'No valid category id was found for default or published, please ensure you have a valid category created.';
-
+$_lang['mxcalendars.notice_no_events'] = 'No events found';
 
 $_lang['mxcalendars.mxcalendars_remove_confirm'] = 'Are you sure you want to remove this calendar item?';
 $_lang['mxcalendars.downloads'] = 'Downloads';
@@ -149,6 +150,27 @@ $_lang['mxcalendars.label_select_calendar'] = 'Select Calendar';
 $_lang['mxcalendars.label_select_calendar_err'] = 'Calendar not found';
 $_lang['mxcalendars.grid_col_calendar'] = 'Calendar';
 
+//-- Feed lexicon entries
+$_lang['mxcalendars.tab_feed'] = 'Feeds'; 
+$_lang['mxcalendars.feed_desc'] = 'Enter an external site iCalendar or XML feed url that is public accessible via your server.'; 
 
+$_lang['mxcalendars.default_feed_search'] = 'Search Feeds';
+$_lang['mxcalendars.feed_btn_create'] = 'Create New Feed';
+$_lang['mxcalendars.feed_menu_update'] = 'Update Feed';
+$_lang['mxcalendars.feed_menu_remove'] = 'Remove Feed';
+$_lang['mxcalendars.feed_remove_title'] = 'Confirm Removal of Feed';
+$_lang['mxcalendars.feed_remove_confirm'] = 'This will remove the feed completely from the database and no further import actions will take place.';
+$_lang['mxcalendars.feed_col_feed'] = 'Feed URL';
+$_lang['mxcalendars.feed_col_active'] = 'Active';
+$_lang['mxcalendars.feed_col_type'] = 'Type';
+$_lang['mxcalendars.lastrunon_col_label'] = 'Last Update';
+$_lang['mxcalendars.nextrunon_col_label'] = 'Next Update';
+$_lang['mxcalendars.label_default'] = 'Default';
+$_lang['mxcalendars.source'] = 'Source';
+$_lang['mxcalendars.label_feedmeasurementtime'] = 'Enter number of units';
+$_lang['mxcalendars.label_feedmeasurementtype'] = 'Timer type';
+
+$_lang['mxcalendars.feed_type_label_select_empty'] = '--select--';
+$_lang['mxcalendars.measurement_type_label_select_empty'] = '--select--';
 
 ?>

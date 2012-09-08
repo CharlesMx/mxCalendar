@@ -84,14 +84,9 @@ $mxcal->setTimeZone($setTimezone,$debugTimezone);
 //-- Update to the Timezone: Manual fix to adjust timezone to match server settings
 //date_default_timezone_set("Europe/Amsterdam");
 
-//-- Create tables
-// $m = $modx->getManager();
-// $m->removeObjectContainer('mxCalendarCalendars');
-// $m->createObjectContainer('mxCalendarCalendars');
-// $m->addField('mxCalendarEvents','context');
-// $m->addField('mxCalendarEvents','calendar_id');
-// $m->addField('mxCalendarEvents','form_chunk');
 
+$mxcal->processFeeds();
+            
 if($debug)
 var_dump($scriptProperties);
 
@@ -177,6 +172,8 @@ if(!empty($calendarFilter))
                         
 if($_REQUEST['cid'] && ($displayType == 'calendar' || $displayType == 'mini'))
         $whereArr['AND:CategoryId.id:='] = (int)$_REQUEST['cid'];
+
+$whereArr['mxCalendarEvents.active'] = 1;
 
 $c->where($whereArr);
 $c->sortby($sort,$dir);

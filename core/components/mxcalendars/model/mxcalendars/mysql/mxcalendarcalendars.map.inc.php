@@ -1,7 +1,9 @@
 <?php
 $xpdo_meta_map['mxCalendarCalendars']= array (
   'package' => 'mxcalendars',
+  'version' => NULL,
   'table' => 'mxcalendars_calendars',
+  'extends' => 'xPDOSimpleObject',
   'fields' => 
   array (
     'name' => '',

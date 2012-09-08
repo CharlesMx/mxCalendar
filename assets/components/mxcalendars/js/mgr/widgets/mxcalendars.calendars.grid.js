@@ -38,7 +38,7 @@ mxcCore.grid.calendars = function(config) {
             header: _('mxcalendars.calendar_name_col_active')
             ,dataIndex: 'active'
             ,sortable: true
-            ,editor: { xtype: 'checkbox' }
+            ,editor: { xtype: 'modx-combo-boolean', renderer: true}
         }],tbar:[{
                 xtype: 'textfield'
                 ,id: 'mxcalendars-search-calendars-filter'

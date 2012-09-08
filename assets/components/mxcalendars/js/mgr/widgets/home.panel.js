@@ -49,6 +49,16 @@ mxcCore.panel.Home = function(config) {
                         xtype: 'mxcalendars-grid-calendars'
                         ,preventRender: true
                     }]
+                },{
+                //-- Feeds Tab
+                title: _('mxcalendars.tab_feed')
+                ,items: [{
+                        html: '<p>'+_('mxcalendars.feed_desc')+'</p><br />'
+                       ,border: false
+                    },{
+                        xtype: 'mxcalendars-grid-feeds'
+                        ,preventRender: true
+                    }]
                 }
             ]
         }]

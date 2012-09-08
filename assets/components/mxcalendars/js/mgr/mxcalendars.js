@@ -98,3 +98,29 @@ mxcCore.combo.Section = function(config) {
 };
 Ext.extend(mxcCore.combo.Section,MODx.combo.ComboBox);
 Ext.reg('mxc-combo-context',mxcCore.combo.Section);
+
+mxcCore.combo.FeedType = function(config) {
+    config = config || {};
+    Ext.applyIf(config,{
+        store: [['ical', 'iCal'], ['xml', 'XML']]
+        ,mode: 'local'
+        //,displayField: 'key'
+        //,valueField: 'key'
+        ,emptyText:_('mxcalendars.feed_type_label_select_empty')
+    });
+    mxcCore.combo.FeedType.superclass.constructor.call(this,config);
+};
+Ext.extend(mxcCore.combo.FeedType,MODx.combo.ComboBox);
+Ext.reg('mxc-combo-feedtype',mxcCore.combo.FeedType);
+
+mxcCore.combo.MeasuremenType = function(config) {
+    config = config || {};
+    Ext.applyIf(config,{
+        store: [['minutes', 'minutes'], ['hours', 'hours'], ['days','days'],['weeks','weeks'],['months','months']]
+        ,mode: 'local'
+        ,emptyText:_('mxcalendars.measurement_type_label_select_empty')
+    });
+    mxcCore.combo.MeasuremenType.superclass.constructor.call(this,config);
+};
+Ext.extend(mxcCore.combo.MeasuremenType,MODx.combo.ComboBox);
+Ext.reg('mxc-combo-measurementtype',mxcCore.combo.MeasuremenType);

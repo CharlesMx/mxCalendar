@@ -7,6 +7,8 @@ if(!@file_exists(dirname(dirname(__FILE__)).'/mxcHelper.php') ) {
 }
 
 //-- Server Side Validation of Required Fields
+if(!$modx->user->isMember('Administrator') && empty($scriptProperties['context']))
+    $modx->error->addField('context', $modx->lexicon('mxcalendars.err_event_req_context'));
 if (empty($scriptProperties['title']))
     $modx->error->addField('title',$modx->lexicon('mxcalendars.err_ns_title'));
 //if (empty($scriptProperties['categoryid']))
@@ -19,6 +21,7 @@ if(empty($scriptProperties['enddate_date']))
     $modx->error->addField('enddate_date', $modx->lexicon('mxcalendars.err_event_req_enddate'));
 if(empty($scriptProperties['enddate_time']))
     $modx->error->addField('enddate_time', $modx->lexicon('mxcalendars.err_event_req_endtime'));
+
 
 //-- Both date and time are always posted back
 $scriptProperties['startdate'] = tstamptotime($scriptProperties['startdate_date'],$scriptProperties['startdate_time'],true);

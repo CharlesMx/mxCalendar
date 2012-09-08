@@ -19,7 +19,7 @@ mxcCore.grid.categories = function(config) {
             header: _('mxcalendars.category_isdefault_col_label')
             ,dataIndex: 'isdefault'
             ,sortable: true
-            ,editor: { xtype: 'checkbox' }
+            ,editor: { xtype: 'modx-combo-boolean', renderer: true}
         },{
             header: _('mxcalendars.category_name_col_label')
             ,dataIndex: 'name'
@@ -44,12 +44,12 @@ mxcCore.grid.categories = function(config) {
             header: _('mxcalendars.category_disabled_col_label')
             ,dataIndex: 'disable'
             ,sortable: true
-            ,editor: { xtype: 'checkbox' }
+            ,editor: { xtype: 'modx-combo-boolean', renderer: true}
         },{
             header: _('mxcalendars.category_active_col_label')
             ,dataIndex: 'active'
             ,sortable: true
-            ,editor: { xtype: 'checkbox' }
+            ,editor: { xtype: 'modx-combo-boolean', renderer: true}
         }],tbar:[{
 			xtype: 'textfield'
 			,id: 'mxcalendars-search-categories-filter'

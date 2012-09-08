@@ -3,7 +3,11 @@ Changelog file for mxCalendar component.
 ==================================== 
 mxCalendar 1.1.6-pl 
 ====================================
-- Added support for context filtering using ACLs
+- Added support for context filtering using ACLs; only users assigned to "Administrator" user group can view the events not assigned to a context (global)
+- Bug fix: Issue #57, #59 modal window not rendering with supplied modal parameters ()
+** Fix the default list item template 
+- BUg fix: Issue #60, addded support back to manage day of week labels via lexicon for mxCalendar ex: mxcalendars.label_monday, mxcalendars.label_tuesday ... 
+- Enhancement: New feature to use external iCal feed to generate events in listings with only active (display/no display) editing
 
 ==================================== 
 mxCalendar 1.1.5-pl 

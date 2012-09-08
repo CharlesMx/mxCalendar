@@ -17,11 +17,44 @@ if ($object->xpdo) {
  
             $m = $modx->getManager();
             
+            //-- Create tables
+            // $m = $modx->getManager();
+            // 
+            //$m->removeObjectContainer('mxCalendarEvents');
+            //$m->removeObjectContainer('mxCalendarCategories');
+            //$m->removeObjectContainer('mxCalendarSettings');
+            //$m->removeObjectContainer('mxCalendarEventWUG');
+            //$m->removeObjectContainer('mxCalendarCalendars');
+            //$m->removeObjectContainer('mxCalendarFeed');
+            //$m->removeObjectContainer('mxCalendarLog');
+
+            //$m->createObjectContainer('mxCalendarEvents');
+            //$m->createObjectContainer('mxCalendarCategories');
+            //$m->createObjectContainer('mxCalendarSettings');
+            //$m->createObjectContainer('mxCalendarEventWUG');
+            //$m->createObjectContainer('mxCalendarCalendars');
+            //$m->createObjectContainer('mxCalendarFeed');
+            //$m->createObjectContainer('mxCalendarLog');
+
+            // $m->addField('mxCalendarEvents','feeds_id');
+            // $m->addField('mxCalendarEvents','source');
+            // $m->addField('mxCalendarEvents','feeds_uid');
+            // $m->addField('mxCalendarEvents','lastedit');
+            // $m->addField('mxCalendarEvents','active');
+
             $created_calendar = $m->createObjectContainer('mxCalendarEvents');
             $created_cats = $m->createObjectContainer('mxCalendarCategories');
             $created_settings = $m->createObjectContainer('mxCalendarSettings');
             $created_eventWUG = $m->createObjectContainer('mxCalendarEventWUG');
             $m->createObjectContainer('mxCalendarCalendars');
+            $m->createObjectContainer('mxCalendarFeed');
+            $m->createObjectContainer('mxCalendarLog');
+             
+            $m->addField('mxCalendarEvents','feeds_id');
+            $m->addField('mxCalendarEvents','source');
+            $m->addField('mxCalendarEvents','feeds_uid');
+            $m->addField('mxCalendarEvents','lastedit');
+            $m->addField('mxCalendarEvents','active');
 
             $c = $modx->newQuery('mxCalendarCategories');
             $count = $modx->getCount('mxCalendarCategories',$c);
@@ -78,6 +111,16 @@ if ($object->xpdo) {
             break;
             
         case xPDOTransport::ACTION_UPGRADE:
+            
+            $m = $modx->getManager();
+            $m->createObjectContainer('mxCalendarFeed');
+            $m->createObjectContainer('mxCalendarLog');
+            $m->addField('mxCalendarEvents','feeds_id');
+            $m->addField('mxCalendarEvents','source');
+            $m->addField('mxCalendarEvents','feeds_uid');
+            $m->addField('mxCalendarEvents','lastedit');
+            $m->addField('mxCalendarEvents','active');
+            
             $success = true;
             break;
         case xPDOTransport::ACTION_UNINSTALL:

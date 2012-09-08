@@ -4,7 +4,7 @@ mxcCore.grid.events = function(config) {
         id: 'mxcalendars-grid-events'
         ,url: mxcCore.config.connectorUrl
         ,baseParams: {action: 'mgr/events/getList'}
-        ,fields: ['id','description','title','context','calendar_id','form_chunk','categoryid',{name:'startdate', type: 'date', dateFormat:'timestamp'},'startdate_date','startdate_time',{name:'enddate', type: 'date', dateFormat:'timestamp'},'enddate_date','enddate_time','repeating','repeattype','repeaton','repeatfrequency',{name:'repeatenddate', type: 'date', dateFormat:'timestamp'},'repeatdates','menu','name','map','link','linkrel','linktarget','location_name','location_address','address']
+        ,fields: ['id','description','title','context','calendar_id','form_chunk','categoryid','source','feeds_id','feeds_uid',{name:'startdate', type: 'date', dateFormat:'timestamp'},'startdate_date','startdate_time',{name:'enddate', type: 'date', dateFormat:'timestamp'},'enddate_date','enddate_time','repeating','repeattype','repeaton','repeatfrequency',{name:'repeatenddate', type: 'date', dateFormat:'timestamp'},'repeatdates','menu','name','map','link','linkrel','linktarget','location_name','location_address','address','active']
         ,paging: true
         ,remoteSort: true
         ,anchor: '97%'
@@ -14,6 +14,7 @@ mxcCore.grid.events = function(config) {
         ,columns: [
 			// add the grid columns to the display
 			 {header: _('id'),dataIndex: 'id',sortable: true,width:40}
+                        ,{header: _('mxcalendars.source'),dataIndex: 'source',sortable: true,width:50}
 			,{header: _('mxcalendars.name'),dataIndex: 'title',sortable: true,width:110,editor: {xtype: 'textfield'}}
                         ,{header: _('mxcalendars.grid_col_context'), dataIndex:'context',editor: { xtype: 'mxc-combo-context', renderer: true }}
                         ,{header: _('mxcalendars.grid_col_calendar'), dataIndex:'calendar_id',editor: { xtype: 'mxc-combo-calendar', renderer: true }}
@@ -25,6 +26,7 @@ mxcCore.grid.events = function(config) {
 			,{header: _('mxcalendars.endtime_col_label'),dataIndex: 'enddate_time',sortable: false,width:60, editor:{ xtype:'timefield', format: mxcCore.config.mgr_timeformat}}
 			,{header: _('mxcalendars.repeating_col_label'),dataIndex: 'repeating',sortable: true,width:30}
                         ,{header: _('mxcalendars.repeating_last_occ_col_label'),dataIndex: 'repeatenddate', sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat}
+                        ,{header: _('mxcalendars.category_active_col_label'),dataIndex: 'active', sortable: true,width:30,editor: { xtype: 'modx-combo-boolean', renderer: true}}
                         ,{hidden:true, header: _('mxcalendars.label_forms'), dataIndex:'form_chunk'}
                         ,{hidden:true, header: _('mxcalendars.label_repeating_event'), dataIndex:'repeating'}
                         ,{hidden:true, header: _('mxcalendars.label_repeat_type'), dataIndex:'repeattype'}
@@ -222,7 +224,7 @@ mxcCore.window.CreateCal = function(config) {
                               name: 'context',
                               hiddenName: 'context',
                               id: 'ccontext',
-                              allowBlank: true,
+                              allowBlank: mxcCore.config.isAdministrator ? true : false,
                               typeAhead:true,
                               minChars:1,
                               emptyText:_('mxcalendars.label_select_context'),
@@ -596,7 +598,14 @@ mxcCore.window.CreateCal = function(config) {
 				]
 			    }
 			]
-		    }
+		    },{
+                        xtype: 'checkbox'
+                        ,fieldLabel: _('mxcalendars.category_active_col_label')
+                        ,name: 'active'
+                        ,hiddenName: 'active'
+                        ,checked: true
+                        ,value: 1
+                    }
 		]
                 
         ,buttons: [{
@@ -683,6 +692,9 @@ mxcCore.window.CreateCal = function(config) {
 	}]
     });
     mxcCore.window.CreateCal.superclass.constructor.call(this,config);
+    this.on('activate',function() {
+        if (typeof Tiny != 'undefined') { MODx.loadRTE('cdescription'); }
+    });
 };
 Ext.extend(mxcCore.window.CreateCal,MODx.Window);
 Ext.reg('mxcalendars-window-mxcalendar-create',mxcCore.window.CreateCal);
@@ -756,7 +768,7 @@ mxcCore.window.UpdateCal = function(config) {
                               name: 'context',
                               hiddenName: 'context',
                               id: 'context',
-                              allowBlank: true,
+                              allowBlank: mxcCore.config.isAdministrator ? true : false,
                               typeAhead:true,
                               minChars:1,
                               emptyText:_('mxcalendars.label_select_context'),
@@ -1132,7 +1144,14 @@ mxcCore.window.UpdateCal = function(config) {
 				]
 			    }
 			]
-		    }
+		    },{
+                        xtype: 'checkbox'
+                        ,fieldLabel: _('mxcalendars.category_active_col_label')
+                        ,name: 'active'
+                        ,hiddenName: 'active'
+                        ,checked: config.record.active ? true : false
+                        ,value: 1
+                    }
 		]
                 
         ,buttons: [{

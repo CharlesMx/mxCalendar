@@ -25,32 +25,34 @@ $boxes = $xpdo->getCollection('Box',$c);
  //$user->isMember('UserGroupName')
 
 //-- Restrict Access Based on User Group Access
+$userWUG_arr = $modx->user->getUserGroupNames();
 $userContextACL_arr = array();
 $userid = $modx->user->get('id');
-
 $ug = $modx->newQuery('modUserGroup');
 $ug->where(array(
-    'name:LIKE' => 'mxcmanager-%',
+    'name:IN' => $userWUG_arr,
 ));
 $mxc_groups = $modx->getIterator('modUserGroup', $ug);
 if(count($mxc_groups)){
     foreach($mxc_groups AS $mxg){
-        $check = $modx->user->isMember($mxg->get('name'));
-        if($check){
+
             $webContextAccess = $modx->newQuery('modAccessContext');
             $webContextAccess->where(array(
                 'principal' => $mxg->get('id'),
+                'AND:target:!=' => 'mgr',
             ));
             $mxc_cntx = $modx->getIterator('modAccessContext', $webContextAccess);
-
+			
             if(count($mxc_cntx)){
                 foreach($mxc_cntx AS $acl){
-                    $userContextACL_arr[] = $acl->get('target');
+                    if(!in_array($acl->get('target'), $userContextACL_arr))
+                        $userContextACL_arr[] = $acl->get('target');
                 }
             }
-        } 
+
     }
 }
+if($modx->user->isMember('Administrator')) { $userContextACL_arr[] = ''; }
 
 
 /* build query */
@@ -88,7 +90,7 @@ if (!empty($query)) {
         ));
     }
 }
-if(count($mxc_groups)){
+if(count($userContextACL_arr)){
     $c->where(array('context:IN' => $userContextACL_arr));
 }
 

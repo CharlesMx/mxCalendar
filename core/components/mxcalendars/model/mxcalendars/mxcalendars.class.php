@@ -6,6 +6,7 @@ class mxCalendars {
     public $modx;
     public $config = array();
     public $tz;
+    public $loggingEnabled = 0;
     private $scriptProperties = array();
     private $dowMatch = array('Mon'=>1,'Tue'=>2,'Wed'=>3,'Thu'=>4,'Fri'=>5,'Sat'=>6,'Sun'=>7);
     
@@ -16,6 +17,7 @@ class mxCalendars {
         $assetsUrl = $this->modx->getOption('mxcalendars.assets_url',$config,$this->modx->getOption('assets_url').'components/mxcalendars/');
         $descriptionEditorMode = $this->modx->getOption('mxcalendars.event_desc_type','htmleditor');
         $categoryRequired = $this->modx->getOption('mxcalendars.category_required','true');
+        $this->loggingEnabled = $this->modx->getOption('mxcalendars.mgr_log_enable', 0);
         $this->config = array_merge(array(
             'basePath' => $basePath,
             'corePath' => $basePath,
@@ -35,19 +37,25 @@ class mxCalendars {
         $this->modx->addPackage('mxcalendars',$this->config['modelPath']);
         $this->modx->getService('lexicon','modLexicon');
         $this->modx->lexicon->load('mxcalendars:default');
+        
+        
     }
     
 	/*
 	 * MANAGER: Initialize the manager view for calendar item management
 	 */
 	public function initialize($ctx = 'web') {
-	   switch ($ctx) {
+            
+            $this->processFeeds();
+            
+            switch ($ctx) {
 			case 'mgr':
-				$this->modx->lexicon->load('mxcalendars:default');
+                                $this->modx->lexicon->load('mxcalendars:default');
 				if (!$this->modx->loadClass('mxcalendarControllerRequest',$this->config['modelPath'].'mxcalendars/request/',true,true)) {
 				   return 'Could not load controller request handler. ['.$this->config['modelPath'].'mxcalendars/request/]';
 				}
-				$this->request = new mxcalendarControllerRequest($this);
+                                $this->request = new mxcalendarControllerRequest($this);
+                                
 				return $this->request->handleRequest();
 			break;
 		}
@@ -465,4 +473,165 @@ class mxCalendars {
             //return $output.'</ul>';
         }
         
+        public function processFeeds(){
+
+            require_once dirname(__FILE__).'/mxcalendars.ics.class.php';
+            
+            $f = $this->modx->newQuery('mxCalendarFeed');
+            $f->where(  array('active:=' => 1,'nextrunon:<=' => time()) );
+            $f->prepare();
+   
+            $mxcfeeds = $this->modx->getCollection('mxCalendarFeed', $f);
+            
+            if($this->loggingEnabled){
+                $this->logEvent('feed','feeds processor called\n\nSQL:\n'.$f->toSql());
+            }
+            
+            //$this->modx->setLogLevel(modX::LOG_LEVEL_INFO);
+            foreach($mxcfeeds AS $feed){
+                $hadmodifications = 0;
+                if($feed->get('type') == 'ical'){
+                    
+                    $activeUrl = $feed->get('feed');
+
+                    //$myics = file_get_contents($activeUrl);
+
+                    // Cache the response for giggles
+                    //$this->modx->cacheManager->set('mxcfeed-'.$feed->get('id'),$myics,3600);
+
+                    $config    = array( "unique_id" => 'mxcfeed-'.$feed->get('id').'-'.time(),
+                                        "url"       => $activeUrl,
+                                    );
+                    $vcalendar = new vcalendar( $config );
+                    $vcalendar->parse();
+
+                    //$this->modx->setLogLevel(modX::LOG_LEVEL_INFO);
+                    //$this->modx->log(modX::LOG_LEVEL_INFO,'Parsing feed #'.$feed->get('id').' events. ['.$feed->get('feed').']\n\nResponse:\n'.$myics);
+                    
+                    $mxclog = $this->modx->newObject('mxCalendarLog',array(
+                    'itemtype' => 'feed',
+                    'log' => 'Parsing feed #'.$feed->get('id').' events. ['.$feed->get('feed').']\n\nResponse:\n'.$myics,  
+                    'datetime' => time(),
+                    ));
+                    $mxclog->save();
+
+                    while( $vevent = $vcalendar->getComponent( "vevent" )) {
+
+                        $start     =  mktime(
+                                                $vevent->dtstart['value']['hour'],
+                                                $vevent->dtstart['value']['min'],
+                                                $vevent->dtstart['value']['sec'],
+                                                $vevent->dtstart['value']['month'],
+                                                $vevent->dtstart['value']['day'],
+                                                $vevent->dtstart['value']['year']
+                                        );      // one occurrence
+                        $end =        mktime(
+                                                $vevent->dtend['value']['hour'],
+                                                $vevent->dtend['value']['min'],
+                                                $vevent->dtend['value']['sec'],
+                                                $vevent->dtend['value']['month'],
+                                                $vevent->dtend['value']['day'],
+                                                $vevent->dtend['value']['year']
+                                        );
+                        $lastchange = mktime(
+                                                $vevent->lastmodified['value']['hour'],
+                                                $vevent->lastmodified['value']['min'],
+                                                $vevent->lastmodified['value']['sec'],
+                                                $vevent->lastmodified['value']['month'],
+                                                $vevent->lastmodified['value']['day'],
+                                                $vevent->lastmodified['value']['year']
+                                        );
+                        
+                          $createdDate = mktime(
+                                                $vevent->created['value']['hour'],
+                                                $vevent->created['value']['min'],
+                                                $vevent->created['value']['sec'],
+                                                $vevent->created['value']['month'],
+                                                $vevent->created['value']['day'],
+                                                $vevent->created['value']['year']
+                                        );
+                        $description = $vevent->getProperty( "description" );  // one occurrence
+                        $location = $vevent->getProperty( "location" );
+                        $title = $vevent->getProperty( "summary" );
+                        $feedEventUID = $vevent->getProperty("uid");
+
+                        //-- Multiple Occurances
+                        //while( $comment = $vevent->getProperty( "comment" )) { // MAY occur more than once
+                        //   echo json_encode($comment).'<br /><hr /><br />';
+                        //}
+
+                        // Output for testing
+                        $event = array(
+                                    'title'=>$title,
+                                    'description'=>$description,
+                                    'location_name'=>$location,
+                                    'startdate'=>$start,
+                                    'enddate'=>$end,
+                                    'source'=>'feed',
+                                    'lastedit'=>$lastchange,
+                                    'feeds_id'=>$feed->get('id'),
+                                    'feeds_uid'=>$feedEventUID,
+                                    'context'=>'',
+                                    'categoryid'=>$feed->get('defaultcategoryid'),
+                                    'createdon'=>$createDate,
+                                    'repeattype'=>0,
+                                    'repeaton'=>'',
+                                    'repeatfrequency'=>0
+                                    );
+                        //echo 'Title: '.$title.'<br />'.json_encode($event).'<br /><hr><br /><br />';
+                        
+                        //-- Save the new event
+                        $existingEvent = $this->modx->getObject('mxCalendarEvents',array('feeds_uid' => $feedEventUID));
+                        if(is_object($existingEvent)){
+                            // Check and modify existing event if modified since last update
+                            if($existingEvent->get('lastedit') <= $lastchange){
+                                // Event has been updated so lets just update all properties
+                                $existingEvent->fromArray($event);
+                                $existingEvent->save();
+                                if($this->loggingEnabled){
+                                    $this->logEvent('feed','Update Event ('.$existingEvent->get('id').') for feed #'.$feed->get('id').'\n\nEvent JSON:\n'.json_encode($event));
+                                }
+                                $hadmodifications++;
+                            }
+                        } else {
+                            // Create the newly found event from the feed
+                            $feedEvent = $this->modx->newObject('mxCalendarEvents');
+                            $feedEvent->fromArray($event);
+                            $feedEvent->save();
+                            if($this->loggingEnabled){
+                                $this->logEvent('feed','New Event ('.$feedEvent->get('id').') for feed #'.$feed->get('id').'\n\nEvent JSON:\n'.json_encode($event));
+                            }
+                            $hadmodifications++;
+                        }
+                       
+                        //-- Update the feed next run time
+                        $nextTime = strtotime('+'.$feed->get('timerint').' '.$feed->get('timermeasurement'));
+                        $feed->set('lastrunon',time());
+                        $feed->set('nextrunon',$nextTime);
+                        $feed->save();
+                        
+                    }
+                    
+                    if($hadmodifications){
+                        $this->logEvent('feed','Parsing feed #'.$feed->get('id').' had <strong>'.$hadmodifications.'</strong> event'.($hadmodifications > 1 ? 's' : '').' added/updated ['.$feed->get('feed').']');
+                    } else {
+                        $this->logEvent('feed','Parsing feed #'.$feed->get('id').' had no changes. ['.$feed->get('feed').']');
+                    }
+                    
+                } else {
+                    //-- not an ical feed, do nothing for now
+                }
+            }
+            
+            
+        }
+        
+        public function logEvent($itemType='',$log=''){
+                $mxclog = $this->modx->newObject('mxCalendarLog',array(
+                'itemtype' => $itemType,
+                'log' => $log,  
+                'datetime' => time(),
+                ));
+                $mxclog->save();
+        }
 }

@@ -1,7 +1,9 @@
 <?php
 $xpdo_meta_map['mxCalendarEventWUG']= array (
   'package' => 'mxcalendars',
+  'version' => NULL,
   'table' => 'mxcalendars_wug',
+  'extends' => 'xPDOSimpleObject',
   'fields' => 
   array (
     'eventid' => NULL,

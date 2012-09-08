@@ -1,7 +1,9 @@
 <?php
 $xpdo_meta_map['mxCalendarEvents']= array (
   'package' => 'mxcalendars',
+  'version' => NULL,
   'table' => 'mxcalendars_events',
+  'extends' => 'xPDOSimpleObject',
   'fields' => 
   array (
     'title' => '',
@@ -21,6 +23,10 @@ $xpdo_meta_map['mxCalendarEvents']= array (
     'repeatfrequency' => NULL,
     'repeatenddate' => NULL,
     'repeatdates' => NULL,
+    'source' => 'local',
+    'feeds_id' => 0,
+    'feeds_uid' => '',
+    'lastedit' => NULL,
     'context' => '',
     'calendar_id' => 0,
     'form_chunk' => '',
@@ -28,6 +34,7 @@ $xpdo_meta_map['mxCalendarEvents']= array (
     'createdby' => 0,
     'editedon' => NULL,
     'editedby' => 0,
+    'active' => 1,
   ),
   'fieldMeta' => 
   array (
@@ -155,6 +162,37 @@ $xpdo_meta_map['mxCalendarEvents']= array (
       'phptype' => 'string',
       'null' => true,
     ),
+    'source' => 
+    array (
+      'dbtype' => 'varchar',
+      'precision' => '32',
+      'phptype' => 'string',
+      'null' => false,
+      'default' => 'local',
+    ),
+    'feeds_id' => 
+    array (
+      'dbtype' => 'int',
+      'precision' => '20',
+      'phptype' => 'integer',
+      'null' => true,
+      'default' => 0,
+    ),
+    'feeds_uid' => 
+    array (
+      'dbtype' => 'varchar',
+      'precision' => '255',
+      'phptype' => 'string',
+      'null' => true,
+      'default' => '',
+    ),
+    'lastedit' => 
+    array (
+      'dbtype' => 'int',
+      'precision' => '20',
+      'phptype' => 'integer',
+      'null' => true,
+    ),
     'context' => 
     array (
       'dbtype' => 'varchar',
@@ -211,6 +249,13 @@ $xpdo_meta_map['mxCalendarEvents']= array (
       'null' => false,
       'default' => 0,
     ),
+    'active' => 
+    array (
+      'dbtype' => 'boolean',
+      'phptype' => 'boolean',
+      'null' => false,
+      'default' => 1,
+    ),
   ),
   'aggregates' => 
   array (
@@ -226,6 +271,14 @@ $xpdo_meta_map['mxCalendarEvents']= array (
     array (
       'class' => 'mxCalendarCalendars',
       'local' => 'calendar_id',
+      'foreign' => 'id',
+      'cardinality' => 'one',
+      'owner' => 'foreign',
+    ),
+    'eventfeed' => 
+    array (
+      'class' => 'mxCalendarFeed',
+      'local' => 'feeds_id',
       'foreign' => 'id',
       'cardinality' => 'one',
       'owner' => 'foreign',

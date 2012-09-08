@@ -10,6 +10,7 @@ $tstart = $tstart[1] + $tstart[0];
 set_time_limit(0);
  
 /* define package names */
+define('PKG_EXTRA_NAME','mxCalendars');
 define('PKG_NAME','mxCalendars');
 define('PKG_NAME_LOWER','mxcalendars');
 define('PKG_VERSION','1.1.6');
@@ -44,7 +45,7 @@ $modx->setLogTarget('ECHO');
  
 $modx->loadClass('transport.modPackageBuilder','',false, true);
 $builder = new modPackageBuilder($modx);
-$builder->createPackage(PKG_NAME_LOWER,PKG_VERSION,PKG_RELEASE);
+$builder->createPackage(PKG_EXTRA_NAME,PKG_VERSION,PKG_RELEASE);
 $builder->registerNamespace(PKG_NAME_LOWER,false,true,'{core_path}components/'.PKG_NAME_LOWER.'/');
 
 //-- CREATE THE CATEGORY OBJECT

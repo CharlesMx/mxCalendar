@@ -7,6 +7,10 @@ class mxcHelper extends mxCalendars {
 	/*
 	 * GLOBAL HELPER FUNCTIONS: do what we can to making life easier
 	 */ 
+    public function parseChunk($name,$properties=array()){
+            return $this->modx->getChunk($name,$properties);
+    }
+
     public function getChunk($name,$properties = array()) {
 		$chunk = null;
 		if (!isset($this->chunks[$name])) {
