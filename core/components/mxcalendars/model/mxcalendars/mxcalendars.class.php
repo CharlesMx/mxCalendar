@@ -9,6 +9,7 @@ class mxCalendars {
     public $loggingEnabled = 0;
     private $scriptProperties = array();
     private $dowMatch = array('Mon'=>1,'Tue'=>2,'Wed'=>3,'Thu'=>4,'Fri'=>5,'Sat'=>6,'Sun'=>7);
+    public $debug = false;
     
     function __construct(modX &$modx,array $config = array()) {
         $this->modx =& $modx;
@@ -225,7 +226,16 @@ class mxCalendars {
             }
         }
         public function getFormatedDate($f,$t){
-            return str_replace('%O', date('S', $t),strftime($f,$t));
+            $isDST = $this->timezoneDoesDST(date_default_timezone_get());
+            if($isDST){
+                $t = $t -3600;
+            }
+            return str_replace('%O', date('S', $t),gmstrftime($f,$t));
+        }
+        public function timezoneDoesDST($tzId) {
+            $tz = new DateTimeZone($tzId);
+            $trans = $tz->getTransitions();
+            return ((count($trans) && $trans[count($trans) - 1]['ts'] > time()));
         }
         public function custom_sort($a,$b){
             return $a['date']>$b['date'];
@@ -325,7 +335,7 @@ class mxCalendars {
             $mStartDate = strftime('%Y-%m',strtotime($startDate)) . '-01 00:00:01';
             $nextMonth = strftime('%Y-%m', strtotime('+1 month',strtotime($mStartDate)));
             $prevMonth = strftime('%Y-%m', strtotime('-1 month',strtotime($mStartDate)));
-            $startDOW = $this->dowMatch[strftime('%a', strtotime($mStartDate))];
+            $startDOW = strftime('%u', strtotime($mStartDate));
             $lastDayOfMonth = strftime('%Y-%m',strtotime($mStartDate)) . '-'.date('t',strtotime($mStartDate)) .' 23:59:59';
             $startMonthCalDate = $startDOW <= 6 ? strtotime('- '.$startDOW.' day', strtotime($mStartDate)) : strtotime($mStartDate)	;
             $endMonthCalDate = strtotime('+ 6 weeks', $startMonthCalDate);
@@ -338,9 +348,9 @@ class mxCalendars {
             $mCurMonth = strftime('%m', strtotime($mStartDate));
             $nextMonth = strftime('%Y-%m', strtotime('+1 month',strtotime($mStartDate)));
             $prevMonth = strftime('%Y-%m', strtotime('-1 month',strtotime($mStartDate)));
-            $startDOW = $this->dowMatch[strftime('%a', strtotime($mStartDate))];
+            $startDOW = strftime('%u', strtotime($mStartDate));
             $lastDayOfMonth = strftime('%Y-%m',strtotime($mStartDate)) . '-'.date('t',strtotime($mStartDate)) .' 23:59:59';
-            $endDOW = $this->dowMatch[strftime('%a', strtotime($lastDayOfMonth))];
+            $endDOW = strftime('%u', strtotime($lastDayOfMonth));
             $tpls=(object)$tpls;
             $out = '';
             $startMonthCalDate = $startDOW <= 6 ? strtotime('- '.$startDOW.' day', strtotime($mStartDate)) : strtotime($mStartDate)	;
@@ -359,7 +369,7 @@ class mxCalendars {
             
             $heading = '';
             for($i=0;$i<7;$i++){
-                    if($debug) echo '&nbsp;&nbsp;'.strftime('%A', strtotime('+ '.$i.' day', $startMonthCalDate)).'<br />';
+                    if($this->debug) echo '&nbsp;&nbsp;'.strftime('%A', strtotime('+ '.$i.' day', $startMonthCalDate)).'<br />';
                     $thisDOW = trim('mxcalendars.label_'.strtolower(strftime('%A', strtotime('+ '.$i.' day', $startMonthCalDate))));
                     $heading.=$this->getChunk($tpls->heading, array('dayOfWeekId'=>'','dayOfWeekClass'=>'mxcdow', 'dayOfWeek'=> $this->modx->lexicon($thisDOW) ));
             }
@@ -376,9 +386,9 @@ class mxCalendars {
             //-- Start the Date loop
             $var=0;
             do {
-                if($debug) echo '---------------<br />';
-                if($debug) echo 'Week '.($var + 1).'<br />';
-                if($debug) echo '---------------<br />';
+                if($this->debug) echo '---------------<br />';
+                if($this->debug) echo 'Week '.($var + 1).'<br />';
+                if($this->debug) echo '---------------<br />';
                 // Week Start date
                 $iWeek = strtotime('+ '.$var.' week', $startMonthCalDate);
                 $diw = 0;
@@ -387,19 +397,19 @@ class mxCalendars {
                     // Get the week's days
                     $iDay = strtotime('+ '.$diw.' day', $iWeek);
                     $thisMonth = strftime('%m', $iDay);
-                    if($debug) echo strftime('%a %b %d', $iDay).'<br />';
+                    if($this->debug) echo strftime('%a %b %d', $iDay).'<br />';
                     $eventList = '';
-                    if(count($events[strftime('%Y-%m-%d', $iDay)])){
+                    if(isset($events[strftime('%Y-%m-%d', $iDay)]) && count($events[strftime('%Y-%m-%d', $iDay)])){
                         //-- Echo each event item
                         $e = $events[strftime('%Y-%m-%d', $iDay)];
                         
                         foreach($e AS $el){
-                            if($debug) echo '&nbsp;&nbsp;<span style="color:green;">++</span>&nbsp;&nbsp;'.$el['title'].'<br />';
+                            if($this->debug) echo '&nbsp;&nbsp;<span style="color:green;">++</span>&nbsp;&nbsp;'.$el['title'].'<br />';
                             //$eventList.=$chunkEvent->process($el);
                             //@TODO -- FIX: Add check for display of current month
                             $eventList.=$this->getChunk($tpls->event, $el);
                         }
-                    } else { if($debug) echo '&nbsp;&nbsp;<span style="color:red;">--&nbsp;&nbsp;'.strftime('%m-%d', $iDay).'</span><br />'; }
+                    } else { if($this->debug) echo '&nbsp;&nbsp;<span style="color:red;">--&nbsp;&nbsp;'.strftime('%m-%d', $iDay).'</span><br />'; }
                     //-- Set additional day placeholders for day
                     $isToday = (strftime('%m-%d') == strftime('%m-%d', $iDay) && $highlightToday==true ? 'today ' : '');
                     $dayMonthName = strftime('%b',$iDay);
@@ -415,7 +425,7 @@ class mxCalendars {
                     //$days.=$chunkDay->process($phDay);
                     $days.=$this->getChunk($tpls->day, $phDay);
                 } while (++$diw < 7);
-                if($debug) echo '<br />';
+                if($this->debug) echo '<br />';
                 //-- Set additional day placeholders for week
                 $phWeek = array(
                     'weekId'=>'mxcWeek'.$var
@@ -494,7 +504,7 @@ class mxCalendars {
                     
                     $activeUrl = $feed->get('feed');
 
-                    //$myics = file_get_contents($activeUrl);
+                    $myics = file_get_contents($activeUrl);
 
                     // Cache the response for giggles
                     //$this->modx->cacheManager->set('mxcfeed-'.$feed->get('id'),$myics,3600);
@@ -508,15 +518,11 @@ class mxCalendars {
                     //$this->modx->setLogLevel(modX::LOG_LEVEL_INFO);
                     //$this->modx->log(modX::LOG_LEVEL_INFO,'Parsing feed #'.$feed->get('id').' events. ['.$feed->get('feed').']\n\nResponse:\n'.$myics);
                     
-                    $mxclog = $this->modx->newObject('mxCalendarLog',array(
-                    'itemtype' => 'feed',
-                    'log' => 'Parsing feed #'.$feed->get('id').' events. ['.$feed->get('feed').']\n\nResponse:\n'.$myics,  
-                    'datetime' => time(),
-                    ));
-                    $mxclog->save();
+                    if($this->loggingEnabled) $this->logEvent('feed parse','Parsing feed #'.$feed->get('id').' events. ['.$feed->get('feed').']\n\nResponse:\n'.$myics);
 
                     while( $vevent = $vcalendar->getComponent( "vevent" )) {
 
+                        if($vevent->dtstart['value']){
                         $start     =  mktime(
                                                 $vevent->dtstart['value']['hour'],
                                                 $vevent->dtstart['value']['min'],
@@ -525,6 +531,9 @@ class mxCalendars {
                                                 $vevent->dtstart['value']['day'],
                                                 $vevent->dtstart['value']['year']
                                         );      // one occurrence
+                        } else { $start=''; }
+                        
+                        if($vevent->dtend['value']){
                         $end =        mktime(
                                                 $vevent->dtend['value']['hour'],
                                                 $vevent->dtend['value']['min'],
@@ -533,7 +542,10 @@ class mxCalendars {
                                                 $vevent->dtend['value']['day'],
                                                 $vevent->dtend['value']['year']
                                         );
-                        $lastchange = mktime(
+                        } else { $end = ''; }
+                        
+                        if($vevent->lastmodified['value']){
+                            $lastchange = mktime(
                                                 $vevent->lastmodified['value']['hour'],
                                                 $vevent->lastmodified['value']['min'],
                                                 $vevent->lastmodified['value']['sec'],
@@ -541,8 +553,10 @@ class mxCalendars {
                                                 $vevent->lastmodified['value']['day'],
                                                 $vevent->lastmodified['value']['year']
                                         );
+                        } else {$lastchange = ''; }
                         
-                          $createdDate = mktime(
+                        if($vevent->created['value']){
+                            $createdDate = mktime(
                                                 $vevent->created['value']['hour'],
                                                 $vevent->created['value']['min'],
                                                 $vevent->created['value']['sec'],
@@ -550,6 +564,8 @@ class mxCalendars {
                                                 $vevent->created['value']['day'],
                                                 $vevent->created['value']['year']
                                         );
+                        } else { $createdDate = ''; }
+                        
                         $description = $vevent->getProperty( "description" );  // one occurrence
                         $location = $vevent->getProperty( "location" );
                         $title = $vevent->getProperty( "summary" );
@@ -563,7 +579,7 @@ class mxCalendars {
                         // Output for testing
                         $event = array(
                                     'title'=>$title,
-                                    'description'=>$description,
+                                    'description'=>(!empty($description) ? $description : ''),
                                     'location_name'=>$location,
                                     'startdate'=>$start,
                                     'enddate'=>$end,
@@ -581,7 +597,14 @@ class mxCalendars {
                         //echo 'Title: '.$title.'<br />'.json_encode($event).'<br /><hr><br /><br />';
                         
                         //-- Save the new event
-                        $existingEvent = $this->modx->getObject('mxCalendarEvents',array('feeds_uid' => $feedEventUID));
+                        if(!empty($feedEventUID)){
+                            $existingEvent = $this->modx->getObject('mxCalendarEvents',array('feeds_uid' => $feedEventUID));
+                            if(!is_object($existingEvent)){
+                                $existingEvent = $this->modx->getObject('mxCalendarEvents',array('title' => $title));
+                            }
+                        } else {
+                            $existingEvent = $this->modx->getObject('mxCalendarEvents',array('title' => $title));
+                        }
                         if(is_object($existingEvent)){
                             // Check and modify existing event if modified since last update
                             if($existingEvent->get('lastedit') <= $lastchange){
@@ -604,14 +627,14 @@ class mxCalendars {
                             $hadmodifications++;
                         }
                        
-                        //-- Update the feed next run time
-                        $nextTime = strtotime('+'.$feed->get('timerint').' '.$feed->get('timermeasurement'));
-                        $feed->set('lastrunon',time());
-                        $feed->set('nextrunon',$nextTime);
-                        $feed->save();
                         
                     }
-                    
+                    //-- Update the feed next run time
+                    $nextTime = strtotime('+'.$feed->get('timerint').' '.$feed->get('timermeasurement'));
+                    $feed->set('lastrunon',time());
+                    $feed->set('nextrunon',$nextTime);
+                    $feed->save();
+
                     if($hadmodifications){
                         $this->logEvent('feed','Parsing feed #'.$feed->get('id').' had <strong>'.$hadmodifications.'</strong> event'.($hadmodifications > 1 ? 's' : '').' added/updated ['.$feed->get('feed').']');
                     } else {
@@ -619,7 +642,93 @@ class mxCalendars {
                     }
                     
                 } else {
-                    //-- not an ical feed, do nothing for now
+                    //-- ==================== --//
+                    //-- Process the XML feed --//
+                    //-- ==================== --//
+                    $activeUrl = $feed->get('feed');
+                    $xmlEvents = file_get_contents($activeUrl);
+                    $events = new SimpleXMLElement($xmlEvents);
+                    $idx = 0;
+                    foreach ($events->event as $event) {
+                        if(strtolower($event->timebegin) !== 'all day'){
+                            $startDateTime = strtotime($event->date.' '.$event->timebegin); 
+                            $endDateTime = strtotime($event->date.' '.str_replace('- ', '', $event->timeend)); 
+                        } else {
+                            $startDateTime = strtotime($event->date.' 00:00:00'); 
+                            $endDateTime = strtotime($event->date.' 23:59:59');
+                        }
+                        $lastchange = (!empty($event->lastedit) ? $event->lastedit : time());
+                        // Output for testing
+                        $eventdata = array(
+                                    'title'=>$event->title,
+                                    'description'=>(!empty($event->description) ? $event->description : ''),
+                                    'location_name'=>(!empty($event->location) ? $event->location : ''),
+                                    'startdate'=>$startDateTime,
+                                    'enddate'=>$endDateTime,
+                                    'source'=>'feed',
+                                    'lastedit'=>$lastchange,
+                                    'feeds_id'=>$feed->get('id'),
+                                    'feeds_uid'=> (!empty($event->eventid) ? $event->eventid : ''),
+                                    'context'=>'',
+                                    'categoryid'=>$feed->get('defaultcategoryid'),
+                                    'createdon'=>(!empty($event->createDate) ? $event->createDate : time()),
+                                    'repeattype'=>0,
+                                    'repeaton'=>'',
+                                    'repeatfrequency'=>0
+                                    );
+                        //-- Save the new event
+                        if(!empty($event->eventid) && isset($event->eventid) ){
+                                $q = $this->modx->newQuery('mxCalendarEvents');
+                                $title = (string)$event->title;
+                                $feeduid = (string)$event->eventid;
+                                $q->where(array(
+                                    'mxCalendarEvents.title'        => $title,
+                                    'mxCalendarEvents.feeds_id'     => $feed->get('id'),
+                                    'mxCalendarEvents.feeds_uid'    => $feeduid
+                                ));
+                                $q->prepare();
+                                //echo 'SQL ['.$event->title.' '.$event->eventid.']: <br />'.$q->toSQL().'<br /><br />';
+                                $existingEvent = $this->modx->getObject('mxCalendarEvents',$q);
+                            //$existingEvent = $this->modx->getObject('mxCalendarEvents',array());
+                        } else {
+                            $existingEvent = false;
+                        }
+                        if(is_object($existingEvent)){
+                            // Check and modify existing event if modified since last update
+                            if($existingEvent->get('lastedit') <= $lastchange){
+                                // Event has been updated so lets just update all properties
+                                $existingEvent->fromArray($eventdata);
+                                $existingEvent->save();
+                                if($this->loggingEnabled){
+                                    $this->logEvent('feed','Update Event ('.$existingEvent->get('id').')['.$event->eventid.'] for feed #'.$feed->get('id').'\n\nEvent JSON:\n'.json_encode($event));
+                                }
+                                $hadmodifications++;
+                            }
+                        } else {
+                            // Create the newly found event from the feed
+                            $feedEvent = $this->modx->newObject('mxCalendarEvents');
+                            $feedEvent->fromArray($eventdata);
+                            $feedEvent->save();
+                            if($this->loggingEnabled){
+                                $this->logEvent('feed','New Event ('.$feedEvent->get('id').') for feed #'.$feed->get('id').'\n\nEvent JSON:\n'.json_encode($event));
+                            }
+                            $hadmodifications++;
+                        }
+                        //unset($event);
+                        $idx++;
+                    }
+                    //-- Update the feed next run time
+                    $nextTime = strtotime('+'.$feed->get('timerint').' '.$feed->get('timermeasurement'));
+                    $feed->set('lastrunon',time());
+                    $feed->set('nextrunon',$nextTime);
+                    $feed->save();
+
+                    if($hadmodifications){
+                        $this->logEvent('feed','Parsing feed #'.$feed->get('id').' had <strong>'.$hadmodifications.'</strong> event'.($hadmodifications > 1 ? 's' : '').' added/updated ['.$feed->get('feed').']');
+                    } else {
+                        $this->logEvent('feed','Parsing feed #'.$feed->get('id').' had no changes. ['.$feed->get('feed').']');
+                    }
+                    
                 }
             }
             
