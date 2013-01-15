@@ -136,4 +136,13 @@ $chunks[14]->fromArray(array(
     'snippet' => getChunkContent($sources['elements'].'chunks/detail.modal.chunk.tpl'),
 ),'',true,true);
 
+//-- Add the image item chunk 
+$chunks[15]= $modx->newObject('modChunk');
+$chunks[15]->fromArray(array(
+    'id' => 1,
+    'name' => 'tplImageItem',
+    'description' => 'Image item default chunk used in both the List and Detail views.',
+    'snippet' => getChunkContent($sources['elements'].'chunks/image.chunk.tpl'),
+),'',true,true);
+
 return $chunks;

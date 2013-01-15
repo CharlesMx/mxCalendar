@@ -13,8 +13,8 @@ set_time_limit(0);
 define('PKG_EXTRA_NAME','mxCalendars');
 define('PKG_NAME','mxCalendars');
 define('PKG_NAME_LOWER','mxcalendars');
-define('PKG_VERSION','1.1.6');
-define('PKG_RELEASE','pl');
+define('PKG_VERSION','1.1.6.d');
+define('PKG_RELEASE','pr');
  
 /* define build paths */
 $root = dirname(dirname(__FILE__)).'/';
@@ -45,6 +45,7 @@ $modx->setLogTarget('ECHO');
  
 $modx->loadClass('transport.modPackageBuilder','',false, true);
 $builder = new modPackageBuilder($modx);
+$builder->directory = dirname(dirname(__FILE__)).'/_package/';
 $builder->createPackage(PKG_EXTRA_NAME,PKG_VERSION,PKG_RELEASE);
 $builder->registerNamespace(PKG_NAME_LOWER,false,true,'{core_path}components/'.PKG_NAME_LOWER.'/');
 

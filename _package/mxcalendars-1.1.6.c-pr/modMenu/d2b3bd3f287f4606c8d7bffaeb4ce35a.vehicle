@@ -1,0 +1,57 @@
+<?php return array (
+  'preserve_keys' => true,
+  'update_object' => true,
+  'unique_key' => 'text',
+  'related_objects' => 
+  array (
+    'Action' => 
+    array (
+      '7cae0a7ff29c9ebed0dbd0a0ab416f38' => 
+      array (
+        'preserve_keys' => false,
+        'update_object' => true,
+        'unique_key' => 
+        array (
+          0 => 'namespace',
+          1 => 'controller',
+        ),
+        'class' => 'modAction',
+        'object' => '{"id":1,"namespace":"mxcalendars","controller":"controllers\\/index","haslayout":1,"lang_topics":"mxcalendars:default","assets":"","help_url":"","parent":0}',
+        'guid' => '07e581a548f717b66bcdae66f51f45be',
+        'native_key' => 1,
+        'signature' => '9916002345b7a90beed0d4dd5f9ca1e5',
+      ),
+    ),
+  ),
+  'related_object_attributes' => 
+  array (
+    'Action' => 
+    array (
+      'preserve_keys' => false,
+      'update_object' => true,
+      'unique_key' => 
+      array (
+        0 => 'namespace',
+        1 => 'controller',
+      ),
+    ),
+  ),
+  'namespace' => 'mxcalendars',
+  'resolve' => 
+  array (
+    0 => 
+    array (
+      'type' => 'php',
+      'body' => '{"source":"mxcalendars-1.1.6.c-pr\\/modMenu\\/d2b3bd3f287f4606c8d7bffaeb4ce35a.resolve.tables.resolver","type":"php","name":"resolve.tables"}',
+    ),
+  ),
+  'validate' => NULL,
+  'vehicle_package' => 'transport',
+  'vehicle_class' => 'xPDOObjectVehicle',
+  'guid' => '89579a9f8dc2a49d651f1a3c4ad16655',
+  'package' => 'modx',
+  'class' => 'modMenu',
+  'signature' => 'd2b3bd3f287f4606c8d7bffaeb4ce35a',
+  'native_key' => 'mxCalendar',
+  'object' => '{"text":"mxCalendar","parent":"components","action":1,"description":"mxcalendars.desc","icon":"images\\/icons\\/plugin.gif","menuindex":0,"params":"","handler":"","permissions":""}',
+);
