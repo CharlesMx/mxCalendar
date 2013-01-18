@@ -1,6 +1,18 @@
 Changelog file for mxCalendar component.
 
 ==================================== 
+mxCalendar 1.1.6.e-pr
+====================================
+- mxcalendar.js file jQuery live functions updated to the "on" event handler
+
+==================================== 
+mxCalendar 1.1.6.e-pr
+====================================
+- New displayType "daily" added for intuitive understanding if desired
+- Added new placeholders for list and daily displayType (fulldate,tomorrow,yesterday)
+- Ability now to use url parameter, query string, to modify the displayType (ex: ?&displayType=list)
+
+==================================== 
 mxCalendar 1.1.6-pl 
 ====================================
 - Added support for context filtering using ACLs; only users assigned to "Administrator" user group can view the events not assigned to a context (global)

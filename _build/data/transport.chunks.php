@@ -145,4 +145,13 @@ $chunks[15]->fromArray(array(
     'snippet' => getChunkContent($sources['elements'].'chunks/image.chunk.tpl'),
 ),'',true,true);
 
+//-- Add the no events chunk 
+$chunks[16]= $modx->newObject('modChunk');
+$chunks[16]->fromArray(array(
+    'id' => 1,
+    'name' => 'tplNoEvents',
+    'description' => 'No events chunk to display in list display mode.',
+    'snippet' => getChunkContent($sources['elements'].'chunks/el.noevents.chunk.tpl'),
+),'',true,true);
+
 return $chunks;

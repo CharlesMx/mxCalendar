@@ -12,17 +12,18 @@ include_once($modx->getOption('mxcalendars.core_path',null,$modx->getOption('cor
 $theme = $modx->getOption('theme',$scriptProperties,'default');// default, traditional
 $resourceId = $modx->getOption('resourceId', $scriptProperties, $modx->resource->get('id'));
 $isLocked = $modx->getOption('isLocked', $scriptProperties, 0);
-$displayType = isset($_REQUEST['detail']) && !$isLocked ? 'detail' : $modx->getOption('displayType', $scriptProperties, 'calendar'); //calendar,list,mini
+$displayType = isset($_REQUEST['detail']) && !$isLocked ? 'detail' : (isset($_REQUEST['displayType']) ? $_REQUEST['displayType'] : $modx->getOption('displayType', $scriptProperties, 'calendar')); //calendar,list,mini
 //++ Images properties
 $imageLimit = $modx->getOption('limit',$scriptProperties,'15');
 $imageDisable = $modx->getOption('imageDisable',$scriptProperties,0);
 //++ Results query properties
-$eventListStartDate = (isset($_REQUEST['elStartDate']) ? $_REQUEST['elStartDate'] : $modx->getOption('elStartDate',$scriptProperties,'now'));
-$eventListEndDate = (isset($_REQUEST['elEndDate']) ? $_REQUEST['elEndDate'] : $modx->getOption('elEndDate',$scriptProperties,'+1 year'));
+$eventListStartDate = (isset($_REQUEST['elStartDate']) && !$isLocked ? $_REQUEST['elStartDate'] : $modx->getOption('elStartDate',$scriptProperties,'now'));
+$eventListEndDate = (isset($_REQUEST['elEndDate']) && !$isLocked ? $_REQUEST['elEndDate'] : $modx->getOption('elEndDate',$scriptProperties,'+1 year'));
 $elDirectional = $modx->getOption('elDirectional',$scriptProperties, false);
 $tplElItem = $modx->getOption('tplListItem',$scriptProperties,'el.itemclean');
 $tplElMonthHeading = $modx->getOption('tplListHeading',$scriptProperties,'el.listheading');
 $tplElWrap = $modx->getOption('tplListWrap',$scriptProperties,'el.wrap');
+$tplNoEvents = $modx->getOption('tplNoEvents',$scriptProperties,'el.noevents');
 $eventListLimit = $modx->getOption('eventListlimit',$scriptProperties,'5');
 $sort = $modx->getOption('sort',$scriptProperties,'startdate');
 $dir = $modx->getOption('dir',$scriptProperties,'ASC');
@@ -79,6 +80,8 @@ $setTimezone = $modx->getOption('setTimezone', $scriptProperties, date_default_t
 $debugTimezone = $modx->getOption('debugTimezone', $scriptProperties, 0 );
 $debug = $modx->getOption('debug',$scriptProperties,0);
 
+//++ Calendar Options (ver >= 1.1.6d-pr)
+$categoryFilter = isset($_REQUEST['cid']) ? $_REQUEST['cid'] : $modx->getOption('categoryFilter', $scriptProperties, null); //-- Defaults to show all categories
 //++ Calendar Options (ver >= 1.1.0-pl)
 $calendarFilter = isset($_REQUEST['calf']) ? $_REQUEST['calf'] : $modx->getOption('calendarFilter', $scriptProperties, null); //-- Defaults to show all calendars
 //++ Context Options (ver >= 1.1.0-pl)
@@ -108,7 +111,7 @@ if($elEndDate ===false){
     $elEndDate = time();
 }
 
-
+            
 //-- Setup varibles to hold the output
 $debugOutput = array();
 $arrEventsDetail = array();
@@ -128,7 +131,7 @@ $c->select(array(
 // Create the where clause by display type to limit the returned records
 switch ($displayType){
     case 'list':
-        
+    case 'daily':
         if(!$elDirectional){
             $whereArr = array(array('repeating:=' => 0,'AND:enddate:>=' => $elStartDate,'AND:enddate:<=' => $elEndDate,array('OR:repeating:='=>1,'AND:repeatenddate:>=' => $elStartDate)) );
         } else {
@@ -174,12 +177,12 @@ if(!empty($calendarFilter))
     $whereArr['AND:calendar_id:IN'] = explode(',',$calendarFilter);
 
                         
-if($_REQUEST['cid'] && ($displayType == 'calendar' || $displayType == 'mini' || $displayType == 'list'))
+if($categoryFilter && ($displayType == 'calendar' || $displayType == 'mini' || $displayType == 'list'))
         $whereArr[] = array(
-            array('categoryid:LIKE' => $_REQUEST['cid']),
-            array('OR:categoryid:LIKE' => '%,'.$_REQUEST['cid'].',%'),
-            array('OR:categoryid:LIKE' => '%,'.$_REQUEST['cid']),
-            array('OR:categoryid:LIKE' => $_REQUEST['cid'].',%'),
+            array('categoryid:LIKE' => $categoryFilter),
+            array('OR:categoryid:LIKE' => '%,'.$categoryFilter.',%'),
+            array('OR:categoryid:LIKE' => '%,'.$categoryFilter),
+            array('OR:categoryid:LIKE' => $categoryFilter.',%'),
             );
 
 $whereArr['mxCalendarEvents.active'] = 1;
@@ -321,7 +324,8 @@ $modx->setPlaceholders(array('dateseperator'=>$dateSeperator));
 //----- NOW GET THE DISPLAY TYPE ------//
 switch ($displayType){
     case 'list':
-        $output = $mxcal->makeEventList($eventListLimit, $eventsArr, array('tplElItem'=>$tplElItem, 'tplElMonthHeading'=>$tplElMonthHeading, 'tplElWrap'=>$tplElWrap, 'tplImage'=>$tplImageItem));
+    case 'daily':
+        $output = $mxcal->makeEventList($eventListLimit, $eventsArr, array('tplElItem'=>$tplElItem, 'tplElMonthHeading'=>$tplElMonthHeading, 'tplElWrap'=>$tplElWrap, 'tplImage'=>$tplImageItem, 'tplNoEvents'=>$tplNoEvents),$elStartDate,$elEndDate);
         break;
     case 'calendar':
     case 'mini':

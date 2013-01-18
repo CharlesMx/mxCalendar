@@ -66,42 +66,47 @@ $(function() {
             Shadowbox.clearCache();
             Shadowbox.setup(".mxcmodal", sbOptions);
         }
+        
+        mxcBindEvents();
     }
     function addHistory(url){
         var stateObj = {};
         if(url)
         history.pushState(stateObj, "Calendar", url);
     }
-    $("#mxcnextlnk").live("click",function(event){
+    function mxcBindEvents(){
+        $('#mxcnextlnk').on('click', function(event) { 
         event.preventDefault();
         if(!$("#mxcnextlnk, #mxcprevlnk").hasClass('loading')){
             $("#calbody").html(mxcCalNexContent);
             //addHistory(mxcCalNext);
             ajaxmxc();
         }
-    });
-    $("#mxcprevlnk").live("click",function(event){
-        event.preventDefault();
-        if(!$("#mxcnextlnk, #mxcprevlnk").hasClass('loading')){
-            $("#calbody").html(mxcCalPreContent);
-            //addHistory(mxcCalPrev);
-            ajaxmxc();
-        }
-    });
-    $("#mxctodaylnk").live("click",function(event){
-        event.preventDefault();
-        if(todayContent != ''){
-            $("#calbody").html(todayContent);
-            ajaxmxc();
-        } else {
-            $.get(this.href+"&imajax=1", {},
-               function(data){
-                 todayContent = data;
-                 $("#calbody").html(todayContent);
-                 ajaxmxc();
-               });
-        }
-    })
+        });
+        $('#mxcprevlnk').on('click', function(event) { 
+            event.preventDefault();
+            if(!$("#mxcnextlnk, #mxcprevlnk").hasClass('loading')){
+                $("#calbody").html(mxcCalPreContent);
+                //addHistory(mxcCalPrev);
+                ajaxmxc();
+            }
+        });
+        $('#mxctodaylnk').on('click', function(event) { 
+            event.preventDefault();
+            if(todayContent != ''){
+                $("#calbody").html(todayContent);
+                ajaxmxc();
+            } else {
+                $.get(this.href+"&imajax=1", {},
+                function(data){
+                    todayContent = data;
+                    $("#calbody").html(todayContent);
+                    ajaxmxc();
+                });
+            }
+        });
+    }
+    
     //-- Get today's content
     if(document.getElementById("mxctodaylnk") != null && todayContent == '')
     $.get(document.getElementById("mxctodaylnk").href+"&imajax=1", {},
