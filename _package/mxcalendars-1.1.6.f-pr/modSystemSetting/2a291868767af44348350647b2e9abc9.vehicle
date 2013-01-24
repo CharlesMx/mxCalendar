@@ -1,0 +1,16 @@
+<?php return array (
+  'unique_key' => 'key',
+  'preserve_keys' => true,
+  'update_object' => false,
+  'namespace' => 'mxcalendars',
+  'resolve' => NULL,
+  'validate' => NULL,
+  'vehicle_package' => 'transport',
+  'vehicle_class' => 'xPDOObjectVehicle',
+  'guid' => '96b39a96061e0b8c1a5f11da475649d3',
+  'package' => 'modx',
+  'class' => 'modSystemSetting',
+  'signature' => '2a291868767af44348350647b2e9abc9',
+  'native_key' => 'mxcalendars.mgr_dateformat',
+  'object' => '{"key":"mxcalendars.mgr_dateformat","value":"m\\/d\\/Y","xtype":"textfield","namespace":"mxcalendars","area":"mxcalendars","editedon":null,"name":"mxcalendars.set_mgr_dateformat"}',
+);

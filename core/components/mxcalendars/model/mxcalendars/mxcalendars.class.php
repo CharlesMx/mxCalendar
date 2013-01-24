@@ -230,7 +230,7 @@ class mxCalendars {
             if($isDST){
                 $t = $t -3600;
             }
-            return str_replace('%O', date('S', $t),gmstrftime($f,$t));
+            return str_replace('%O', date('S', $t),strftime($f,$t));
         }
         public function timezoneDoesDST($tzId) {
             $tz = new DateTimeZone($tzId);
@@ -514,7 +514,7 @@ class mxCalendars {
             //return $output.'</ul>';
         }
         
-        public function processFeeds(){
+        public function processFeeds($setFeedTZ=null){
 
             require_once dirname(__FILE__).'/mxcalendars.ics.class.php';
             
@@ -526,6 +526,12 @@ class mxCalendars {
             
             if($this->loggingEnabled){
                 $this->logEvent('feed','feeds processor called\n\nSQL:\n'.$f->toSql());
+            }
+            
+            if(!empty($setFeedTZ) && is_array(json_decode($setFeedTZ, true))){
+                $feedTzSettings = json_decode($setFeedTZ, true);
+            } else {
+                $feedTzSettings = null;
             }
             
             //$this->modx->setLogLevel(modX::LOG_LEVEL_INFO);
@@ -546,13 +552,32 @@ class mxCalendars {
                     $vcalendar = new vcalendar( $config );
                     $vcalendar->parse();
 
+                    
+                    //echo '<pre>'.print_r($vcalendar,true).'</pre>';
+                    //echo '<br /><br />=========================================================<br /><br />';
+                    
                     //$this->modx->setLogLevel(modX::LOG_LEVEL_INFO);
                     //$this->modx->log(modX::LOG_LEVEL_INFO,'Parsing feed #'.$feed->get('id').' events. ['.$feed->get('feed').']\n\nResponse:\n'.$myics);
                     
                     if($this->loggingEnabled) $this->logEvent('feed parse','Parsing feed #'.$feed->get('id').' events. ['.$feed->get('feed').']\n\nResponse:\n'.$myics);
 
+                    //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                    $currentTZ = date_default_timezone_get();
+                    
+                    if(!empty($feedTzSettings) && array_key_exists($feed->get('id'), $feedTzSettings)){
+                        //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                        date_default_timezone_set($feedTzSettings[$feed->get('id')]);
+                        //echo '<h2>NEW TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                    }
+                    
                     while( $vevent = $vcalendar->getComponent( "vevent" )) {
-
+                        
+                        if(!empty($feedTzSettings) && array_key_exists($feed->get('id'), $feedTzSettings)){
+                            //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                            //date_default_timezone_set($feedTzSettings[$feed->get('id')]);
+                            //echo '<h2>NEW TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                        }
+                        
                         if($vevent->dtstart['value']){
                         $start     =  mktime(
                                                 $vevent->dtstart['value']['hour'],
@@ -597,7 +622,7 @@ class mxCalendars {
                                         );
                         } else { $createdDate = ''; }
                         
-                        $description = $vevent->getProperty( "description" );  // one occurrence
+                        $description = str_replace(array("\r\n", "\n", "\r","\\r\\n","\\n","\\r"), '<br />', $vevent->getProperty( "description" ));  // one occurrence
                         $location = $vevent->getProperty( "location" );
                         $title = $vevent->getProperty( "summary" );
                         $feedEventUID = $vevent->getProperty("uid");
@@ -610,7 +635,7 @@ class mxCalendars {
                         // Output for testing
                         $event = array(
                                     'title'=>$title,
-                                    'description'=>(!empty($description) ? $description : ''),
+                                    'description'=>(!empty($description) ?  $description : ''),
                                     'location_name'=>$location,
                                     'startdate'=>$start,
                                     'enddate'=>$end,
@@ -630,12 +655,13 @@ class mxCalendars {
                         //-- Save the new event
                         if(!empty($feedEventUID)){
                             $existingEvent = $this->modx->getObject('mxCalendarEvents',array('feeds_uid' => $feedEventUID));
-                            if(!is_object($existingEvent)){
-                                $existingEvent = $this->modx->getObject('mxCalendarEvents',array('title' => $title));
-                            }
-                        } else {
-                            $existingEvent = $this->modx->getObject('mxCalendarEvents',array('title' => $title));
-                        }
+                            //if(!is_object($existingEvent)){
+                            //    $existingEvent = $this->modx->getObject('mxCalendarEvents',array('title' => $title));
+                            //}
+                        } //else {
+                            // Disable the TITLE as a valid itdentifier for duplicated events as it breaks the repeating events
+                            // $existingEvent = $this->modx->getObject('mxCalendarEvents',array('title' => $title));
+                        //}
                         if(is_object($existingEvent)){
                             // Check and modify existing event if modified since last update
                             if($existingEvent->get('lastedit') <= $lastchange){
@@ -660,6 +686,10 @@ class mxCalendars {
                        
                         
                     }
+                    
+                    // Set back current TIME ZONE
+                    date_default_timezone_set($currentTZ);
+                    
                     //-- Update the feed next run time
                     $nextTime = strtotime('+'.$feed->get('timerint').' '.$feed->get('timermeasurement'));
                     $feed->set('lastrunon',time());

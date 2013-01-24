@@ -79,6 +79,8 @@ $holidayDisplayEvents = $modx->getOption('holidayDisplayEvents', $scriptProperti
 $setTimezone = $modx->getOption('setTimezone', $scriptProperties, date_default_timezone_get() );
 $debugTimezone = $modx->getOption('debugTimezone', $scriptProperties, 0 );
 $debug = $modx->getOption('debug',$scriptProperties,0);
+//++ Set a feed processor timezone adjustment
+$setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, '{"5":"America/New_York"}');
 
 //++ Calendar Options (ver >= 1.1.6d-pr)
 $categoryFilter = isset($_REQUEST['cid']) ? $_REQUEST['cid'] : $modx->getOption('categoryFilter', $scriptProperties, null); //-- Defaults to show all categories
@@ -94,8 +96,13 @@ $mxcal->setTimeZone($setTimezone,$debugTimezone);
 //-- Update to the Timezone: Manual fix to adjust timezone to match server settings
 //date_default_timezone_set("Europe/Amsterdam");
 
-$mxcal->processFeeds();
-            
+$mxcal->processFeeds($setFeedTZ);
+           
+
+//$icalFeed = $modx->getObject('mxCalendarFeed',8);
+//$icalFeed->set('nextrunon',0);
+//$icalFeed->save();
+
 if($debug)
 var_dump($scriptProperties);
 
@@ -179,7 +186,7 @@ if(!empty($calendarFilter))
                         
 if($categoryFilter && ($displayType == 'calendar' || $displayType == 'mini' || $displayType == 'list'))
         $whereArr[] = array(
-            array('categoryid:LIKE' => $categoryFilter),
+            array('categoryid' => $categoryFilter),
             array('OR:categoryid:LIKE' => '%,'.$categoryFilter.',%'),
             array('OR:categoryid:LIKE' => '%,'.$categoryFilter),
             array('OR:categoryid:LIKE' => $categoryFilter.',%'),
