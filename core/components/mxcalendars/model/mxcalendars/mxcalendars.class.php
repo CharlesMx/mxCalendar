@@ -644,7 +644,7 @@ class mxCalendars {
                                     'feeds_id'=>$feed->get('id'),
                                     'feeds_uid'=>$feedEventUID,
                                     'context'=>'',
-                                    'categoryid'=>$feed->get('defaultcategoryid'),
+                                    //'categoryid'=>$feed->get('defaultcategoryid'),
                                     'createdon'=>$createDate,
                                     'repeattype'=>0,
                                     'repeaton'=>'',
@@ -676,6 +676,9 @@ class mxCalendars {
                         } else {
                             // Create the newly found event from the feed
                             $feedEvent = $this->modx->newObject('mxCalendarEvents');
+                            
+                            $event['categoryid']=$feed->get('defaultcategoryid');
+                            
                             $feedEvent->fromArray($event);
                             $feedEvent->save();
                             if($this->loggingEnabled){
