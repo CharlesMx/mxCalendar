@@ -154,4 +154,13 @@ $chunks[16]->fromArray(array(
     'snippet' => getChunkContent($sources['elements'].'chunks/el.noevents.chunk.tpl'),
 ),'',true,true);
 
+//-- Add the search chunk 
+$chunks[17]= $modx->newObject('modChunk');
+$chunks[17]->fromArray(array(
+    'id' => 1,
+    'name' => 'tplSearch',
+    'description' => 'Default search form template.',
+    'snippet' => getChunkContent($sources['elements'].'chunks/search.chunk.tpl'),
+),'',true,true);
+
 return $chunks;
