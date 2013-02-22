@@ -432,13 +432,13 @@ mxcCore.window.CreateCal = function(config) {
 			    ,xtype: 'checkboxgroup'
                             ,hidden: config.record.repeattype == 1 ? false : true // hide on load
 			    ,items: [
-				{boxLabel: _('mxcalendars.label_sunday'), name: 'cb-auto-1', value: 0, checked: config.record.repeaton.indexOf(',0,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_monday'), name: 'cb-auto-2', value: 1, checked: config.record.repeaton.indexOf(',1,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_tuesday'), name: 'cb-auto-3', value: 2, checked: config.record.repeaton.indexOf(',2,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_wednesday'), name: 'cb-auto-4', value: 3, checked: config.record.repeaton.indexOf(',3,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_thursday'), name: 'cb-auto-5', value: 4, checked: config.record.repeaton.indexOf(',4,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_friday'), name: 'cb-auto-6', value: 5, checked: config.record.repeaton.indexOf(',5,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_saturday'), name: 'cb-auto-7', value: 6, checked: config.record.repeaton.indexOf(',6,')!=-1 ? true : false }
+				{boxLabel: _('mxcalendars.label_sunday'), name: 'cb-auto-1', value: -1, checked: config.record.repeaton.indexOf(',-1,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_monday'), name: 'cb-auto-2', value: 0, checked: config.record.repeaton.indexOf(',0,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_tuesday'), name: 'cb-auto-3', value: 1, checked: config.record.repeaton.indexOf(',1,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_wednesday'), name: 'cb-auto-4', value: 2, checked: config.record.repeaton.indexOf(',2,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_thursday'), name: 'cb-auto-5', value: 3, checked: config.record.repeaton.indexOf(',3,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_friday'), name: 'cb-auto-6', value: 4, checked: config.record.repeaton.indexOf(',4,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_saturday'), name: 'cb-auto-7', value: 5, checked: config.record.repeaton.indexOf(',5,')!=-1 ? true : false }
 			    ]
                             ,value: config.record.repeaton
 			},{
@@ -988,13 +988,13 @@ mxcCore.window.UpdateCal = function(config) {
 			    ,xtype: 'checkboxgroup'
                             ,hidden: config.record.repeattype == 1 ? false : true // hide on load
 			    ,items: [
-				{boxLabel: _('mxcalendars.label_sunday'), name: 'cb-auto-1', value: 0, checked: config.record.repeaton.indexOf(',0,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_monday'), name: 'cb-auto-2', value: 1, checked: config.record.repeaton.indexOf(',1,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_tuesday'), name: 'cb-auto-3', value: 2, checked: config.record.repeaton.indexOf(',2,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_wednesday'), name: 'cb-auto-4', value: 3, checked: config.record.repeaton.indexOf(',3,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_thursday'), name: 'cb-auto-5', value: 4, checked: config.record.repeaton.indexOf(',4,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_friday'), name: 'cb-auto-6', value: 5, checked: config.record.repeaton.indexOf(',5,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_saturday'), name: 'cb-auto-7', value: 6, checked: config.record.repeaton.indexOf(',6,')!=-1 ? true : false }
+				{boxLabel: _('mxcalendars.label_sunday'), name: 'cb-auto-1', value: -1, checked: config.record.repeaton.indexOf(',-1,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_monday'), name: 'cb-auto-2', value: 0, checked: config.record.repeaton.indexOf(',0,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_tuesday'), name: 'cb-auto-3', value: 1, checked: config.record.repeaton.indexOf(',1,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_wednesday'), name: 'cb-auto-4', value: 2, checked: config.record.repeaton.indexOf(',2,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_thursday'), name: 'cb-auto-5', value: 3, checked: config.record.repeaton.indexOf(',3,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_friday'), name: 'cb-auto-6', value: 4, checked: config.record.repeaton.indexOf(',4,')!=-1 ? true : false },
+				{boxLabel: _('mxcalendars.label_saturday'), name: 'cb-auto-7', value: 5, checked: config.record.repeaton.indexOf(',5,')!=-1 ? true : false }
 			    ]
                             //,value: config.record.repeaton
 			},{
