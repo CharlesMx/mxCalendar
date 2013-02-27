@@ -25,8 +25,8 @@ $tplElMonthHeading = $modx->getOption('tplListHeading',$scriptProperties,'el.lis
 $tplElWrap = $modx->getOption('tplListWrap',$scriptProperties,'el.wrap');
 $tplNoEvents = $modx->getOption('tplNoEvents',$scriptProperties,'el.noevents');
 $eventListLimit = $modx->getOption('eventListlimit',$scriptProperties,'5');
-$sort = $modx->getOption('mxc.sort',$scriptProperties,'startdate');
-$dir = $modx->getOption('mxc.dir',$scriptProperties,'ASC');
+$sort = $modx->getOption('sort',$scriptProperties,'startdate');
+$dir = $modx->getOption('dir',$scriptProperties,'ASC');
 $limit = $modx->getOption('limit',$scriptProperties,'99');
 $limitstart = $modx->getOption('limitstart', $scriptProperties, 0);
 //++ Text|Date Formatting properties
