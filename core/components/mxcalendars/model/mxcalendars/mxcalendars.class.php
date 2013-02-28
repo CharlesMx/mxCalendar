@@ -8,7 +8,6 @@ class mxCalendars {
     public $tz;
     public $loggingEnabled = 0;
     private $scriptProperties = array();
-    private $dowMatch = array('Mon'=>1,'Tue'=>2,'Wed'=>3,'Thu'=>4,'Fri'=>5,'Sat'=>6,'Sun'=>7);
     public $debug = false;
     
     function __construct(modX &$modx,array $config = array()) {
@@ -420,7 +419,7 @@ class mxCalendars {
             $heading = '';
             for($i=0;$i<7;$i++){
                     if($this->debug) echo '&nbsp;&nbsp;'.strftime('%A', strtotime('+ '.$i.' day', $startMonthCalDate)).'<br />';
-                    $thisDOW = trim('mxcalendars.label_'.strtolower(strftime('%A', strtotime('+ '.$i.' day', $startMonthCalDate))));
+                    $thisDOW = trim('mxcalendars.label_dow_'.strtolower(strftime('%u', strtotime('+ '.$i.' day', $startMonthCalDate))));
                     $heading.=$this->getChunk($tpls->heading, array('dayOfWeekId'=>'','dayOfWeekClass'=>'mxcdow', 'dayOfWeek'=> $this->modx->lexicon($thisDOW) ));
             }
             //-- Set additional day placeholders for week
