@@ -4,7 +4,7 @@
   array (
     'license' => '--------------------
 Extra: mxCalendar 
-Version: 1.1.6.e
+Version: 1.1.7-pl
 --------------------
 GNU GENERAL PUBLIC LICENSE
    Version 2, June 1991
@@ -300,13 +300,9 @@ Learn more at <a href="http://charlesmx.com/software/mxcalendar-revo.html?refpkm
     'changelog' => 'Changelog file for mxCalendar component.
 
 ==================================== 
-mxCalendar 1.1.6.e-pr
+mxCalendar 1.1.7-pl
 ====================================
 - mxcalendar.js file jQuery live functions updated to the "on" event handler
-
-==================================== 
-mxCalendar 1.1.6.e-pr
-====================================
 - New displayType "daily" added for intuitive understanding if desired
 - Added new placeholders for list and daily displayType (fulldate,tomorrow,yesterday)
 - Ability now to use url parameter, query string, to modify the displayType (ex: ?&displayType=list)
@@ -411,9 +407,9 @@ mxCalendar 0.0.1-beta
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modNamespace',
-      'guid' => '69fbfa4a96f20e2cf6898cdb0964c8ec',
+      'guid' => 'fbbd45a48fef041faa202098eb8b48e0',
       'native_key' => 'mxcalendars',
-      'filename' => 'modNamespace/f9f157947dd408bb3d0ac669e0e935c1.vehicle',
+      'filename' => 'modNamespace/41253decd69c82d891de6d5174cf619b.vehicle',
       'namespace' => 'mxcalendars',
     ),
     1 => 
@@ -421,9 +417,9 @@ mxCalendar 0.0.1-beta
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modCategory',
-      'guid' => '2e5438a6ce51340adc5828d9469e696f',
+      'guid' => 'fccc0306310664b5dc7d606753f90947',
       'native_key' => 1,
-      'filename' => 'modCategory/64afa598055e3bfd5688ade067976852.vehicle',
+      'filename' => 'modCategory/f4c17d99503f8186fdb698bb23ee4415.vehicle',
       'namespace' => 'mxcalendars',
     ),
     2 => 
@@ -431,9 +427,9 @@ mxCalendar 0.0.1-beta
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modSystemSetting',
-      'guid' => '566b827e7f8b4b101fe06b622585a6f9',
+      'guid' => 'bb7ebef18a71f29c3f739e031b8dcf85',
       'native_key' => 'mxcalendars.category_required',
-      'filename' => 'modSystemSetting/d6642d028b75bbccf4572221be726de3.vehicle',
+      'filename' => 'modSystemSetting/31a2dc6d219c454ff88277fb643e2fb9.vehicle',
       'namespace' => 'mxcalendars',
     ),
     3 => 
@@ -441,9 +437,9 @@ mxCalendar 0.0.1-beta
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modSystemSetting',
-      'guid' => 'c66fbee8cf36bda4f5422a8b2e9162fa',
+      'guid' => 'c55e683b96f8e1d765b3b97bb94122e1',
       'native_key' => 'mxcalendars.event_desc_type',
-      'filename' => 'modSystemSetting/969cd6743753e9d4ae32e59512b0a94e.vehicle',
+      'filename' => 'modSystemSetting/802bc398034943c8a54c4bd74d913633.vehicle',
       'namespace' => 'mxcalendars',
     ),
     4 => 
@@ -451,9 +447,9 @@ mxCalendar 0.0.1-beta
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modSystemSetting',
-      'guid' => '67e8db52872e3410a765452ce3ae3c08',
+      'guid' => '62894f8a1c163ff16ceff5a6333c17a0',
       'native_key' => 'mxcalendars.mgr_dateformat',
-      'filename' => 'modSystemSetting/aa82a48a874dd89ea2dc0f4092122f24.vehicle',
+      'filename' => 'modSystemSetting/c715be7865dc1f9049afa219cd0ab319.vehicle',
       'namespace' => 'mxcalendars',
     ),
     5 => 
@@ -461,9 +457,9 @@ mxCalendar 0.0.1-beta
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modSystemSetting',
-      'guid' => 'a21cad507520e0bc7e480c64936a1037',
+      'guid' => '266614bff86932ee25c97490d3395ab9',
       'native_key' => 'mxcalendars.mgr_timeformat',
-      'filename' => 'modSystemSetting/15b38b673595e673e5f805307b55a2f6.vehicle',
+      'filename' => 'modSystemSetting/d91d477891efbab48dd2d9891760fd51.vehicle',
       'namespace' => 'mxcalendars',
     ),
     6 => 
@@ -471,9 +467,9 @@ mxCalendar 0.0.1-beta
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modSystemSetting',
-      'guid' => '35deb768df9a58747d96f4ca71c59883',
+      'guid' => '563df4167b7250516d122c7e52b93a4b',
       'native_key' => 'mxcalendars.mgr_log_enable',
-      'filename' => 'modSystemSetting/228159e910123463a7b31caad7418765.vehicle',
+      'filename' => 'modSystemSetting/f8cdff31298415987dfd470a42c02fb8.vehicle',
       'namespace' => 'mxcalendars',
     ),
     7 => 
@@ -481,9 +477,9 @@ mxCalendar 0.0.1-beta
       'vehicle_package' => 'transport',
       'vehicle_class' => 'xPDOObjectVehicle',
       'class' => 'modMenu',
-      'guid' => '754a55a0b0a97ca18015fa66a45ed5ac',
+      'guid' => 'fe75b2109efb6ccb199c5babd03dc794',
       'native_key' => 'mxCalendar',
-      'filename' => 'modMenu/1901df234888c74acdca39567b14b02e.vehicle',
+      'filename' => 'modMenu/5e92f933ac85c2e9e0fa73ef6ea0b755.vehicle',
       'namespace' => 'mxcalendars',
     ),
   ),

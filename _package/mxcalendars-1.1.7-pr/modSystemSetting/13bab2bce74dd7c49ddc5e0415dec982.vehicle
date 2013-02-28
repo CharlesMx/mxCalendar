@@ -1,0 +1,16 @@
+<?php return array (
+  'unique_key' => 'key',
+  'preserve_keys' => true,
+  'update_object' => false,
+  'namespace' => 'mxcalendars',
+  'resolve' => NULL,
+  'validate' => NULL,
+  'vehicle_package' => 'transport',
+  'vehicle_class' => 'xPDOObjectVehicle',
+  'guid' => '6cf69812f71514da29c31b83aca07ca2',
+  'package' => 'modx',
+  'class' => 'modSystemSetting',
+  'signature' => '13bab2bce74dd7c49ddc5e0415dec982',
+  'native_key' => 'mxcalendars.mgr_log_enable',
+  'object' => '{"key":"mxcalendars.mgr_log_enable","value":false,"xtype":"combo-boolean","namespace":"mxcalendars","area":"mxcalendars","editedon":null,"name":"mxcalendars.set_mgr_log_enable"}',
+);

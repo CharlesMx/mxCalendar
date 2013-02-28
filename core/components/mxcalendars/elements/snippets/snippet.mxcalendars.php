@@ -80,7 +80,7 @@ $setTimezone = $modx->getOption('setTimezone', $scriptProperties, date_default_t
 $debugTimezone = $modx->getOption('debugTimezone', $scriptProperties, 0 );
 $debug = $modx->getOption('debug',$scriptProperties,0);
 //++ Set a feed processor timezone adjustment
-$setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, '{"5":"America/New_York"}');
+$setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, '{"8":"UTC"}');
 
 //++ Calendar Options (ver >= 1.1.6d-pr)
 $categoryFilter = isset($_REQUEST['cid']) ? $_REQUEST['cid'] : $modx->getOption('categoryFilter', $scriptProperties, null); //-- Defaults to show all categories
@@ -92,7 +92,7 @@ $contextFilter = isset($_REQUEST['conf']) ? $_REQUEST['conf'] : $modx->getOption
 $formFilter = $modx->getOption('formFilter',$scriptProperties,'form_');
 
 //-- Update to the Timezone
-$mxcal->setTimeZone($setTimezone,$debugTimezone);
+if($setFeedTZ !== null) $mxcal->setTimeZone($setTimezone,$debugTimezone);
 //-- Update to the Timezone: Manual fix to adjust timezone to match server settings
 //date_default_timezone_set("Europe/Amsterdam");
 
@@ -108,13 +108,13 @@ var_dump($scriptProperties);
 
 $elStartDate = strtotime($eventListStartDate);
 if($elStartDate ===false){
-    if($debug) echo 'Could note convert <strong>elStartDate</strong> value of "'.$elStartDate.'" to proper time stamp.<br />';
+    if($debug) echo 'Could not convert <strong>elStartDate</strong> value of "'.$elStartDate.'" to proper time stamp.<br />';
     $elStartDate = time();
 
 }
 $elEndDate = strtotime($eventListEndDate);
 if($elEndDate ===false){
-    if($debug) echo 'Could note convert <strong>elEndDate</strong> value of "'.$elEndDate.'" to proper time stamp.<br />';
+    if($debug) echo 'Could not convert <strong>elEndDate</strong> value of "'.$elEndDate.'" to proper time stamp.<br />';
     $elEndDate = time();
 }
 
@@ -139,6 +139,7 @@ $c->select(array(
 switch ($displayType){
     case 'list':
     case 'daily':
+        $sort = 'startdate';
         if(!$elDirectional){
             $whereArr = array(array('repeating:=' => 0,'AND:enddate:>=' => $elStartDate,'AND:enddate:<=' => $elEndDate,array('OR:repeating:='=>1,'AND:repeatenddate:>=' => $elStartDate)) );
         } else {
@@ -195,7 +196,8 @@ if($categoryFilter && ($displayType == 'calendar' || $displayType == 'mini' || $
 $whereArr['mxCalendarEvents.active'] = 1;
 
 $c->where($whereArr);
-$c->sortby($sort,$dir);
+if($displayType != 'detail')
+    $c->sortby($sort,$dir);
 $c->limit($limit,$limitstart);
 
 $c->prepare();

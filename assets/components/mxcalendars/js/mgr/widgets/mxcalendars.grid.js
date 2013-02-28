@@ -324,7 +324,15 @@ mxcCore.window.CreateCal = function(config) {
 				    padding: '0 5 0 0',
 				    allowBlank: false,
 				    width: 150,
-                                    value: config.record.startdate_date
+                                    value: config.record.startdate_date,
+                                    listeners:{change:{fn:function(item, value) {
+                                        var ed = Ext.getCmp('cenddate_date');
+                                        if(ed.getValue() === ''){
+                                            ed.setValue(value);
+                                        } 
+                                        }}
+                                    }
+                                    
 				},
 				{
 				    xtype     : 'timefield',

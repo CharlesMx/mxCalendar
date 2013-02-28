@@ -22,12 +22,14 @@ function tstamptotime($ISO8601,$tstamp=null,$mergeTime=false) {
 //-- Make reoccuring event list
 function _getRepeatDates($frequencymode=0, $interval=1, $frequency='1',$startDate = null, $endDate = null,$onwd=array(0,1,2,3,4,5,6),$occType = 'UNIX'){
     // Lets check the timezone setting so that our date functions return correct dates for location
+    /* Removed until fully supported with offset value saving in db
     if(date_default_timezone_get() != 'UTC'){
         $curTZ = date_default_timezone_get();
         if($debug) { echo 'DEBUG: Current TimeZone set to '.$curTZ.PHP_EOL; }
         date_default_timezone_set('UTC');
         if($debug) { echo 'DEBUG: SET TimeZone to '.$curTZ.' for date calculations'.PHP_EOL; }
     }
+    */
     //-- Date Output Format
     $dateFormat = 'D n-j-Y'; //'Y-m-d h:i a';
     //-- Time Output Format
