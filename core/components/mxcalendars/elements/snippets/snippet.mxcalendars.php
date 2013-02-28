@@ -1,6 +1,8 @@
 <?php
 /**
  * mxCalendar 
+ * 
+ * version: 1.1.7-pl
  *  
  */
 $mxcal = $modx->getService('mxcalendars','mxCalendars',$modx->getOption('mxcalendars.core_path',null,$modx->getOption('core_path').'components/mxcalendars/').'model/mxcalendars/',$scriptProperties);
