@@ -7,6 +7,7 @@ mxCalendar 1.1.7-pl
 - New displayType "daily" added for intuitive understanding if desired
 - Added new placeholders for list and daily displayType (fulldate,tomorrow,yesterday)
 - Ability now to use url parameter, query string, to modify the displayType (ex: ?&displayType=list)
+- Bug Fix: closes #84, #67, #53
 
 ==================================== 
 mxCalendar 1.1.6-pl 

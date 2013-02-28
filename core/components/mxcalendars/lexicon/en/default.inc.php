@@ -50,6 +50,14 @@ $_lang['mxcalendars.label_wednesday'] = 'Wednesday';
 $_lang['mxcalendars.label_thursday'] = 'Thursday';
 $_lang['mxcalendars.label_friday'] = 'Friday';
 $_lang['mxcalendars.label_saturday'] = 'Saturday';
+$_lang['mxcalendars.label_dow_7'] = 'Sunday';
+$_lang['mxcalendars.label_dow_1'] = 'Monday';
+$_lang['mxcalendars.label_dow_2'] = 'Tuesday';
+$_lang['mxcalendars.label_dow_3'] = 'Wednesday';
+$_lang['mxcalendars.label_dow_4'] = 'Thursday';
+$_lang['mxcalendars.label_dow_5'] = 'Friday';
+$_lang['mxcalendars.label_dow_6'] = 'Saturday';
+
 $_lang['mxcalendars.label_daily'] = 'Daily';
 $_lang['mxcalendars.label_weekly'] = 'Weekly';
 $_lang['mxcalendars.label_monthly'] = 'Monthly';
