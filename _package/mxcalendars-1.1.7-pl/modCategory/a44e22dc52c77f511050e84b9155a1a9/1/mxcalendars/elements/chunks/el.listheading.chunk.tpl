@@ -1,0 +1,1 @@
+<h3 class="monthheading [[+altmonthheading]]">[[+startdate:date=`%b`]]</h3>
