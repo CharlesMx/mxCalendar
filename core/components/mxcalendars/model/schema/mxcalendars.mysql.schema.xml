@@ -59,7 +59,7 @@
     </object>
 
     <object class="mxCalendarCategories" table="mxcalendars_categories" extends="xPDOSimpleObject">
-        <field key="name" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="name" dbtype="varchar" precision="255" phptype="string" null="true" default=""/>
         <field key="isdefault" dbtype="boolean" phptype="boolean" null="false" default="0"/>
         <field key="foregroundcss" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
         <field key="backgroundcss" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
@@ -79,7 +79,7 @@
     </object>
 
     <object class="mxCalendarCalendars" table="mxcalendars_calendars" extends="xPDOSimpleObject">
-        <field key="name" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="name" dbtype="varchar" precision="255" phptype="string" null="true" default=""/>
         <field key="webusergroup" dbtype="int" precision="10" phptype="integer" />
         <field key="active" dbtype="boolean" phptype="boolean" null="false" default="1"/>
         

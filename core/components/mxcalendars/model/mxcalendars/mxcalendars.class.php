@@ -392,6 +392,8 @@ class mxCalendars {
             if($activeMonthOnlyEvents) return array('start'=>strtotime($mStartDate), 'end'=>strtotime($lastDayOfMonth)); else return array('start'=>$startMonthCalDate, 'end'=>$endMonthCalDate);
         }
         public function makeEventCalendar($events=array(),$resourceId=null,$ajaxMonthResourceId=null,$tpls=array('event'=>'month.inner.container.row.day.eventclean','day'=>'month.inner.container.row.day','week'=>'month.inner.container.row','month'=>'month.inner.container','heading'=>'month.inner.container.row.heading'), $conFilter=null, $calFilter=null, $highlightToday=true){
+            $time_start = microtime(true);
+            
             $startDate = $_REQUEST['dt'] ? $_REQUEST['dt'] : strftime('%Y-%m-%d');
             $mStartDate = strftime('%Y-%m',strtotime($startDate)) . '-01 00:00:01';
             $mCurMonth = strftime('%m', strtotime($mStartDate));
@@ -460,10 +462,12 @@ class mxCalendars {
                             $categoryInlineCSS = array();
                             
                             // Get the events category css info
+                            
                             if(!empty($el['categoryid'])){
                                 $categories = explode(',', $el['categoryid']);
                                 if(count($categories)){
                                     foreach($categories AS $catid){
+                                        
                                         $catQuery = $this->modx->newQuery('mxCalendarCategories');
                                         $catQuery->where(array('id:IN'=>$categories));
                                         $catproperties = $this->modx->getCollection('mxCalendarCategories',$catQuery);
@@ -474,10 +478,12 @@ class mxCalendars {
                                                 $categoryInlineCSS['backgroundcss'] .= $catCSS->get('backgroundcss');
                                             }
                                         }
+                                        
                                     }
                                 }
                             }
                             $eventList.=$this->getChunk($tpls->event, array_merge($el,$categoryInlineCSS));
+                            
                         }
                     } else { if($this->debug) echo '&nbsp;&nbsp;<span style="color:red;">--&nbsp;&nbsp;'.strftime('%m-%d', $iDay).'</span><br />'; }
                     //-- Set additional day placeholders for day
@@ -493,11 +499,12 @@ class mxCalendars {
                         ,'fulldate'=>strftime('%m/%d/%Y', $iDay)
                         ,'tomorrow'=>strftime('%m/%d/%Y', strtotime('+1 day',  $iDay ))
                         ,'yesterday'=>strftime('%m/%d/%Y', strtotime('-1 day', $iDay ))
-                        ,'class'=>($mCurMonth == $thisMonth ? $isToday.(!empty($eventList) ? 'hasEvents' : 'noEvents') : 'ncm')
+                        ,'class'=>($mCurMonth == $thisMonth ? $isToday.(array_key_exists(strftime('%Y-%m-%d', $iDay),$events) ? 'hasEvents' : 'noEvents') : 'ncm')
                         );
                     //$days.=$chunkDay->process($phDay);
                     $days.=$this->getChunk($tpls->day, $phDay);
                 } while (++$diw < 7);
+                
                 if($this->debug) echo '<br />';
                 //-- Set additional day placeholders for week
                 $phWeek = array(
@@ -507,7 +514,14 @@ class mxCalendars {
                     );
                 //$weeks.=$chunkWeek->process($phWeek);
                 $weeks.=$this->getChunk($tpls->week, $phWeek);
+                
             } while (++$var < 6); //Only advance 5 weeks giving total of 6 weeks
+            
+            //
+            $time_end = microtime(true);
+            $time = $time_end - $time_start;
+            //echo '<p>mxCalendar=>makeEventCalendar() processed in '.$time.'</p>';
+            
             //-- Set additional day placeholders for month
             $phMonth = array(
                 'containerID'=>strftime('%a',$iDay)
@@ -583,11 +597,32 @@ class mxCalendars {
                     
                     $activeUrl = $feed->get('feed');
 
-                    $myics = file_get_contents($activeUrl);
+/*                    
+        $crl = curl_init();
+        $timeout = 5;
+        curl_setopt ($crl, CURLOPT_URL,  substr($activeUrl, strpos($activeUrl, '://')+3 ));
+        curl_setopt ($crl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt ($crl, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $myics = curl_exec($crl);
+        curl_close($crl);
 
+
+        echo '<pre>';
+        echo $myics;
+        echo '</pre>';
+*/                    
                     // Cache the response for giggles
                     //$this->modx->cacheManager->set('mxcfeed-'.$feed->get('id'),$myics,3600);
 
+                    //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                    $currentTZ = date_default_timezone_get();
+                    
+                    if(!empty($feedTzSettings) && array_key_exists($feed->get('id'), $feedTzSettings)){
+                        echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                        date_default_timezone_set($feedTzSettings[$feed->get('id')]);
+                        echo '<h2>NEW TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                    }
+                    
                     $config    = array( "unique_id" => 'mxcfeed-'.$feed->get('id').'-'.time(),
                                         "url"       => $activeUrl,
                                     );
@@ -603,23 +638,9 @@ class mxCalendars {
                     
                     if($this->loggingEnabled) $this->logEvent('feed parse','Parsing feed #'.$feed->get('id').' events. ['.$feed->get('feed').']\n\nResponse:\n'.$myics);
 
-                    //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
-                    $currentTZ = date_default_timezone_get();
-                    
-                    if(!empty($feedTzSettings) && array_key_exists($feed->get('id'), $feedTzSettings)){
-                        //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
-                        date_default_timezone_set($feedTzSettings[$feed->get('id')]);
-                        //echo '<h2>NEW TIMEZONE: '.date_default_timezone_get().'</h2><br />';
-                    }
-                    
+                   
                     while( $vevent = $vcalendar->getComponent( "vevent" )) {
-                        
-                        if(!empty($feedTzSettings) && array_key_exists($feed->get('id'), $feedTzSettings)){
-                            //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
-                            //date_default_timezone_set($feedTzSettings[$feed->get('id')]);
-                            //echo '<h2>NEW TIMEZONE: '.date_default_timezone_get().'</h2><br />';
-                        }
-                        
+                        //echo '<br />[] Feed Event Load: '.print_r($vevent,true);
                         if($vevent->dtstart['value']){
                         $start     =  mktime(
                                                 $vevent->dtstart['value']['hour'],

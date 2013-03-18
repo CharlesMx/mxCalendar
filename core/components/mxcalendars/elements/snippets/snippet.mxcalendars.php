@@ -5,6 +5,47 @@
  * version: 1.1.7-pl
  *  
  */
+
+class makeProcessTime {
+    public $globalStartProcess, $startProcess, $endProcess;
+    public function __construct($gsProc=null){
+        $now = microtime(true);
+        if(!empty($gsProc)){
+            self::set('globalStartProcess',$gsProc);
+        }
+        self::set('startProcess',$now);
+        
+    }
+    public function set($property='',$val=null){
+        if(!empty($property)){
+            $this->{$property} = $val;
+        }
+    }
+    public function get($property=''){
+        if(!empty($property)){
+            return $this->{$property};
+        }
+        return false;
+    }
+    public function getTime(){
+        return $this->endProcess - $this->startProcess;
+    }
+    public function end($echoMessage=''){
+        self::set('endProcess',microtime(true));
+        if(!empty($echoMessage)){
+            /*
+            if(!empty($this->globalStartProcess))
+                echo  $echoMessage.' started @'.($this->startProcess - $this->globalStartProcess).' and  ended @'.($this->endProcess - $this->globalStartProcess).' for total processing time of <strong>'.self::getTime().'</strong> seconds<br />';
+            else
+                echo  $echoMessage.' had a total processing time of <strong>'.self::getTime().'</strong> seconds<br />';
+             * 
+             */
+        } else {
+            return self::getTime();
+        }
+    }
+}
+
 $mxcal = $modx->getService('mxcalendars','mxCalendars',$modx->getOption('mxcalendars.core_path',null,$modx->getOption('core_path').'components/mxcalendars/').'model/mxcalendars/',$scriptProperties);
 if (!($mxcal instanceof mxCalendars)) return 'Error loading instance of mxCalendars.';
 
@@ -82,7 +123,7 @@ $setTimezone = $modx->getOption('setTimezone', $scriptProperties, date_default_t
 $debugTimezone = $modx->getOption('debugTimezone', $scriptProperties, 0 );
 $debug = $modx->getOption('debug',$scriptProperties,0);
 //++ Set a feed processor timezone adjustment
-$setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, '{"8":"UTC"}');
+$setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, '{"2":"America/New_York"}');
 
 //++ Calendar Options (ver >= 1.1.6d-pr)
 $categoryFilter = isset($_REQUEST['cid']) ? $_REQUEST['cid'] : $modx->getOption('categoryFilter', $scriptProperties, null); //-- Defaults to show all categories
@@ -98,12 +139,12 @@ if($setFeedTZ !== null) $mxcal->setTimeZone($setTimezone,$debugTimezone);
 //-- Update to the Timezone: Manual fix to adjust timezone to match server settings
 //date_default_timezone_set("Europe/Amsterdam");
 
-$mxcal->processFeeds($setFeedTZ);
-           
-
-//$icalFeed = $modx->getObject('mxCalendarFeed',8);
+//$icalFeed = $modx->getObject('mxCalendarFeed',2);
 //$icalFeed->set('nextrunon',0);
 //$icalFeed->save();
+
+$mxcal->processFeeds($setFeedTZ);
+           
 
 if($debug)
 var_dump($scriptProperties);
@@ -226,6 +267,8 @@ if($modx->resource->get('id') != $ajaxResourceId && $modx->resource->get('id') !
         $modx->regClientStartupScript($mxcal->config['assetsUrl'].'js/web/mxc-calendar.js');
     }
 }
+
+$resultLoopTimer = new makeProcessTime($time_start);
 foreach ($mxcalendars as $mxc) {
     //-- Convert the object to an array
     $mxcArray = $mxc->toArray();
@@ -234,16 +277,20 @@ foreach ($mxcalendars as $mxc) {
     
 	
     //-- Split the single unix time stamp into date and time for preformatted UI
+    /* DEPRECIATED
     $mxcArray['startdate_fdate'] = $mxcal->getFormatedDate($dateFormat,$mxc->get('startdate'));
     $mxcArray['startdate_ftime'] = $mxcal->getFormatedDate($timeFormat,$mxc->get('startdate'));
     $mxcArray['enddate_fdate'] = $mxcal->getFormatedDate($dateFormat,$mxc->get('enddate'));
     $mxcArray['enddate_ftime'] = $mxcal->getFormatedDate($timeFormat,$mxc->get('enddate'));
+     * 
+     */
 
     
     $eStart    = new DateTime(date('Y-m-d H:i:s',$mxc->get('startdate'))); 
     $eEnd      = new DateTime(date('Y-m-d H:i:s',$mxc->get('enddate')));
     
     $durYear; $durMonth; $durDay; $durHour; $durMin; $durSec;
+    
     if(version_compare(PHP_VERSION, '5.3.0') >= 0){
         $diff = $eStart->diff($eEnd);
         $durYear = $diff->format('%y');
@@ -288,6 +335,7 @@ foreach ($mxcalendars as $mxc) {
    
     //$output .= $mxcal->getChunk($tpl,$mxcArray);
 }
+$resultLoopTimer->end('mxc result set loop');
 
 // Obtain a list of columns
 foreach ($arrEventDates as $key => $row) {
@@ -298,10 +346,12 @@ foreach ($arrEventDates as $key => $row) {
 // Sort the data with volume descending, edition ascending
 // Add $data as the last parameter, to sort by the common key
 if(count($arrEventDates) && $displayType == 'list'){
+    $multiSortTimer = new makeProcessTime($time_start);
     if($dir == 'ASC')
         array_multisort($date, SORT_ASC, $event, SORT_ASC, $arrEventDates);
     else
         array_multisort($date, SORT_DESC, $event, SORT_DESC, $arrEventDates);
+    $multiSortTimer->end('array_multisort');
 } else {
     //array_multisort($date, SORT_ASC, $event, SORT_ASC, $arrEventDates);
 }
@@ -309,16 +359,22 @@ if(count($arrEventDates) && $displayType == 'list'){
 if(count($arrEventDates)){
     if($debug) echo 'Looping through events list of '.count($arrEventDates).' total.<br />';
     $ulimit=0;
+    
+    $arraEventTimer = new makeProcessTime($time_start);
+        
     foreach($arrEventDates AS $e){
         
             $oDetails = $arrEventsDetail[$e['eventId']]; //Get original event (parent) details
             $oDetails['startdate'] = $e['date'];
             $oDetails['enddate'] = strtotime('+'.($arrEventsDetail[$e['eventId']]['durDay'] ? $arrEventsDetail[$e['eventId']]['durDay'].' days ' :'').($arrEventsDetail[$e['eventId']]['durHour'] ? $arrEventsDetail[$e['eventId']]['durHour'].' hour ' :'').($arrEventsDetail[$e['eventId']]['durMin'] ? $arrEventsDetail[$e['eventId']]['durMin'].' minute' :''), $e['date']);//$e['date'];//repeatenddate
             if(( ( ($oDetails['startdate']>=$elStartDate || $oDetails['enddate'] >= $elStartDate) && $oDetails['enddate']<=$elEndDate) || $displayType=='detail' || $elDirectional ) ){
+                /* DEPRECIATED
                 $oDetails['startdate_fdate'] = $mxcal->getFormatedDate($dateFormat,$oDetails['startdate']);
                 $oDetails['startdate_ftime'] = $mxcal->getFormatedDate($timeFormat,$oDetails['startdate']);
                 $oDetails['enddate_fdate'] = $mxcal->getFormatedDate($dateFormat,$oDetails['enddate']);
                 $oDetails['enddate_ftime'] = $mxcal->getFormatedDate($timeFormat,$oDetails['enddate']);
+                 *
+                 */
                 $oDetails['detailURL'] = $modx->makeUrl((!empty($ajaxResourceId) && (bool)$modalView === true ? $ajaxResourceId : $resourceId),'',array('detail' => $e['eventId'], 'r'=>$e['repeatId']));
                 $eventsArr[strftime('%Y-%m-%d', $e['date'])][] = $oDetails;
                 $ulimit++;
@@ -326,6 +382,9 @@ if(count($arrEventDates)){
                 if($ulimit >= $limit && $displayType=='list' ) break;
             }
     }
+
+    $arraEventTimer->end('arrEventDates');
+        
 } else {
     if($debug) echo 'No valid dates returned.';
 }
@@ -341,6 +400,7 @@ switch ($displayType){
     case 'calendar':
     case 'mini':
     default:
+        
         $output = $mxcal->makeEventCalendar($eventsArr,(!empty($ajaxResourceId) && $modalView? $ajaxResourceId : $resourceId),(!empty( $ajaxMonthResourceId) ?  $ajaxMonthResourceId : (!empty($ajaxResourceId) ? $ajaxResourceId : $resourceId) ),array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading, 'tplImage'=>$tplImageItem), $contextFilter, $calendarFilter, $highlightToday);
         break;
     case 'detail':
