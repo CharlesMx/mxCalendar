@@ -8,6 +8,7 @@ class mxCalendars {
     public $tz;
     public $loggingEnabled = 0;
     private $scriptProperties = array();
+    private $dowMatch = array('Mon'=>1,'Tue'=>2,'Wed'=>3,'Thu'=>4,'Fri'=>5,'Sat'=>6,'Sun'=>7);
     public $debug = false;
     
     function __construct(modX &$modx,array $config = array()) {
@@ -226,6 +227,7 @@ class mxCalendars {
         }
         public function getFormatedDate($f,$t){
             $isDST = $this->timezoneDoesDST(date_default_timezone_get());
+            
             if($isDST){
                 $t = $t -3600;
             }
@@ -618,9 +620,9 @@ class mxCalendars {
                     $currentTZ = date_default_timezone_get();
                     
                     if(!empty($feedTzSettings) && array_key_exists($feed->get('id'), $feedTzSettings)){
-                        echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                        //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
                         date_default_timezone_set($feedTzSettings[$feed->get('id')]);
-                        echo '<h2>NEW TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                        //echo '<h2>NEW TIMEZONE: '.date_default_timezone_get().'</h2><br />';
                     }
                     
                     $config    = array( "unique_id" => 'mxcfeed-'.$feed->get('id').'-'.time(),
@@ -640,27 +642,53 @@ class mxCalendars {
 
                    
                     while( $vevent = $vcalendar->getComponent( "vevent" )) {
-                        //echo '<br />[] Feed Event Load: '.print_r($vevent,true);
+                        
+                        if(!empty($feedTzSettings) && array_key_exists($feed->get('id'), $feedTzSettings)){
+                            //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                            //date_default_timezone_set($feedTzSettings[$feed->get('id')]);
+                            //echo '<h2>NEW TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                        }
+                        
                         if($vevent->dtstart['value']){
-                        $start     =  mktime(
+                        $start     =   strtotime(
+                                        implode('-',array($vevent->dtstart['value']['year'],$vevent->dtstart['value']['month'],$vevent->dtstart['value']['day']))
+                                        .'T'.
+                                        implode(':',array($vevent->dtstart['value']['hour'],$vevent->dtstart['value']['min'],$vevent->dtstart['value']['sec']))
+                                        . $vevent->dtstart['value']['tz']
+                                        );// 2013-03-18T11:19:28-04:00  $this->getFormatedDate(null,,true);
+
+                        /*
+                                        mktime(
                                                 $vevent->dtstart['value']['hour'],
                                                 $vevent->dtstart['value']['min'],
                                                 $vevent->dtstart['value']['sec'],
                                                 $vevent->dtstart['value']['month'],
                                                 $vevent->dtstart['value']['day'],
                                                 $vevent->dtstart['value']['year']
+                                                ,0
                                         );      // one occurrence
+                        */
                         } else { $start=''; }
+                        //echo '<br />NY: '.date('Y-m-d h:i a', $start).' ==> '.$start;
                         
                         if($vevent->dtend['value']){
-                        $end =        mktime(
+                        $end =strtotime(
+                                        implode('-',array($vevent->dtend['value']['year'],$vevent->dtend['value']['month'],$vevent->dtend['value']['day']))
+                                        .'T'.
+                                        implode(':',array($vevent->dtend['value']['hour'],$vevent->dtend['value']['min'],$vevent->dtend['value']['sec']))
+                                        . $vevent->dtend['value']['tz']
+                                        );
+                        /*
+                                    mktime(
                                                 $vevent->dtend['value']['hour'],
                                                 $vevent->dtend['value']['min'],
                                                 $vevent->dtend['value']['sec'],
                                                 $vevent->dtend['value']['month'],
                                                 $vevent->dtend['value']['day'],
                                                 $vevent->dtend['value']['year']
+                                                ,0
                                         );
+                         */
                         } else { $end = ''; }
                         
                         if($vevent->lastmodified['value']){
@@ -671,6 +699,7 @@ class mxCalendars {
                                                 $vevent->lastmodified['value']['month'],
                                                 $vevent->lastmodified['value']['day'],
                                                 $vevent->lastmodified['value']['year']
+                                                ,0
                                         );
                         } else {$lastchange = ''; }
                         
@@ -682,6 +711,7 @@ class mxCalendars {
                                                 $vevent->created['value']['month'],
                                                 $vevent->created['value']['day'],
                                                 $vevent->created['value']['year']
+                                                ,0
                                         );
                         } else { $createdDate = ''; }
                         

@@ -1,0 +1,106 @@
+Changelog file for mxCalendar component.
+
+==================================== 
+mxCalendar 1.1.8-pr
+====================================
+-- Enhancement: Added two new properties to the times for events startdate_fstamp, enddate_fstamp to force no DST time adjustment during time zone rendering
+
+==================================== 
+mxCalendar 1.1.7-pr
+====================================
+- mxcalendar.js file jQuery live functions updated to the "on" event handler
+- New displayType "daily" added for intuitive understanding if desired
+- Added new placeholders for list and daily displayType (fulldate,tomorrow,yesterday)
+- Ability now to use url parameter, query string, to modify the displayType (ex: ?&displayType=list)
+
+==================================== 
+mxCalendar 1.1.6-pl 
+====================================
+- Added support for context filtering using ACLs; only users assigned to "Administrator" user group can view the events not assigned to a context (global)
+- Bug fix: Issue #57, #59 modal window not rendering with supplied modal parameters ()
+** Fix the default list item template 
+- BUg fix: Issue #60, addded support back to manage day of week labels via lexicon for mxCalendar ex: mxcalendars.label_monday, mxcalendars.label_tuesday ... 
+- Enhancement: New feature to use external iCal feed to generate events in listings with only active (display/no display) editing
+
+==================================== 
+mxCalendar 1.1.5-pl 
+====================================
+- Added labels to the hidden columns for Events
+- Enabled Events grid inline edit of Category, Calendar, and Context
+- Made the Calendar and Context visible by default in the Events tab grid
+
+==================================== 
+mxCalendar 1.1.4-pl 
+====================================
+- Bug fix: calendar editor cut off on larger displays
+- bug fix issue #48
+
+
+==================================== 
+mxCalendar 1.1.3-pl 
+====================================
+- Bug fix: Calendar and Context filter were crossed thus ajax request and use of parameters gave unexpected listings or none at all
+
+==================================== 
+mxCalendar 1.1.2-pl 
+====================================
+- Bug fix: (#41) Missing trailing zero in monthly calendar dates (10 was just 1; 20 was just 2; etc)
+- Bug fix: (#40) No event warning notification from the parser
+- Bug fix: typo in case for addJQ not being capitalized properly in the snippet
+- Bug fix: google map initializer to render maps
+- Enhancement: New property/parameter "elDirectional" to simply look forward or backward from the start date for events, no using an end date
+- Enhancement: New system settings for manager date/time display (mgr_dateformat, mgrtimeformat) to change the date format display for the manager view
+
+
+==================================== 
+mxCalendar 1.1.1-pl 
+====================================
+- Bug fix: Detail view not displaying repeating events content
+- Bug fix: Parameter for modalView being ignored
+- Bug fix: Trailing zeros on dates missing
+- Bug fix: Upgrade not adding in new schema updates
+- Bug fix: Removed unused fields from forms
+- Bug fix: Mixed results when using "false" or "true" in paramete as they always returned true; recommended to use digits/integers [0=False,1=True]
+- Misc: Several small changes to the packaged templates (chunks)
+
+==================================== 
+mxCalendar 1.1.0-pl 
+====================================
+- Bug fix [34]: Sorting event list was not filtering the returned events based on the actual start/end dates
+- Bug fix [34]: CRT Parameter warning log, issue with strftime() format types across platforms (*nix, IIS)
+- Bug fix: Modal view template, tplDetailModal, was not loading when in AJAX page (requires ajax page to have the "resourceId" property set)
+- Enhancement: Ability to set the event description form type between html editor (htmleditor) and text area (textarea)
+- Enhancement: Ability to change the category requirement for event input
+- Enhancement: Added "Context" filtering per event (contextFilter [string; comma seperated list])
+- Enhancement: Added "Calendar" grouping for filtering events (calendarFilter [string; comma seperated id list])
+- Enhancement: Ability to attach a specific chunk (form) to the calendar event; does a match on chunk name so you can easily filter out by using standard formated names in chunks (ex: form_ContactForm, form_Registration) and match on "form_"
+
+==================================== 
+mxCalendar 1.0.0-pl
+==================================== 
+- Enhancement: Speed improvements for the prev/next navigation
+- Enhancement: Tooltip to the repeat every field (will extend more tooltips in future releases)
+
+==================================== 
+mxCalendar 0.0.3-beta
+==================================== 
+- Bug fix: Issue not allowing multiple instances to render on same page
+- Bug fix: IE8 & IE9 not saving events in the create/update window
+- Bug fix: Date time displayed incorrectly on front-end
+- Enhancement: Ajax load of calendar navigation (previous & next) months including the today link
+- Enhancement: Modal view of event details from calendar or list view
+- Enhancement: Added the category filter list display option and associated templates for UI output
+- Enhancement: Updated templates to render the Google Map (API v3) from location when set
+
+==================================== 
+mxCalendar 0.0.2-beta
+==================================== 
+- Bug fix: Issue with the width of the form fields in the repeating event area
+- Bug fix: Added a new install option to automatically create the default category with the provided name
+- Bug fix: PHP Error (< 5.3.0) on display of the snippet with the DateTime class
++ Enhancement: Set the containing window to automatically resize when the repeating event section expands/collapse
+
+==================================== 
+mxCalendar 0.0.1-beta
+==================================== 
+- First release to the beta group

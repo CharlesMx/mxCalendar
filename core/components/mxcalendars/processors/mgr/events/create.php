@@ -65,18 +65,22 @@ if(empty($scriptProperties['categoryid'])){
        'isdefault' => 1
     ));
     
-    if($default_cat->get('id')){
-        $scriptProperties['categoryid'] = $default_cat->get('id');
-    } else {
-        //-- Get the first published category
-        $default_cat = $modx->getObject('mxCalendarCategories', array(
-           'active' => 1
-        ));
+    if($default_cat){
         if($default_cat->get('id')){
             $scriptProperties['categoryid'] = $default_cat->get('id');
         } else {
-            return $modx->error->failure($modx->lexicon('mxcalendars.err_event_req_validcat'));
+            //-- Get the first published category
+            $default_cat = $modx->getObject('mxCalendarCategories', array(
+            'active' => 1
+            ));
+            if($default_cat->get('id')){
+                $scriptProperties['categoryid'] = $default_cat->get('id');
+            } else {
+                return $modx->error->failure($modx->lexicon('mxcalendars.err_event_req_validcat'));
+            }
         }
+    } else {
+        $scriptProperties['categoryid'] = 0;
     }
 }
 

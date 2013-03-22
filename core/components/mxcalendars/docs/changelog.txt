@@ -1,7 +1,12 @@
 Changelog file for mxCalendar component.
 
 ==================================== 
-mxCalendar 1.1.7-pl
+mxCalendar 1.1.8-pr
+====================================
+-- Enhancement: Added two new properties to the times for events startdate_fstamp, enddate_fstamp to force no DST time adjustment during time zone rendering
+
+==================================== 
+mxCalendar 1.1.7-pr
 ====================================
 - mxcalendar.js file jQuery live functions updated to the "on" event handler
 - New displayType "daily" added for intuitive understanding if desired

@@ -119,11 +119,11 @@ $gmapRegion = $modx->getOption('gmapRegion', $scriptProperties, '');
 $holidays = $modx->getOption('holidays', $scriptProperties, "{'us':{''}}");
 $holidayDisplayEvents = $modx->getOption('holidayDisplayEvents', $scriptProperties, 1);
 //++ Used in very limited cases
-$setTimezone = $modx->getOption('setTimezone', $scriptProperties, date_default_timezone_get() );
+$setTimezone = $modx->getOption('setTimezone', $scriptProperties, null );
 $debugTimezone = $modx->getOption('debugTimezone', $scriptProperties, 0 );
 $debug = $modx->getOption('debug',$scriptProperties,0);
 //++ Set a feed processor timezone adjustment
-$setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, '{"2":"America/New_York"}');
+$setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, null); // '{"2":"America/New_York"}'
 
 //++ Calendar Options (ver >= 1.1.6d-pr)
 $categoryFilter = isset($_REQUEST['cid']) ? $_REQUEST['cid'] : $modx->getOption('categoryFilter', $scriptProperties, null); //-- Defaults to show all categories
@@ -135,13 +135,16 @@ $contextFilter = isset($_REQUEST['conf']) ? $_REQUEST['conf'] : $modx->getOption
 $formFilter = $modx->getOption('formFilter',$scriptProperties,'form_');
 
 //-- Update to the Timezone
-if($setFeedTZ !== null) $mxcal->setTimeZone($setTimezone,$debugTimezone);
+ if(!empty($setTimezone)) $mxcal->setTimeZone($setTimezone,$debugTimezone);
 //-- Update to the Timezone: Manual fix to adjust timezone to match server settings
 //date_default_timezone_set("Europe/Amsterdam");
+//date_default_timezone_set('America/New_York');
 
-//$icalFeed = $modx->getObject('mxCalendarFeed',2);
-//$icalFeed->set('nextrunon',0);
-//$icalFeed->save();
+ /*
+$icalFeed = $modx->getObject('mxCalendarFeed',2);
+$icalFeed->set('nextrunon',0);
+$icalFeed->save();
+*/
 
 $mxcal->processFeeds($setFeedTZ);
            
@@ -280,11 +283,11 @@ foreach ($mxcalendars as $mxc) {
     /* DEPRECIATED
     $mxcArray['startdate_fdate'] = $mxcal->getFormatedDate($dateFormat,$mxc->get('startdate'));
     $mxcArray['startdate_ftime'] = $mxcal->getFormatedDate($timeFormat,$mxc->get('startdate'));
+    $mxcArray['startdate_fstamp'] = strtotime($mxcArray['startdate_fdate'].' '.$mxcArray['startdate_ftime']);
     $mxcArray['enddate_fdate'] = $mxcal->getFormatedDate($dateFormat,$mxc->get('enddate'));
     $mxcArray['enddate_ftime'] = $mxcal->getFormatedDate($timeFormat,$mxc->get('enddate'));
-     * 
-     */
-
+    $mxcArray['enddate_fstamp'] = strtotime($mxcArray['enddate_fdate'].' '.$mxcArray['enddate_ftime']);
+    */
     
     $eStart    = new DateTime(date('Y-m-d H:i:s',$mxc->get('startdate'))); 
     $eEnd      = new DateTime(date('Y-m-d H:i:s',$mxc->get('enddate')));
@@ -316,7 +319,7 @@ foreach ($mxcalendars as $mxc) {
     $mxcArray['durHour']     = !empty($durHour) ? $durHour : null; 
     $mxcArray['durMin']      = !empty($durMin) ? $durMin : null; 
     $mxcArray['durSec']      = !empty($durSec) ? $durSec : null;
-    $mxcArray['mxcmodalClass'] = ($modalView && $ajaxResourceId || $_REQUEST['imajax'] ? 'mxcmodal' : '');
+    $mxcArray['mxcmodalClass'] = ($modalView && $ajaxResourceId || isset($_REQUEST['imajax']) ? 'mxcmodal' : '');
     
     $arrEventsDetail[$mxcArray['id']] = $mxcArray;
     $arrEventDates[$mxcArray['id']] = array('date'=>$mxcArray['startdate'], 'eventId'=>$mxcArray['id'],'repeatId'=>0);
@@ -373,8 +376,10 @@ if(count($arrEventDates)){
                 $oDetails['startdate_ftime'] = $mxcal->getFormatedDate($timeFormat,$oDetails['startdate']);
                 $oDetails['enddate_fdate'] = $mxcal->getFormatedDate($dateFormat,$oDetails['enddate']);
                 $oDetails['enddate_ftime'] = $mxcal->getFormatedDate($timeFormat,$oDetails['enddate']);
-                 *
-                 */
+                */
+                $oDetails['startdate_fstamp'] = strtotime($oDetails['startdate_fdate'].' '.$oDetails['startdate_ftime']); 
+                $oDetails['enddate_fstamp'] = strtotime($oDetails['enddate_fdate'].' '.$oDetails['enddate_ftime']);
+                
                 $oDetails['detailURL'] = $modx->makeUrl((!empty($ajaxResourceId) && (bool)$modalView === true ? $ajaxResourceId : $resourceId),'',array('detail' => $e['eventId'], 'r'=>$e['repeatId']));
                 $eventsArr[strftime('%Y-%m-%d', $e['date'])][] = $oDetails;
                 $ulimit++;
