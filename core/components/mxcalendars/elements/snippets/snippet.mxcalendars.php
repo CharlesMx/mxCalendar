@@ -1,7 +1,7 @@
 <?php
 /**
  * mxCalendar 
- *  
+ * Version: 1.1.9-pr 
  */
 $mxcal = $modx->getService('mxcalendars','mxCalendars',$modx->getOption('mxcalendars.core_path',null,$modx->getOption('core_path').'components/mxcalendars/').'model/mxcalendars/',$scriptProperties);
 if (!($mxcal instanceof mxCalendars)) return 'Error loading instance of mxCalendars.';
@@ -30,8 +30,8 @@ $dir = $modx->getOption('dir',$scriptProperties,'ASC');
 $limit = $modx->getOption('limit',$scriptProperties,'99');
 $limitstart = $modx->getOption('limitstart', $scriptProperties, 0);
 //++ Text|Date Formatting properties
-$dateFormat = $modx->getOption('dateformat', $scriptProperties, '%Y-%m-%d');
-$timeFormat = $modx->getOption('timeformat', $scriptProperties, '%H:%M %p');
+$dateFormat = $modx->getOption('dateformat', $scriptProperties, '%b %e');
+$timeFormat = $modx->getOption('timeformat', $scriptProperties, '%l:%M %p');
 $dateSeperator = $modx->getOption('dateseperator',$scriptProperties, '/');
 //++ Display: Calendar properties
 $activeMonthOnlyEvents = $modx->getOption('activeMonthOnlyEvents', $scriptProperties, 0);
@@ -76,11 +76,11 @@ $gmapRegion = $modx->getOption('gmapRegion', $scriptProperties, '');
 $holidays = $modx->getOption('holidays', $scriptProperties, "{'us':{''}}");
 $holidayDisplayEvents = $modx->getOption('holidayDisplayEvents', $scriptProperties, 1);
 //++ Used in very limited cases
-$setTimezone = $modx->getOption('setTimezone', $scriptProperties, date_default_timezone_get() );
+$setTimezone = $modx->getOption('setTimezone', $scriptProperties, null );
 $debugTimezone = $modx->getOption('debugTimezone', $scriptProperties, 0 );
 $debug = $modx->getOption('debug',$scriptProperties,0);
 //++ Set a feed processor timezone adjustment
-$setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, '{"8":"UTC"}');
+$setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, null); // '{"2":"America/New_York"}'
 
 //++ Calendar Options (ver >= 1.1.6d-pr)
 $categoryFilter = isset($_REQUEST['cid']) ? $_REQUEST['cid'] : $modx->getOption('categoryFilter', $scriptProperties, null); //-- Defaults to show all categories
@@ -92,16 +92,18 @@ $contextFilter = isset($_REQUEST['conf']) ? $_REQUEST['conf'] : $modx->getOption
 $formFilter = $modx->getOption('formFilter',$scriptProperties,'form_');
 
 //-- Update to the Timezone
-if($setFeedTZ !== null) $mxcal->setTimeZone($setTimezone,$debugTimezone);
+ if(!empty($setTimezone)) $mxcal->setTimeZone($setTimezone,$debugTimezone);
 //-- Update to the Timezone: Manual fix to adjust timezone to match server settings
 //date_default_timezone_set("Europe/Amsterdam");
+//date_default_timezone_set('America/New_York');
+
+ /*
+$icalFeed = $modx->getObject('mxCalendarFeed',2);
+$icalFeed->set('nextrunon',0);
+$icalFeed->save();
+*/
 
 $mxcal->processFeeds($setFeedTZ);
-           
-
-//$icalFeed = $modx->getObject('mxCalendarFeed',8);
-//$icalFeed->set('nextrunon',0);
-//$icalFeed->save();
 
 if($debug)
 var_dump($scriptProperties);
@@ -232,11 +234,14 @@ foreach ($mxcalendars as $mxc) {
     
 	
     //-- Split the single unix time stamp into date and time for preformatted UI
+    /*
     $mxcArray['startdate_fdate'] = $mxcal->getFormatedDate($dateFormat,$mxc->get('startdate'));
     $mxcArray['startdate_ftime'] = $mxcal->getFormatedDate($timeFormat,$mxc->get('startdate'));
+    $mxcArray['startdate_fstamp'] = strtotime($mxcArray['startdate_fdate'].' '.$mxcArray['startdate_ftime']);
     $mxcArray['enddate_fdate'] = $mxcal->getFormatedDate($dateFormat,$mxc->get('enddate'));
     $mxcArray['enddate_ftime'] = $mxcal->getFormatedDate($timeFormat,$mxc->get('enddate'));
-
+    $mxcArray['enddate_fstamp'] = strtotime($mxcArray['enddate_fdate'].' '.$mxcArray['enddate_ftime']);
+    */
     
     $eStart    = new DateTime(date('Y-m-d H:i:s',$mxc->get('startdate'))); 
     $eEnd      = new DateTime(date('Y-m-d H:i:s',$mxc->get('enddate')));
@@ -267,7 +272,7 @@ foreach ($mxcalendars as $mxc) {
     $mxcArray['durHour']     = !empty($durHour) ? $durHour : null; 
     $mxcArray['durMin']      = !empty($durMin) ? $durMin : null; 
     $mxcArray['durSec']      = !empty($durSec) ? $durSec : null;
-    $mxcArray['mxcmodalClass'] = ($modalView && $ajaxResourceId || $_REQUEST['imajax'] ? 'mxcmodal' : '');
+    $mxcArray['mxcmodalClass'] = ($modalView && $ajaxResourceId || isset($_REQUEST['imajax']) ? 'mxcmodal' : '');
     
     $arrEventsDetail[$mxcArray['id']] = $mxcArray;
     $arrEventDates[$mxcArray['id']] = array('date'=>$mxcArray['startdate'], 'eventId'=>$mxcArray['id'],'repeatId'=>0);
@@ -313,10 +318,15 @@ if(count($arrEventDates)){
             $oDetails['startdate'] = $e['date'];
             $oDetails['enddate'] = strtotime('+'.($arrEventsDetail[$e['eventId']]['durDay'] ? $arrEventsDetail[$e['eventId']]['durDay'].' days ' :'').($arrEventsDetail[$e['eventId']]['durHour'] ? $arrEventsDetail[$e['eventId']]['durHour'].' hour ' :'').($arrEventsDetail[$e['eventId']]['durMin'] ? $arrEventsDetail[$e['eventId']]['durMin'].' minute' :''), $e['date']);//$e['date'];//repeatenddate
             if(( ( ($oDetails['startdate']>=$elStartDate || $oDetails['enddate'] >= $elStartDate) && $oDetails['enddate']<=$elEndDate) || $displayType=='detail' || $elDirectional ) ){
+                /*
                 $oDetails['startdate_fdate'] = $mxcal->getFormatedDate($dateFormat,$oDetails['startdate']);
                 $oDetails['startdate_ftime'] = $mxcal->getFormatedDate($timeFormat,$oDetails['startdate']);
                 $oDetails['enddate_fdate'] = $mxcal->getFormatedDate($dateFormat,$oDetails['enddate']);
                 $oDetails['enddate_ftime'] = $mxcal->getFormatedDate($timeFormat,$oDetails['enddate']);
+                */
+                $oDetails['startdate_fstamp'] = strtotime($oDetails['startdate_fdate'].' '.$oDetails['startdate_ftime']); 
+                $oDetails['enddate_fstamp'] = strtotime($oDetails['enddate_fdate'].' '.$oDetails['enddate_ftime']);
+                
                 $oDetails['detailURL'] = $modx->makeUrl((!empty($ajaxResourceId) && (bool)$modalView === true ? $ajaxResourceId : $resourceId),'',array('detail' => $e['eventId'], 'r'=>$e['repeatId']));
                 $eventsArr[strftime('%Y-%m-%d', $e['date'])][] = $oDetails;
                 $ulimit++;
