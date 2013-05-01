@@ -6,50 +6,12 @@
  *  
  */
 
-class makeProcessTime {
-    public $globalStartProcess, $startProcess, $endProcess;
-    public function __construct($gsProc=null){
-        $now = microtime(true);
-        if(!empty($gsProc)){
-            self::set('globalStartProcess',$gsProc);
-        }
-        self::set('startProcess',$now);
-        
-    }
-    public function set($property='',$val=null){
-        if(!empty($property)){
-            $this->{$property} = $val;
-        }
-    }
-    public function get($property=''){
-        if(!empty($property)){
-            return $this->{$property};
-        }
-        return false;
-    }
-    public function getTime(){
-        return $this->endProcess - $this->startProcess;
-    }
-    public function end($echoMessage=''){
-        self::set('endProcess',microtime(true));
-        if(!empty($echoMessage)){
-            /*
-            if(!empty($this->globalStartProcess))
-                echo  $echoMessage.' started @'.($this->startProcess - $this->globalStartProcess).' and  ended @'.($this->endProcess - $this->globalStartProcess).' for total processing time of <strong>'.self::getTime().'</strong> seconds<br />';
-            else
-                echo  $echoMessage.' had a total processing time of <strong>'.self::getTime().'</strong> seconds<br />';
-             * 
-             */
-        } else {
-            return self::getTime();
-        }
-    }
-}
-
 $mxcal = $modx->getService('mxcalendars','mxCalendars',$modx->getOption('mxcalendars.core_path',null,$modx->getOption('core_path').'components/mxcalendars/').'model/mxcalendars/',$scriptProperties);
 if (!($mxcal instanceof mxCalendars)) return 'Error loading instance of mxCalendars.';
 
-include_once($modx->getOption('mxcalendars.core_path',null,$modx->getOption('core_path').'components/mxcalendars/').'model/mxcalendars/mxcalendars.helper.class.php');
+include_once($modx->getOption('mxcalendars.core_path',null,$modx->getOption('core_path').'components/mxcalendars/').'processors/mgr/mxcHelper.php');
+
+$cacheProperties = array();
 
 /* setup default properties */
 $theme = $modx->getOption('theme',$scriptProperties,'default');// default, traditional
@@ -123,7 +85,7 @@ $setTimezone = $modx->getOption('setTimezone', $scriptProperties, null );
 $debugTimezone = $modx->getOption('debugTimezone', $scriptProperties, 0 );
 $debug = $modx->getOption('debug',$scriptProperties,0);
 //++ Set a feed processor timezone adjustment
-$setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, null); // '{"2":"America/New_York"}'
+$setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, null); // Example: FeedId=2; TargetTimeZone=New York; would result in =>  `{"2":"America/New_York"}`
 
 //++ Calendar Options (ver >= 1.1.6d-pr)
 $categoryFilter = isset($_REQUEST['cid']) ? $_REQUEST['cid'] : $modx->getOption('categoryFilter', $scriptProperties, null); //-- Defaults to show all categories
@@ -134,21 +96,49 @@ $contextFilter = isset($_REQUEST['conf']) ? $_REQUEST['conf'] : $modx->getOption
 //++ Form Chunk Filter match name
 $formFilter = $modx->getOption('formFilter',$scriptProperties,'form_');
 
+//++ Caching Options
+$cacheEnable =  $modx->getOption('cacheEnable',$scriptProperties,0);
+$cacheLifetime = $modx->getOption('cacheLifetime',$scriptProperties,null); //3600 would be one hour - and overrides the resource lifetime; leaving null inherits the resource cache lifetime settings
+if (empty($cacheKey)) $cacheKey = $modx->getOption('cache_resource_key', null, 'resource');
+if (empty($cacheHandler)) $cacheHandler = $modx->getOption('cache_resource_handler', null, $modx->getOption(xPDO::OPT_CACHE_HANDLER, null, 'xPDOFileCache'));
+if (!isset($cacheExpires)) $cacheExpires = $cacheLifetime!==null ? (integer)$cacheLifetime : (integer) $modx->getOption('cache_resource_expires', null, $modx->getOption(xPDO::OPT_CACHE_EXPIRES, null, 0));
+if (empty($cacheElementKey)) $cacheElementKey = $modx->resource->getCacheKey() . '/' . md5($modx->toJSON($properties) . implode('', $modx->request->getParameters()));
+$cacheOptions = array(xPDO::OPT_CACHE_KEY => $cacheKey,xPDO::OPT_CACHE_HANDLER => $cacheHandler,xPDO::OPT_CACHE_EXPIRES => $cacheExpires,);
+$results = $modx->cacheManager->get($cacheElementKey, $cacheOptions);
+
+ 
 //-- Update to the Timezone
  if(!empty($setTimezone)) $mxcal->setTimeZone($setTimezone,$debugTimezone);
-//-- Update to the Timezone: Manual fix to adjust timezone to match server settings
+//-- Update to the Timezone: Manual fix to adjust timezone to match server settings examples.
 //date_default_timezone_set("Europe/Amsterdam");
 //date_default_timezone_set('America/New_York');
 
- /*
-$icalFeed = $modx->getObject('mxCalendarFeed',2);
-$icalFeed->set('nextrunon',0);
-$icalFeed->save();
-*/
-
+// Process any needed Feeds as setup in mxCalendar Manager
 $mxcal->processFeeds($setFeedTZ);
-           
 
+
+if($modx->resource->get('id') != $ajaxResourceId && $modx->resource->get('id') != $ajaxMonthResourceId) {
+    //-- Add mxCalendar Theme CSS to html header (set in snippit properties)
+    $modx->regClientCSS($modx->getOption('mxcalendars.assets_url',null,$modx->getOption('assets_url').'components/mxcalendars/').'themes/'.$theme.'/css/mxcalendar.css');
+
+    //-- Add the Shadowbox library info if we are using modal
+    if(($modalView == 'true' || $modalView == 1) && ($usemxcLib == 'true' || $usemxcLib == 1)) {
+        $mxcal->addShadowBox($modalSetWidth,$modalSetHeight);
+    } else { $mxcal->disableModal(); }
+
+    //-- Add mxCalendar jQuery Library if enabled
+    if($addJQ && $addJQ !== 'false'){
+        $modx->regClientStartupScript($jqLibSrc);
+    //-- Only add the required JS files we need
+    if(!empty($ajaxResourceId) && $modx->resource->get('id') != $ajaxResourceId && $modx->resource->get('id') != $ajaxMonthResourceId)//-- Also requires a valid jQuery library be loaded
+        $modx->regClientStartupScript($mxcal->config['assetsUrl'].'js/web/mxc-calendar.js');
+    }
+}
+
+
+if($cacheEnable === 1 && !empty($results) && $debug !== 1)
+    return $results;
+           
 if($debug)
 var_dump($scriptProperties);
 
@@ -173,7 +163,7 @@ $output = '';
 
 $time_start = microtime(true);
 $mxcalendars = $modx->getCollection('mxCalendarEvents');
-if($debug) $output .= "<br />Total Events: ".count($mxcalendars); else $output='';
+if($debug) $output .= "<br />Total Events: ".count($mxcalendars);
 $whereArr = array();
 $eventsArr = array();
 
@@ -185,6 +175,8 @@ $c->select(array(
 switch ($displayType){
     case 'list':
     case 'daily':
+    case 'ical':
+    case 'rss':
         $sort = 'startdate';
         if(!$elDirectional){
             $whereArr = array(array('repeating:=' => 0,'AND:enddate:>=' => $elStartDate,'AND:enddate:<=' => $elEndDate,array('OR:repeating:='=>1,'AND:repeatenddate:>=' => $elStartDate)) );
@@ -219,6 +211,8 @@ switch ($displayType){
                                 'AND:repeatenddate:>=' => $elStartDate)
                     ) );
         break;
+    case 'year':
+        break;
     case 'detail':
         $whereArr = array(array('id' => (int)$_REQUEST['detail']));
         //$whereArr[0]['AND:id:='] = (int)$_REQUEST['detail']; //@TODO Make filter for single events repeating dates
@@ -250,45 +244,18 @@ $c->prepare();
 if($debug) echo '<br /><br />Filtering calendar date SQL range with: '.strftime('%m/%d/%Y', $elStartDate).' through '.strftime('%m/%d/%Y', $elEndDate).'<br /><br />';
 if($debug) echo 'SQL: '.$c->toSql().'<br /><br />';
 
+$queryTimer = new makeProcessTime($time_start,$debug);
 $mxcalendars = $modx->getCollection('mxCalendarEvents',$c);
+$queryTimer->end('mxCalendars Query');
+
 if($debug) echo "<br />Returned Events: ".count($mxcalendars).'<br />';
 
-if($modx->resource->get('id') != $ajaxResourceId && $modx->resource->get('id') != $ajaxMonthResourceId) {
-    //-- Add mxCalendar Theme CSS to html header (set in snippit properties)
-    $modx->regClientCSS($modx->getOption('mxcalendars.assets_url',null,$modx->getOption('assets_url').'components/mxcalendars/').'themes/'.$theme.'/css/mxcalendar.css');
 
-    //-- Add the Shadowbox library info if we are using modal
-    if(($modalView == 'true' || $modalView == 1) && ($usemxcLib == 'true' || $usemxcLib == 1)) {
-        $mxcal->addShadowBox($modalSetWidth,$modalSetHeight);
-    } else { $mxcal->disableModal(); }
-
-    //-- Add mxCalendar jQuery Library if enabled
-    if($addJQ && $addJQ !== 'false'){
-        $modx->regClientStartupScript($jqLibSrc);
-    //-- Only add the required JS files we need
-    if(!empty($ajaxResourceId) && $modx->resource->get('id') != $ajaxResourceId && $modx->resource->get('id') != $ajaxMonthResourceId)//-- Also requires a valid jQuery library be loaded
-        $modx->regClientStartupScript($mxcal->config['assetsUrl'].'js/web/mxc-calendar.js');
-    }
-}
-
-$resultLoopTimer = new makeProcessTime($time_start);
+$resultLoopTimer = new makeProcessTime($time_start,$debug);
 foreach ($mxcalendars as $mxc) {
     //-- Convert the object to an array
     $mxcArray = $mxc->toArray();
-    
-    //-- Now we need to get the category information
-    
-	
-    //-- Split the single unix time stamp into date and time for preformatted UI
-    /* DEPRECIATED
-    $mxcArray['startdate_fdate'] = $mxcal->getFormatedDate($dateFormat,$mxc->get('startdate'));
-    $mxcArray['startdate_ftime'] = $mxcal->getFormatedDate($timeFormat,$mxc->get('startdate'));
-    $mxcArray['startdate_fstamp'] = strtotime($mxcArray['startdate_fdate'].' '.$mxcArray['startdate_ftime']);
-    $mxcArray['enddate_fdate'] = $mxcal->getFormatedDate($dateFormat,$mxc->get('enddate'));
-    $mxcArray['enddate_ftime'] = $mxcal->getFormatedDate($timeFormat,$mxc->get('enddate'));
-    $mxcArray['enddate_fstamp'] = strtotime($mxcArray['enddate_fdate'].' '.$mxcArray['enddate_ftime']);
-    */
-    
+   
     $eStart    = new DateTime(date('Y-m-d H:i:s',$mxc->get('startdate'))); 
     $eEnd      = new DateTime(date('Y-m-d H:i:s',$mxc->get('enddate')));
     
@@ -340,16 +307,19 @@ foreach ($mxcalendars as $mxc) {
 }
 $resultLoopTimer->end('mxc result set loop');
 
+
 // Obtain a list of columns
+$timer_5 = new makeProcessTime($time_start,$debug);
 foreach ($arrEventDates as $key => $row) {
     $date[$key]  = $row['date'];
     $event[$key] = $row['eventId'];
 }
+$timer_5->end('generate list of all columns for sorting');
 
 // Sort the data with volume descending, edition ascending
 // Add $data as the last parameter, to sort by the common key
 if(count($arrEventDates) && $displayType == 'list'){
-    $multiSortTimer = new makeProcessTime($time_start);
+    $multiSortTimer = new makeProcessTime($time_start,$debug);
     if($dir == 'ASC')
         array_multisort($date, SORT_ASC, $event, SORT_ASC, $arrEventDates);
     else
@@ -363,7 +333,7 @@ if(count($arrEventDates)){
     if($debug) echo 'Looping through events list of '.count($arrEventDates).' total.<br />';
     $ulimit=0;
     
-    $arraEventTimer = new makeProcessTime($time_start);
+    $arraEventTimer = new makeProcessTime($time_start,$debug);
         
     foreach($arrEventDates AS $e){
         
@@ -371,12 +341,7 @@ if(count($arrEventDates)){
             $oDetails['startdate'] = $e['date'];
             $oDetails['enddate'] = strtotime('+'.($arrEventsDetail[$e['eventId']]['durDay'] ? $arrEventsDetail[$e['eventId']]['durDay'].' days ' :'').($arrEventsDetail[$e['eventId']]['durHour'] ? $arrEventsDetail[$e['eventId']]['durHour'].' hour ' :'').($arrEventsDetail[$e['eventId']]['durMin'] ? $arrEventsDetail[$e['eventId']]['durMin'].' minute' :''), $e['date']);//$e['date'];//repeatenddate
             if(( ( ($oDetails['startdate']>=$elStartDate || $oDetails['enddate'] >= $elStartDate) && $oDetails['enddate']<=$elEndDate) || $displayType=='detail' || $elDirectional ) ){
-                /* DEPRECIATED
-                $oDetails['startdate_fdate'] = $mxcal->getFormatedDate($dateFormat,$oDetails['startdate']);
-                $oDetails['startdate_ftime'] = $mxcal->getFormatedDate($timeFormat,$oDetails['startdate']);
-                $oDetails['enddate_fdate'] = $mxcal->getFormatedDate($dateFormat,$oDetails['enddate']);
-                $oDetails['enddate_ftime'] = $mxcal->getFormatedDate($timeFormat,$oDetails['enddate']);
-                */
+
                 $oDetails['startdate_fstamp'] = strtotime($oDetails['startdate_fdate'].' '.$oDetails['startdate_ftime']); 
                 $oDetails['enddate_fstamp'] = strtotime($oDetails['enddate_fdate'].' '.$oDetails['enddate_ftime']);
                 
@@ -400,20 +365,24 @@ $modx->setPlaceholders(array('dateseperator'=>$dateSeperator));
 switch ($displayType){
     case 'list':
     case 'daily':
+    case 'ical':
+    case 'rss':
         $output = $mxcal->makeEventList($eventListLimit, $eventsArr, array('tplElItem'=>$tplElItem, 'tplElMonthHeading'=>$tplElMonthHeading, 'tplElWrap'=>$tplElWrap, 'tplImage'=>$tplImageItem, 'tplNoEvents'=>$tplNoEvents),$elStartDate,$elEndDate);
         break;
     case 'calendar':
     case 'mini':
     default:
-        
+        $timer_10 = new makeProcessTime($time_start,$debug);
         $output = $mxcal->makeEventCalendar($eventsArr,(!empty($ajaxResourceId) && $modalView? $ajaxResourceId : $resourceId),(!empty( $ajaxMonthResourceId) ?  $ajaxMonthResourceId : (!empty($ajaxResourceId) ? $ajaxResourceId : $resourceId) ),array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading, 'tplImage'=>$tplImageItem), $contextFilter, $calendarFilter, $highlightToday);
+        $timer_10->end('UI Rendering');
+        break;
+    case 'year':
         break;
     case 'detail':
         if($debug) $output .= 'Total Occurances: '.count($eventsArr).' for Event ID: '.$_REQUEST['detail'].'<br />';
         if(isset($resourceId) && $modx->resource->get('id') != $resourceId)
                 $tplDetail = $tplDetailModal;
         $output .= $mxcal->makeEventDetail($eventsArr,($occurance=$_REQUEST['r']?$_REQUEST['r']:0) , array('tplDetail'=>$tplDetail, 'tplImage'=>$tplImageItem),$mapWidth,$mapHeight,$gmapRegion);
-        //$whereArr = array('id:=' => (int)$_REQUEST['detail']);
         //$whereArr[0]['AND:id:='] = (int)$_REQUEST['detail']; //@TODO Make filter for single events repeating dates
         break;
 }
@@ -426,4 +395,8 @@ $mxcal->restoreTimeZone($debugTimezone);
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 if($debug) echo "<br /><small>mxCalendar processed in $time seconds</small><br /><br />\n";
+
+
+$modx->cacheManager->set($cacheElementKey, $output, $cacheExpires, $cacheOptions);
+
 return $output;

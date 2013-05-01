@@ -66,7 +66,7 @@ if($_DATA['feeds_id'] || $_DATA['source'] != 'local' || $_DATA['feeds_id']){
         'isdefault' => 1
         ));
 
-        if($default_cat->get('id')){
+        if(is_object($default_cat)){
             $_DATA['categoryid'] = $default_cat->get('id');
         } else {
             //-- Get the first published category

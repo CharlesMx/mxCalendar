@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * mxCalendar
+ * 
+ * Version: 1.1.7-pl
+ *  
+ */
 
 class mxCalendars {
     
@@ -8,6 +13,7 @@ class mxCalendars {
     public $tz;
     public $loggingEnabled = 0;
     private $scriptProperties = array();
+    private $dowMatch = array('Mon'=>1,'Tue'=>2,'Wed'=>3,'Thu'=>4,'Fri'=>5,'Sat'=>6,'Sun'=>7);
     public $debug = false;
     
     function __construct(modX &$modx,array $config = array()) {
@@ -32,6 +38,7 @@ class mxCalendars {
             'event_desc_type' => $descriptionEditorMode,
             'mgr_dateformat' => $this->modx->getOption('mxcalendars.mgr_dateformat', '', 'm/d/Y'),
             'mgr_timeformat' => $this->modx->getOption('mxcalendars.mgr_timeformat', '', 'g:i a'),
+            'mgr_time_increment' => $this->modx->getOption('mxcalendars.mgr_time_increment', '', 15),
             'isAdministrator' => $this->modx->user->isMember('Administrator'),
         ),$config);
         $this->modx->addPackage('mxcalendars',$this->config['modelPath']);
@@ -77,15 +84,8 @@ class mxCalendars {
 				$chunk = $this->modx->getObject('modChunk',array('name' => $name));
 				if ($chunk == false) return false;
 			}
-			$this->chunks[$name] = $chunk->getContent();
-		} else {
-			$o = $this->chunks[$name];
-			$chunk = $this->modx->newObject('modChunk');
-			//$chunk->set('name', $name);
-                        $chunk->setContent($o);
-                        //$chunk->save();
-		}
-		$chunk->setCacheable(false);
+		
+                }
                 return $chunk;
 	}
         //@TODO remove; not used
@@ -107,7 +107,7 @@ class mxCalendars {
 			$chunk = $this->modx->newObject('modChunk');
 			$chunk->setContent($o);
 		}
-		$chunk->setCacheable(false);
+		$chunk->setCacheable(true);
 		return $chunk->process($properties);
 	}
 	 
@@ -187,7 +187,7 @@ class mxCalendars {
                 </script>');
         }
         public function disableModal(){
-            $this->modx->regClientHTMLBLock('<script>var modalActive = false;</script>');  
+            $this->modx->regClientHTMLBLock('<script type="text/javascript">var modalActive = false;</script>');  
         }
         
         public function addLightBox(){
@@ -290,7 +290,7 @@ class mxCalendars {
                 foreach($events AS $e){
                     $output_images = '';
                     
-                    if($debug) $o .= 'Check: '.$occ.'<br />';
+                    if($this->debug) $o .= 'Check: '.$occ.'<br />';
                     if($occ == $occurance || ($occurance == 0 && $occ ==0)){
                         $detailPH = $e[0];
                         $detailPH['allplaceholders'] = implode(', ',array_keys($e[0]));
@@ -311,7 +311,6 @@ class mxCalendars {
                             $detailPH['imagesTotal'] = $imgIdx;
                         } 
                         
-                        $detailPH['datetest'] = date('Y-m-d h:i a', $e[0]['startdate']).' '.  date_default_timezone_get();
                         
                         $o .= $this->getChunk($tpls->tplDetail,$detailPH);
                             break;
@@ -363,8 +362,8 @@ class mxCalendars {
                                     if($catproperties){
                                         foreach($catproperties AS $catCSS){
                                             $categoryInlineCSS['inlinecss'] .= $catCSS->get('inlinecss');
-                                            $categoryInlineCSS['foregroundcss'] .= $catCSS->get('foregroundcss');
-                                            $categoryInlineCSS['backgroundcss'] .= $catCSS->get('backgroundcss');
+                                            $categoryInlineCSS['foregroundcss'] .= $catCSS->get('foregroundcss') !== '' ? 'color:'.$catCSS->get('foregroundcss').';' : '';
+                                            $categoryInlineCSS['backgroundcss'] .= $catCSS->get('backgroundcss') !== '' ? 'background-color:'.$catCSS->get('backgroundcss').';' : '';
                                         }
                                     }
                                 }
@@ -382,7 +381,7 @@ class mxCalendars {
             return $this->getChunk($tpls->tplElWrap, array('startdate'=>$startDate,'enddate'=>$endDate,'eventList'=>$o));
         }
         public function getEventCalendarDateRange($activeMonthOnlyEvents=false){
-            $startDate = $_REQUEST['dt'] ? $_REQUEST['dt'] : strftime('%Y-%m');
+            $startDate = $_REQUEST['dt'] ? $_REQUEST['dt'] : ($this->config['dt'] ? $this->config['dt'] : strftime('%Y-%m'));
             $mStartDate = strftime('%Y-%m',strtotime($startDate)) . '-01 00:00:01';
             $nextMonth = strftime('%Y-%m', strtotime('+1 month',strtotime($mStartDate)));
             $prevMonth = strftime('%Y-%m', strtotime('-1 month',strtotime($mStartDate)));
@@ -464,6 +463,7 @@ class mxCalendars {
                             $categoryInlineCSS = array();
                             
                             // Get the events category css info
+                            // Cost CPU: .5seconds for 89 events
                             
                             if(!empty($el['categoryid'])){
                                 $categories = explode(',', $el['categoryid']);
@@ -476,18 +476,22 @@ class mxCalendars {
                                         if($catproperties){
                                             foreach($catproperties AS $catCSS){
                                                 $categoryInlineCSS['inlinecss'] .= $catCSS->get('inlinecss');
-                                                $categoryInlineCSS['foregroundcss'] .= $catCSS->get('foregroundcss');
-                                                $categoryInlineCSS['backgroundcss'] .= $catCSS->get('backgroundcss');
+                                                $categoryInlineCSS['foregroundcss'] .= $catCSS->get('foregroundcss') !== '' ? 'color:'.$catCSS->get('foregroundcss').';' : '';
+                                                $categoryInlineCSS['backgroundcss'] .= $catCSS->get('backgroundcss') !== '' ? 'background-color:'.$catCSS->get('backgroundcss').';' : '';
                                             }
                                         }
                                         
                                     }
                                 }
                             }
+                            
+                            $el['startdate'] = strftime('%l:%M %p', $el['startdate']);
+                            
                             $eventList.=$this->getChunk($tpls->event, array_merge($el,$categoryInlineCSS));
                             
                         }
                     } else { if($this->debug) echo '&nbsp;&nbsp;<span style="color:red;">--&nbsp;&nbsp;'.strftime('%m-%d', $iDay).'</span><br />'; }
+                    
                     //-- Set additional day placeholders for day
                     $isToday = (strftime('%m-%d') == strftime('%m-%d', $iDay) && $highlightToday==true ? 'today ' : '');
                     $dayMonthName = strftime('%b',$iDay);
@@ -599,36 +603,12 @@ class mxCalendars {
                     
                     $activeUrl = $feed->get('feed');
 
-/*                    
-        $crl = curl_init();
-        $timeout = 5;
-        curl_setopt ($crl, CURLOPT_URL,  substr($activeUrl, strpos($activeUrl, '://')+3 ));
-        curl_setopt ($crl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt ($crl, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $myics = curl_exec($crl);
-        curl_close($crl);
-
-
-        echo '<pre>';
-        echo $myics;
-        echo '</pre>';
-*/                    
-                    // Cache the response for giggles
-                    //$this->modx->cacheManager->set('mxcfeed-'.$feed->get('id'),$myics,3600);
-
-                    //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
                     $currentTZ = date_default_timezone_get();
                     
                     if(!empty($feedTzSettings) && array_key_exists($feed->get('id'), $feedTzSettings)){
-<<<<<<< HEAD
-                        echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
-                        date_default_timezone_set($feedTzSettings[$feed->get('id')]);
-                        echo '<h2>NEW TIMEZONE: '.date_default_timezone_get().'</h2><br />';
-=======
                         //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
                         date_default_timezone_set($feedTzSettings[$feed->get('id')]);
                         //echo '<h2>NEW TIMEZONE: '.date_default_timezone_get().'</h2><br />';
->>>>>>> ansteyhodges
                     }
                     
                     $config    = array( "unique_id" => 'mxcfeed-'.$feed->get('id').'-'.time(),
@@ -641,17 +621,18 @@ class mxCalendars {
                     //echo '<pre>'.print_r($vcalendar,true).'</pre>';
                     //echo '<br /><br />=========================================================<br /><br />';
                     
-                    //$this->modx->setLogLevel(modX::LOG_LEVEL_INFO);
-                    //$this->modx->log(modX::LOG_LEVEL_INFO,'Parsing feed #'.$feed->get('id').' events. ['.$feed->get('feed').']\n\nResponse:\n'.$myics);
                     
                     if($this->loggingEnabled) $this->logEvent('feed parse','Parsing feed #'.$feed->get('id').' events. ['.$feed->get('feed').']\n\nResponse:\n'.$myics);
 
-<<<<<<< HEAD
                    
-=======
->>>>>>> ansteyhodges
                     while( $vevent = $vcalendar->getComponent( "vevent" )) {
-                        //echo '<br />[] Feed Event Load: '.print_r($vevent,true);
+                        
+                        if(!empty($feedTzSettings) && array_key_exists($feed->get('id'), $feedTzSettings)){
+                            //echo '<h2>CURRENT TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                            //date_default_timezone_set($feedTzSettings[$feed->get('id')]);
+                            //echo '<h2>NEW TIMEZONE: '.date_default_timezone_get().'</h2><br />';
+                        }
+                        
                         if($vevent->dtstart['value']){
                         $start     =   strtotime(
                                         implode('-',array($vevent->dtstart['value']['year'],$vevent->dtstart['value']['month'],$vevent->dtstart['value']['day']))
@@ -660,19 +641,7 @@ class mxCalendars {
                                         . $vevent->dtstart['value']['tz']
                                         );// 2013-03-18T11:19:28-04:00  $this->getFormatedDate(null,,true);
 
-                        /*
-                                        mktime(
-                                                $vevent->dtstart['value']['hour'],
-                                                $vevent->dtstart['value']['min'],
-                                                $vevent->dtstart['value']['sec'],
-                                                $vevent->dtstart['value']['month'],
-                                                $vevent->dtstart['value']['day'],
-                                                $vevent->dtstart['value']['year']
-                                                ,0
-                                        );      // one occurrence
-                        */
                         } else { $start=''; }
-                        //echo '<br />NY: '.date('Y-m-d h:i a', $start).' ==> '.$start;
                         
                         if($vevent->dtend['value']){
                         $end =strtotime(
@@ -681,17 +650,6 @@ class mxCalendars {
                                         implode(':',array($vevent->dtend['value']['hour'],$vevent->dtend['value']['min'],$vevent->dtend['value']['sec']))
                                         . $vevent->dtend['value']['tz']
                                         );
-                        /*
-                                    mktime(
-                                                $vevent->dtend['value']['hour'],
-                                                $vevent->dtend['value']['min'],
-                                                $vevent->dtend['value']['sec'],
-                                                $vevent->dtend['value']['month'],
-                                                $vevent->dtend['value']['day'],
-                                                $vevent->dtend['value']['year']
-                                                ,0
-                                        );
-                         */
                         } else { $end = ''; }
                         
                         if($vevent->lastmodified['value']){
@@ -903,4 +861,47 @@ class mxCalendars {
                 ));
                 $mxclog->save();
         }
+}
+
+
+/**
+ * Class to help with tracking processing times
+ *  
+ */
+class makeProcessTime {
+    public $globalStartProcess, $startProcess, $endProcess;
+    public function __construct($gsProc=null){
+        $now = microtime(true);
+        if(!empty($gsProc)){
+            self::set('globalStartProcess',$gsProc);
+        }
+        self::set('startProcess',$now);
+        
+    }
+    public function set($property='',$val=null){
+        if(!empty($property)){
+            $this->{$property} = $val;
+        }
+    }
+    public function get($property=''){
+        if(!empty($property)){
+            return $this->{$property};
+        }
+        return false;
+    }
+    public function getTime(){
+        return $this->endProcess - $this->startProcess;
+    }
+    public function end($echoMessage=''){
+        global $debug;
+        self::set('endProcess',microtime(true));
+        if(!empty($echoMessage) && $debug){
+            if(!empty($this->globalStartProcess))
+                echo  $echoMessage.' started @'.($this->startProcess - $this->globalStartProcess).' and  ended @'.($this->endProcess - $this->globalStartProcess).' for total processing time of <strong>'.self::getTime().'</strong> seconds<br />';
+            else
+                echo  $echoMessage.' had a total processing time of <strong>'.self::getTime().'</strong> seconds<br />';
+        } else {
+            return self::getTime();
+        }
+    }
 }
