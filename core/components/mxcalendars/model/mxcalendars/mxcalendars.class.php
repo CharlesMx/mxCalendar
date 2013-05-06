@@ -300,12 +300,13 @@ class mxCalendars {
                         
                         // Check for images
                         $images = $this->modx->getCollection('mxCalendarEventImages', array('event_id' => $e[0]['id'], 'active'=>1) );
+                        $detailPH['imagesTotal'] = $imgIdx = 0;
                         if($images){
-                            $imgIdx = 1;
                             foreach($images AS $image){
-                                $detailPH['images_'.$imgIdx] = $output_images .= $this->getChunk($tpls->tplImage, $image->toArray() );
-                                
                                 $imgIdx++;
+                                $imgArr = $image->toArray();
+                                $imgArr['image_idx'] = $imgIdx;
+                                $detailPH['images_'.$imgIdx] = $output_images .= $this->getChunk($tpls->tplImage, $imgArr );
                             }
                             $detailPH['images'] = $output_images;
                             $detailPH['imagesTotal'] = $imgIdx;
@@ -340,9 +341,13 @@ class mxCalendars {
                         }
                         // check for images
                         $images = $this->modx->getCollection('mxCalendarEventImages', array('event_id' => $e[$rvar]['id'], 'active'=>1) );
+                        $e[$rvar]['imagesTotal'] = $imgIdx = 0;
                         if($images){
                             foreach($images AS $image){
-                                $output_images .= $this->getChunk($tpls->tplImage, $image->toArray() );
+                                $imgIdx++;
+                                $imgArr = $image->toArray();
+                                $imgArr['image_idx'] = $imgIdx;
+                                $e[$rvar]['images_'.$imgIdx] = $output_images .= $this->getChunk($tpls->tplImage, $imgArr );
                             }
                         } else {
                             //echo 'no images for '.$e[$rvar]['id'].'<br />';
@@ -485,9 +490,33 @@ class mxCalendars {
                                 }
                             }
                             
+                            // Check for images
+                            $images = $this->modx->getCollection('mxCalendarEventImages', array('event_id' => $el['id'], 'active'=>1) );
+                            $el['imagesTotal'] = $imgIdx = 0;
+                            if($images){
+                                foreach($images AS $image){
+                                    $imgIdx++;
+                                    $imgArr = $image->toArray();
+                                    $imgArr['image_idx'] = $imgIdx;
+                                    $el['images_'.$imgIdx] = $output_images .= $this->getChunk($tpls->tplImage, $imgArr );
+                                }
+                                $el['images'] = $output_images;
+                                $el['imagesTotal'] = $imgIdx;
+                            } 
+                            
                             $el['startdate'] = strftime('%l:%M %p', $el['startdate']);
                             
-                            $eventList.=$this->getChunk($tpls->event, array_merge($el,$categoryInlineCSS));
+                            /**
+                             * @todo Remove this once final performance testing is completed
+                            */
+                            $event_html = '<div id="'.$el['id'].$el['rid'].'" class="'.$el['eventClass'].'" style="'.$categoryInlineCSS['backgroundcss'].$categoryInlineCSS['foregroundcss'].$categoryInlineCSS['inlinecss'].'">
+                                                '.$el['startdate'].'
+                                                <span class="title startdate '.$categoryInlineCSS['eventCategoryInlineCss'].'">
+                                                    Images: '.$imgIdx.'
+                                                <a href="'.$el['detailURL'].'" class="'.$el['mxcmodalClass'].'">'.$el['title'].'</a></span>
+                                            </div>';
+                            
+                            $eventList.= $event_html; //$this->getChunk($tpls->event, array_merge($el,$categoryInlineCSS));
                             
                         }
                     } else { if($this->debug) echo '&nbsp;&nbsp;<span style="color:red;">--&nbsp;&nbsp;'.strftime('%m-%d', $iDay).'</span><br />'; }
@@ -505,7 +534,7 @@ class mxCalendars {
                         ,'fulldate'=>strftime('%m/%d/%Y', $iDay)
                         ,'tomorrow'=>strftime('%m/%d/%Y', strtotime('+1 day',  $iDay ))
                         ,'yesterday'=>strftime('%m/%d/%Y', strtotime('-1 day', $iDay ))
-                        ,'class'=>($mCurMonth == $thisMonth ? $isToday.(array_key_exists(strftime('%Y-%m-%d', $iDay),$events) ? 'hasEvents' : 'noEvents') : 'ncm')
+                        ,'class'=> $isToday.(array_key_exists(strftime('%Y-%m-%d', $iDay),$events) ? 'hasEvents' : 'noEvents').($mCurMonth == $thisMonth ? : ' ncm')
                         );
                     //$days.=$chunkDay->process($phDay);
                     $days.=$this->getChunk($tpls->day, $phDay);
