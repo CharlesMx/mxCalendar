@@ -532,7 +532,8 @@ class mxCalendars {
                     $dayMonthDay = (strftime('%d',$iDay) == 1 ? strftime('%b ',$iDay).( substr($dayMonthDay,0,1) == '0' ? ' '.substr($dayMonthDay,1) : $dayMonthDay ) : ( substr($dayMonthDay,0,1) == '0' ? ' '.substr($dayMonthDay,1) : $dayMonthDay ));
                     $phDay = array(
                         //'dayOfMonth'=> str_replace('0', ' ', (strftime('%d',$iDay) == 1 ? strftime('%b %d',$iDay) : strftime('%d',$iDay)))
-                        'dayOfMonth' => $dayMonthDay
+                        'timestamp' => $iDay
+                        ,'dayOfMonth' => $dayMonthDay
                         ,'dayOfMonthID'=>'dom-'.strftime('%A%d',$iDay)
                         ,'events'=>$eventList 
                         ,'fulldate'=>strftime('%m/%d/%Y', $iDay)
