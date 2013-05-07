@@ -342,6 +342,10 @@ class mxCalendars {
                         // check for images
                         $images = $this->modx->getCollection('mxCalendarEventImages', array('event_id' => $e[$rvar]['id'], 'active'=>1) );
                         $e[$rvar]['imagesTotal'] = $imgIdx = 0;
+                        
+                        //reset images
+                        $output_images = "";
+                        
                         if($images){
                             foreach($images AS $image){
                                 $imgIdx++;
