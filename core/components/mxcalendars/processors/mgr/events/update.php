@@ -36,11 +36,12 @@ $scriptProperties['repeatenddate'] = !empty($scriptProperties['repeatenddate'])?
 
 if($scriptProperties['repeating']==1){
     //-- Do some error checking just for repeating dates
-    if(empty($scriptProperties['repeattype']))
+    if( !isset($scriptProperties['repeattype']) )
         $modx->error->addField('repeattype', $modx->lexicon('mxcalendars.err_event_req_repeattype'));
     else
-        if(empty($scriptProperties['repeaton']))
+        if(empty($scriptProperties['repeaton']) && (int)$scriptProperties['repeattype'] === 1)
             $modx->error->addField('repeaton', $modx->lexicon('mxcalendars.err_event_req_repeaton'));
+        
     if(empty($scriptProperties['repeatfrequency']))
         $modx->error->addField('repeatfrequency', $modx->lexicon('mxcalendars.err_event_req_repeatfrequency'));
     if(empty($scriptProperties['repeatenddate']))

@@ -1,0 +1,16 @@
+<?php return array (
+  'unique_key' => 'key',
+  'preserve_keys' => true,
+  'update_object' => false,
+  'namespace' => 'mxcalendars',
+  'resolve' => NULL,
+  'validate' => NULL,
+  'vehicle_package' => 'transport',
+  'vehicle_class' => 'xPDOObjectVehicle',
+  'guid' => '3c48cce0e484b1e99c6d46d251ba81d5',
+  'package' => 'modx',
+  'class' => 'modSystemSetting',
+  'signature' => 'fc70d70afec0c6db07244253b9818748',
+  'native_key' => 'mxcalendars.category_required',
+  'object' => '{"key":"mxcalendars.category_required","value":true,"xtype":"combo-boolean","namespace":"mxcalendars","area":"mxcalendars","editedon":null,"name":"mxcalendars.set_category_required"}',
+);
