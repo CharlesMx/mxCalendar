@@ -13,7 +13,7 @@ set_time_limit(0);
 define('PKG_EXTRA_NAME','mxCalendars');
 define('PKG_NAME','mxCalendars');
 define('PKG_NAME_LOWER','mxcalendars');
-define('PKG_VERSION','1.1.7');
+define('PKG_VERSION','1.1.8');
 define('PKG_RELEASE','pl');
  
 /* define build paths */

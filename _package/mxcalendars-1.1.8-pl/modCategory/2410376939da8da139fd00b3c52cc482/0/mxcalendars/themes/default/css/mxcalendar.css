@@ -1,0 +1,68 @@
+/* mxCalendar Styles */
+
+/*
+Colors:
+lightgrey = #F1F1F1
+grey = #E3E3E3
+dark = #555555
+*/
+
+/* CALENDAR LAYOUT: Clean theme */
+#calbody, #calbodylist, #mxccategories {
+    background-color: transparent;
+    color: #555555;
+    font-size: 12px;
+    line-height:14px;
+    width: 100%;
+    display:block;
+}
+#calbody H6, #calbodylist H6 { margin:0; padding:0; font-size:110%; }
+#calbodylist { width: 100%; margin:0; padding:0;  }
+#calbody .mxcCalMonth { line-height:18px;font-size:16px; margin:10px 0; }
+#calbody table.small {
+    
+}
+#calbody table {
+    width:100%;
+    margin-top:15px;
+}
+#calbody td {
+    padding: 5px;
+    border: 1px solid #F1F1F1;
+    text-align: left;
+    width:12%;
+    white-space: normal;
+    vertical-align:top;
+}
+
+#calbody td .datestamp {
+    font-weight:400;
+    border: none;
+    padding: 0;
+    color:#222222;
+}
+#calbody td.mxcdow { color:#aaaaaa; border:none;     }
+#calbody td.hasEvents { border-color:#E3E3E3; }
+#calbody td.hasEvents .datestamp { font-weight:normal; }
+#calbody td.ncm .datestamp { color:#aaaaaa;}
+#calbody td.today { border:1px solid #555555; background-color:#EAEAEA;   }
+#calbody td.today .datestamp { font-weight:400; }
+#calbody td .event { font-size:9px; background-color:transparent; text-align:left; padding:3px; min-height:75px;}
+#calbody td .event > div { margin-top:1px;margin-bottom:1px; padding:2px; }
+#calbody td .event .title { font-weight:normal;  }
+#calbody td .event .title a:hover { background-color:#efefef; }
+#calbody td .event .description { display:block; font-weight:normal; margin:0 0 8px 0; }
+#calbody td .event .durantion { font-size:.85em;}
+#calbody .event .dayofmonth { font-size:140%; }
+#calbody .mxcnav { float:left; margin:0 15px 0 0; text-decoration:none; padding:0 5px 0 5px; font-size:18; line-height:24px; background-color:#555555; color:#efefef; border:none; }
+#calbody .mxcnav.sm { font-size:12px; padding:0 7px 0 7px; } 
+#calbody .mxcnav:hover { background-color:#E3E3E3; color:#555555; } 
+#calbody td div span { clear:both; display:block; }
+#calbody .label { font-size: 14px; line-height:24px; margin:0 15px 0 15px; }
+#calbody .nomargins .mxcnav { margin:0 1px; }
+#calbodylist .monthheading { float:left; width:100%; overflow:hidden; font-size: 160%; line-height:200%; background-color: #efefef; margin:15px 0 0; padding:0 5px;}
+#calbodylist .monthheading.first { margin-top:5px; } 
+#calbodylist .event { padding: 5px; display:block; float:left; width:100%;  clear:both; overflow:hidden; }
+#calbodylist .event H4 { margin:0; padding:0; line-height: 21px; }
+#calbody a, #calbodylist a { color: inherit; text-decoration:none; border-bottom:1px dotted;}
+li.mxcactivecat a { font-weight:bold; text-decoration: none; list-style-image: none; }
