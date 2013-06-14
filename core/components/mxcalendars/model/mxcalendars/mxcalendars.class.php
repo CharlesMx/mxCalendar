@@ -537,7 +537,7 @@ class mxCalendars {
                         ,'fulldate'=>strftime('%m/%d/%Y', $iDay)
                         ,'tomorrow'=>strftime('%m/%d/%Y', strtotime('+1 day',  $iDay ))
                         ,'yesterday'=>strftime('%m/%d/%Y', strtotime('-1 day', $iDay ))
-                        ,'class'=> $isToday.(array_key_exists(strftime('%Y-%m-%d', $iDay),$events) ? 'hasEvents' : 'noEvents').($mCurMonth == $thisMonth ? : ' ncm')
+                        ,'class'=> $isToday.(array_key_exists(strftime('%Y-%m-%d', $iDay),$events) ? 'hasEvents' : 'noEvents').($mCurMonth == $thisMonth ? '' : ' ncm')
                         );
                     //$days.=$chunkDay->process($phDay);
                     $days.=$this->getChunk($tpls->day, $phDay);
