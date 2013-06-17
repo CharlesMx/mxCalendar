@@ -345,6 +345,10 @@ class mxCalendars {
                         // check for images
                         $images = $this->modx->getCollection('mxCalendarEventImages', array('event_id' => $e[$rvar]['id'], 'active'=>1) );
                         $e[$rvar]['imagesTotal'] = $imgIdx = 0;
+                        
+                        //reset images
+                        $output_images = "";
+                        
                         if($images){
                             foreach($images AS $image){
                                 $imgIdx++;
@@ -431,7 +435,7 @@ class mxCalendars {
             for($i=0;$i<7;$i++){
                     if($this->debug) echo '&nbsp;&nbsp;'.strftime('%A', strtotime('+ '.$i.' day', $startMonthCalDate)).'<br />';
                     $thisDOW = trim('mxcalendars.label_dow_'.strtolower(strftime('%u', strtotime('+ '.$i.' day', $startMonthCalDate))));
-                    $heading.=$this->getChunk($tpls->heading, array('dayOfWeekId'=>'','dayOfWeekClass'=>'mxcdow', 'dayOfWeek'=> $this->modx->lexicon($thisDOW) ));
+                    $heading.=$this->getChunk($tpls->heading, array('dayOfWeekId'=>'','dayOfWeekClass'=>'mxcdow', 'dayOfWeek'=> $this->modx->lexicon($thisDOW), 'dayOfWeekShort'=> strftime('%a', strtotime('+ '.$i.' day', $startMonthCalDate))));
             }
             //-- Set additional day placeholders for week
             $phHeading = array(
@@ -531,7 +535,8 @@ class mxCalendars {
                     $dayMonthDay = (strftime('%d',$iDay) == 1 ? strftime('%b ',$iDay).( substr($dayMonthDay,0,1) == '0' ? ' '.substr($dayMonthDay,1) : $dayMonthDay ) : ( substr($dayMonthDay,0,1) == '0' ? ' '.substr($dayMonthDay,1) : $dayMonthDay ));
                     $phDay = array(
                         //'dayOfMonth'=> str_replace('0', ' ', (strftime('%d',$iDay) == 1 ? strftime('%b %d',$iDay) : strftime('%d',$iDay)))
-                        'dayOfMonth' => $dayMonthDay
+                        'timestamp' => $iDay
+                        ,'dayOfMonth' => $dayMonthDay
                         ,'dayOfMonthID'=>'dom-'.strftime('%A%d',$iDay)
                         ,'events'=>$eventList 
                         ,'fulldate'=>strftime('%m/%d/%Y', $iDay)
