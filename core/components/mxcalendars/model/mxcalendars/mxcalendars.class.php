@@ -512,14 +512,15 @@ class mxCalendars {
                             /**
                              * @todo Remove this once final performance testing is completed
                             */
+                            /*
                             $event_html = '<div id="'.$el['id'].$el['rid'].'" class="'.$el['eventClass'].'" style="'.$categoryInlineCSS['backgroundcss'].$categoryInlineCSS['foregroundcss'].$categoryInlineCSS['inlinecss'].'">
                                                 '.$el['startdate'].'
                                                 <span class="title startdate '.$categoryInlineCSS['eventCategoryInlineCss'].'">
                                                     Images: '.$imgIdx.'
                                                 <a href="'.$el['detailURL'].'" class="'.$el['mxcmodalClass'].'">'.$el['title'].'</a></span>
                                             </div>';
-                            
-                            $eventList.= $event_html; //$this->getChunk($tpls->event, array_merge($el,$categoryInlineCSS));
+                            */
+                            $eventList.= $this->getChunk($tpls->event, array_merge($el,$categoryInlineCSS));
                             
                         }
                     } else { if($this->debug) echo '&nbsp;&nbsp;<span style="color:red;">--&nbsp;&nbsp;'.strftime('%m-%d', $iDay).'</span><br />'; }
@@ -750,7 +751,7 @@ class mxCalendars {
                         //}
                         if(is_object($existingEvent)){
                             // Check and modify existing event if modified since last update
-                            if($existingEvent->get('lastedit') <= $lastchange){
+                            if($existingEvent->get('lastedit') <= $lastchange && $existingEvent->get('source') === 'feed'){
                                 // Event has been updated so lets just update all properties
                                 $existingEvent->fromArray($event);
                                 $existingEvent->save();

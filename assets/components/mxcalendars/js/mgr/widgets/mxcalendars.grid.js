@@ -117,7 +117,9 @@ Ext.extend(mxcCore.grid.events,MODx.grid.Grid,{
                     xtype: 'mxcalendars-window-mxcalendar-create'
                     ,record: {'repeaton':''}
                 });
-		this.createCalWindow.show(e.target);
+		
+                this.createCalWindow.show(e.target);
+                //this.createCalWindow.center();
 	},updateCal: function(btn,e) {
 		mxcCore.eventId = this.menu.record.id;
                 if (this.updateCalWindow) {
@@ -130,7 +132,9 @@ Ext.extend(mxcCore.grid.events,MODx.grid.Grid,{
                         'success': {fn:this.refresh,scope:this}
                     }
                 });
-		this.updateCalWindow.show(e.target);
+		
+                this.updateCalWindow.show(e.target);
+                //this.updateCalWindow.center();
 	},removeCal: function() {
 		MODx.msg.confirm({
 		    title: _('mxcalendars.mxcalendars_remove')
@@ -859,6 +863,11 @@ mxcCore.window.UpdateCal = function(config) {
 			    ,name:'id'
                             ,id: 'id'
                             ,value: config.record.id
+			  },{
+			    xtype: 'hidden'
+			    ,name:'source'
+                            ,id: 'source'
+                            ,value: config.record.source
 			  },{	
 			    fieldLabel: _('mxcalendars.label_title'),
 			    name: 'title',
@@ -1356,6 +1365,7 @@ mxcCore.window.UpdateCal = function(config) {
                         ,context: Ext.getCmp('context').getValue()
                         ,calendar_id: Ext.getCmp('calendar_id').getValue()
                         ,form_chunk: Ext.getCmp('form_chunk').getValue()
+                        ,source: Ext.getCmp('source').getValue()
                         // @TODO move to proper config section
                         ,HTTP_MODAUTH: MODx.siteId
                         ,action: 'mgr/events/update'

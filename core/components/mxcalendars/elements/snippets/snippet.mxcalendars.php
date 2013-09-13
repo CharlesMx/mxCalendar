@@ -16,6 +16,7 @@ $theme = $modx->getOption('theme',$scriptProperties,'default');// default, tradi
 $resourceId = $modx->getOption('resourceId', $scriptProperties, $modx->resource->get('id'));
 $isLocked = $modx->getOption('isLocked', $scriptProperties, 0);
 $displayType = isset($_REQUEST['detail']) && !$isLocked ? 'detail' : (isset($_REQUEST['displayType']) ? $_REQUEST['displayType'] : $modx->getOption('displayType', $scriptProperties, 'calendar')); //calendar,list,mini
+$eventid = !empty($_REQUEST['mxcid']) ? (int)$_REQUEST['mxcid'] : null;
 //++ Images properties
 $imageLimit = $modx->getOption('limit',$scriptProperties,'15');
 $imageDisable = $modx->getOption('imageDisable',$scriptProperties,0);
@@ -86,7 +87,7 @@ $debug = $modx->getOption('debug',$scriptProperties,0);
 $setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, null); // Example: FeedId=2; TargetTimeZone=New York; would result in =>  `{"2":"America/New_York"}`
 
 //++ Calendar Options (ver >= 1.1.6d-pr)
-$categoryFilter = isset($_REQUEST['cid']) ? $_REQUEST['cid'] : $modx->getOption('categoryFilter', $scriptProperties, null); //-- Defaults to show all categories
+$categoryFilter = urldecode(isset($_REQUEST['cid']) ? $_REQUEST['cid'] : $modx->getOption('categoryFilter', $scriptProperties, null)); //-- Defaults to show all categories
 //++ Calendar Options (ver >= 1.1.0-pl)
 $calendarFilter = isset($_REQUEST['calf']) ? $_REQUEST['calf'] : $modx->getOption('calendarFilter', $scriptProperties, null); //-- Defaults to show all calendars
 //++ Context Options (ver >= 1.1.0-pl)
@@ -112,6 +113,12 @@ $results = $modx->cacheManager->get($cacheElementKey, $cacheOptions);
 //date_default_timezone_set('America/New_York');
 
 // Process any needed Feeds as setup in mxCalendar Manager
+ 
+ $feed = $modx->getObject('mxCalendarFeed', 10);
+ if($feed){
+     $feed->set('nextrunon', 0);
+     $feed-save();
+ }
 $mxcal->processFeeds($setFeedTZ);
 
 
@@ -176,7 +183,9 @@ switch ($displayType){
     case 'ical':
     case 'rss':
         $sort = 'startdate';
-        if(!$elDirectional){
+        if(is_integer($eventid) && $eventid !== null){
+            $whereArr = array(array('mxCalendarEvents.id:='=>$eventid));
+        } elseif (!$elDirectional) {
             $whereArr = array(array('repeating:=' => 0,'AND:enddate:>=' => $elStartDate,'AND:enddate:<=' => $elEndDate,array('OR:repeating:='=>1,'AND:repeatenddate:>=' => $elStartDate)) );
         } else {
             SWITCH($elDirectional){

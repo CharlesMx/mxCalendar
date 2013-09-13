@@ -87,6 +87,10 @@ if(empty($scriptProperties['categoryid'])){
         }
     }
 }
+if($scriptProperties['source'] == 'feed'){
+    $scriptProperties['source'] = 'feed-manual-change';
+}
+
 
 //-- Set the edited by user id based on authenticated user
 if(empty($scriptProperties['editedby'])){

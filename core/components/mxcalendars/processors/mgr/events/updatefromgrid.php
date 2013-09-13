@@ -24,6 +24,11 @@ if(!$modx->user->isMember('Administrator') && empty($_DATA['context']))
 if($_DATA['feeds_id'] || $_DATA['source'] != 'local' || $_DATA['feeds_id']){
     //-- Allow only the actual active flag to be updated
     $mxcalendar->set('active',$_DATA['active']);
+    
+    if($_DATA['source'] == 'feed'){
+        $mxcalendar->set('source','feed-manual-change');
+    }
+    
 } else {
     //-- Both date and time are always posted back
     $_DATA['startdate'] = tstamptotime($_DATA['startdate_date'],$_DATA['startdate_time'],true);
