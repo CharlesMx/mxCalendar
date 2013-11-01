@@ -493,6 +493,7 @@ mxcCore.window.CreateCal = function(config) {
                                 var rt = Ext.getCmp('crepeattype');
                                 if(rt.getValue() === 1){
                                     Ext.getCmp('crepeaton').show();
+									Ext.getCmp('crepeaton').doLayout();
                                 } else { Ext.getCmp('crepeaton').hide(); }
                                 }}
                             }
