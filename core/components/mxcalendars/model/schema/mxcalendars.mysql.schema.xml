@@ -36,6 +36,7 @@
         <field key="active" dbtype="boolean" phptype="boolean" null="false" default="1"/>
  
 	<composite alias="images" class="mxCalendarEventImages" local="id" foreign="event_id" cardinality="many"/>
+        <composite alias="videos" class="mxCalendarEventVideos" local="id" foreign="event_id" cardinality="many"/>
         <aggregate alias="CalendarId" class="mxCalendarCalendars" local="calendar_id" foreign="id" cardinality="one" owner="foreign"/>
         <aggregate alias="eventfeed" class="mxCalendarFeed" local="feeds_id" foreign="id" cardinality="one" owner="foreign"/>
         
@@ -52,6 +53,14 @@
         <field key="active" dbtype="boolean" phptype="boolean" null="false" default="1"/>
     </object>
     
+    <object class="mxCalendarEventVideos" table="mxcalendars_events_videos" extends="xPDOSimpleObject">
+        <field key="event_id" dbtype="int" precision="20" phptype="integer" null="false" />
+        <field key="video" dbtype="text" phptype="string" null="false" default="" />
+        <field key="title" dbtype="varchar" precision="255" phptype="string" null="false" default="" />
+        <field key="description" dbtype="varchar" precision="255" phptype="string" null="false" default="" />
+        <field key="active" dbtype="boolean" phptype="boolean" null="false" default="1"/>
+    </object>    
+
     <object class="mxCalendarEventWUG" table="mxcalendars_wug" extends="xPDOSimpleObject">
         <field key="eventid" dbtype="int" precision="20" phptype="integer" null="false"/>
         <field key="webusergroup" dbtype="int" precision="10" phptype="integer" null="false"/>
