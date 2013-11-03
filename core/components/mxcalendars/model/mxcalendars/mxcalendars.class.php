@@ -2,7 +2,7 @@
 /**
  * mxCalendar
  * 
- * Version: 1.1.8-pl
+ * Version: 1.1.10-pl
  *  
  */
 
@@ -289,6 +289,7 @@ class mxCalendars {
                 $occ=0;
                 foreach($events AS $e){
                     $output_images = '';
+                    $output_videos = '';
                     
                     if($this->debug) $o .= 'Check: '.$occ.'<br />';
                     if($occ == $occurance || ($occurance == 0 && $occ ==0)){
@@ -315,6 +316,19 @@ class mxCalendars {
                             $detailPH['imagesTotal'] = $imgIdx;
                         } 
                         
+                        // Check for Videos
+                        $videos = $this->modx->getCollection('mxCalendarEventVideos', array('event_id' => $e[0]['id'], 'active'=>1) );
+                        $detailPH['videosTotal'] = $vIdx = 0;
+                        if($videos){
+                            foreach($videos AS $video){
+                                $vIdx++;
+                                $videos = $video->toArray();
+                                $videos['video_idx'] = $vIdx;
+                                $detailPH['videos_'.$vIdx] = $output_videos .= $this->getChunk($tpls->tplVideo, $videos );
+                            }
+                            $detailPH['videos'] = $output_videos;
+                            $detailPH['videosTotal'] = $vIdx;
+                        } 
                         
                         $o .= $this->getChunk($tpls->tplDetail,$detailPH);
                             break;

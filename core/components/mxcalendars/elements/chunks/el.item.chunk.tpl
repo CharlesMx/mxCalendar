@@ -15,4 +15,6 @@
 
         [[+images]]
         
+        [[+videos]]
+        
 </div>

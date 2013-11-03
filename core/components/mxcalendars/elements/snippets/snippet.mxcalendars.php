@@ -52,6 +52,7 @@ $tplHeading = $modx->getOption('tplHeading',$scriptProperties,'month.inner.conta
 $tplDetail = $modx->getOption('tplDetail',$scriptProperties,'detail');
 $tplDetailModal = $modx->getOption('tplDetailModal', $scriptProperties, 'detail.modal');
 $tplImageItem = $modx->getOption('tplImageItem', $scriptProperties, 'image');
+$tplVideoItem = $modx->getOption('tplVideoItem', $scriptProperties, 'video');
 $mapWidth = $modx->getOption('mapWidth', $scriptProperties, '500px');
 $mapHeight = $modx->getOption('mapHeight', $scriptProperties, '500px');
 //++Display: Categories
@@ -374,13 +375,13 @@ switch ($displayType){
     case 'daily':
     case 'ical':
     case 'rss':
-        $output = $mxcal->makeEventList($eventListLimit, $eventsArr, array('tplElItem'=>$tplElItem, 'tplElMonthHeading'=>$tplElMonthHeading, 'tplElWrap'=>$tplElWrap, 'tplImage'=>$tplImageItem, 'tplNoEvents'=>$tplNoEvents),$elStartDate,$elEndDate);
+        $output = $mxcal->makeEventList($eventListLimit, $eventsArr, array('tplElItem'=>$tplElItem, 'tplElMonthHeading'=>$tplElMonthHeading, 'tplElWrap'=>$tplElWrap, 'tplImage'=>$tplImageItem, 'tplVideo'=>$tplVIdeoItem, 'tplNoEvents'=>$tplNoEvents),$elStartDate,$elEndDate);
         break;
     case 'calendar':
     case 'mini':
     default:
         $timer_10 = new makeProcessTime($time_start,$debug);
-        $output = $mxcal->makeEventCalendar($eventsArr,(!empty($ajaxResourceId) && $modalView? $ajaxResourceId : $resourceId),(!empty( $ajaxMonthResourceId) ?  $ajaxMonthResourceId : (!empty($ajaxResourceId) ? $ajaxResourceId : $resourceId) ),array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading, 'tplImage'=>$tplImageItem), $contextFilter, $calendarFilter, $highlightToday);
+        $output = $mxcal->makeEventCalendar($eventsArr,(!empty($ajaxResourceId) && $modalView? $ajaxResourceId : $resourceId),(!empty( $ajaxMonthResourceId) ?  $ajaxMonthResourceId : (!empty($ajaxResourceId) ? $ajaxResourceId : $resourceId) ),array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading, 'tplImage'=>$tplImageItem, 'tplVideo'=>$tplVIdeoItem), $contextFilter, $calendarFilter, $highlightToday);
         $timer_10->end('UI Rendering');
         break;
     case 'year':
@@ -389,7 +390,7 @@ switch ($displayType){
         if($debug) $output .= 'Total Occurances: '.count($eventsArr).' for Event ID: '.$_REQUEST['detail'].'<br />';
         if(isset($resourceId) && $modx->resource->get('id') != $resourceId)
                 $tplDetail = $tplDetailModal;
-        $output .= $mxcal->makeEventDetail($eventsArr,($occurance=$_REQUEST['r']?$_REQUEST['r']:0) , array('tplDetail'=>$tplDetail, 'tplImage'=>$tplImageItem),$mapWidth,$mapHeight,$gmapRegion);
+        $output .= $mxcal->makeEventDetail($eventsArr,($occurance=$_REQUEST['r']?$_REQUEST['r']:0) , array('tplDetail'=>$tplDetail, 'tplImage'=>$tplImageItem, 'tplVideo'=>$tplVIdeoItem),$mapWidth,$mapHeight,$gmapRegion);
         //$whereArr[0]['AND:id:='] = (int)$_REQUEST['detail']; //@TODO Make filter for single events repeating dates
         break;
 }

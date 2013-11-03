@@ -11,6 +11,11 @@
     <div>[[+images]]</div>
 `:else=``]]
 
+[[+videosTotal:gt=`0`:then=`
+    <h3>[[+videosTotal]] Videos Attached</h3>
+    <div>[[+videos]]</div>
+`:else=``]]
+
 <p>Type: <span style="[[+foregroundcss:notempty=`color:[[+foregroundcss]];`]][[+backgroundcss:notempty=`background-color:[[+backgroundcss]];`]]">[[+category]]</span></p>
 
 

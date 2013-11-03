@@ -23,6 +23,7 @@ if ($object->xpdo) {
             $created_settings = $m->createObjectContainer('mxCalendarSettings');
             $created_eventWUG = $m->createObjectContainer('mxCalendarEventWUG');
             $m->createObjectContainer('mxCalendarEventImages');
+            $m->createObjectContainer('mxCalendarEventVideos');
             $m->createObjectContainer('mxCalendarCalendars');
             $m->createObjectContainer('mxCalendarFeed');
             $m->createObjectContainer('mxCalendarLog');
@@ -93,6 +94,9 @@ if ($object->xpdo) {
             $m->createObjectContainer('mxCalendarEventImages');
             $m->addField('mxCalendarCategories','parent');
             */
+            $m = $modx->getManager();
+            $m->createObjectContainer('mxCalendarEventVideos');
+            
             $success = true;
             break;
         case xPDOTransport::ACTION_UNINSTALL:

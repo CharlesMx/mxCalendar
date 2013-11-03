@@ -7,9 +7,13 @@
 <p>[[+description]]</p>
 
 <p>Images ([[+imagesTotal]]):<br>[[+images]]</p>
-
 [[+images_1:ne=``:then=`
 <p>Single Image: [[+images_1]]</p>
+`:else=``]]
+
+<p>Videos ([[+videosTotal]]):<br>[[+videos]]</p>
+[[+videos_1:ne=``:then=`
+<p>Single Video: [[+video_1]]</p>
 `:else=``]]
 
 <p>Type: <span style="[[+foregroundcss:notempty=`color:[[+foregroundcss]];`]][[+backgroundcss:notempty=`background-color:[[+backgroundcss]];`]]">[[+category]]</span></p>

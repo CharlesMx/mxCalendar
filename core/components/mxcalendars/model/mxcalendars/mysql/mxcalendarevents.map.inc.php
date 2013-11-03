@@ -273,6 +273,13 @@ $xpdo_meta_map['mxCalendarEvents']= array (
       'foreign' => 'event_id',
       'cardinality' => 'many',
     ),
+    'videos' => 
+    array (
+      'class' => 'mxCalendarEventVideos',
+      'local' => 'id',
+      'foreign' => 'event_id',
+      'cardinality' => 'many',
+    ),
   ),
   'aggregates' => 
   array (

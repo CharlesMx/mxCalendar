@@ -590,6 +590,14 @@ mxcCore.window.CreateCal = function(config) {
                                             ,id: 'gridimages'
 					}
 				    },{
+					cls: 'x-plain',
+					title: _('mxcalendars.label_videos'),
+					layout: 'fit',
+					items: {
+					    xtype: 'mxc-videos-grid'
+                                            ,id: 'gridvideos'
+					}
+				    },{
 					title: _('mxcalendars.label_location')
 					,defaults: {width:230}
 					,defaultType:'textfield'
@@ -684,6 +692,7 @@ mxcCore.window.CreateCal = function(config) {
 		    },{
                         xtype: 'checkbox'
                         ,boxLabel: _('mxcalendars.category_active_col_label')
+                        ,id: 'cactive'
                         ,name: 'active'
                         ,hiddenName: 'active'
                         ,checked: true
@@ -713,6 +722,7 @@ mxcCore.window.CreateCal = function(config) {
                 ////console.log("New RepeatON: "+repeatDOW);
                 var frmData = {
                         title: Ext.getCmp('ctitle').getValue() //req
+                        ,active: Ext.getCmp('cactive').getValue() === true ? 1 :0
                         ,description: Ext.getCmp('cdescription').getValue()
                         ,categoryid: Ext.getCmp('ccategoryid').getValue() //req
                         ,allday: Ext.getCmp('callday').getValue() === true ? 1 :0
@@ -1221,6 +1231,14 @@ mxcCore.window.UpdateCal = function(config) {
                                             ,id: 'gridimages'
 					}
 				    },{
+					cls: 'x-plain',
+					title: _('mxcalendars.label_videos'),
+					layout: 'fit',
+					items: {
+					    xtype: 'mxc-videos-grid'
+                                            ,id: 'gridvideos'
+					}
+				    },{
 					title: _('mxcalendars.label_location')
 					,defaults: {width:230}
 					,defaultType:'textfield'
@@ -1315,6 +1333,7 @@ mxcCore.window.UpdateCal = function(config) {
 		    },{
                         xtype: 'checkbox'
                         ,fieldLabel: _('mxcalendars.category_active_col_label')
+                        ,id: 'active'
                         ,name: 'active'
                         ,hiddenName: 'active'
                         ,checked: config.record.active ? true : false
@@ -1344,6 +1363,7 @@ mxcCore.window.UpdateCal = function(config) {
                 //console.log("New RepeatON: "+repeatDOW);
                 var frmData = {
                         id: Ext.getCmp('id').getValue()
+                        ,active: Ext.getCmp('active').getValue() === true ? 1 :0
                         ,title: Ext.getCmp('title').getValue()
                         ,description: Ext.getCmp('description').getValue()
                         ,categoryid: Ext.getCmp('categoryid').getValue()

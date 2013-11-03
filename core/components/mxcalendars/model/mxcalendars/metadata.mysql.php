@@ -5,11 +5,12 @@ $xpdo_meta_map = array (
   array (
     0 => 'mxCalendarEvents',
     1 => 'mxCalendarEventImages',
-    2 => 'mxCalendarEventWUG',
-    3 => 'mxCalendarCategories',
-    4 => 'mxCalendarCalendars',
-    5 => 'mxCalendarSettings',
-    6 => 'mxCalendarFeed',
-    7 => 'mxCalendarLog',
+    2 => 'mxCalendarEventVideos',
+    3 => 'mxCalendarEventWUG',
+    4 => 'mxCalendarCategories',
+    5 => 'mxCalendarCalendars',
+    6 => 'mxCalendarSettings',
+    7 => 'mxCalendarFeed',
+    8 => 'mxCalendarLog',
   ),
 );
