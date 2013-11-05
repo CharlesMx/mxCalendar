@@ -1,0 +1,16 @@
+<?php return array (
+  'unique_key' => 'key',
+  'preserve_keys' => true,
+  'update_object' => false,
+  'namespace' => 'mxcalendars',
+  'resolve' => NULL,
+  'validate' => NULL,
+  'vehicle_package' => 'transport',
+  'vehicle_class' => 'xPDOObjectVehicle',
+  'guid' => '8badb4840a674edc4e78221fad28e853',
+  'package' => 'modx',
+  'class' => 'modSystemSetting',
+  'signature' => '1da1847abfefac3ff0be27ff03a5660d',
+  'native_key' => 'mxcalendars.tiny.buttons3',
+  'object' => '{"key":"mxcalendars.tiny.buttons3","value":"styleselect,formatselect,separator,styleprops","xtype":"textfield","namespace":"mxcalendar","area":"TinyMCE","editedon":null}',
+);

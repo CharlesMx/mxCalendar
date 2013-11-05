@@ -14,7 +14,7 @@ define('PKG_EXTRA_NAME','mxCalendars');
 define('PKG_NAME','mxCalendars');
 define('PKG_NAME_LOWER','mxcalendars');
 define('PKG_VERSION','1.1.10');
-define('PKG_RELEASE','pl');
+define('PKG_RELEASE','beta1');
  
 /* define build paths */
 $root = dirname(dirname(__FILE__)).'/';
