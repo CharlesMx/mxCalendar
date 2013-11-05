@@ -61,7 +61,16 @@ mxcCore.grid.Images = function(config) {
 			}
 		},'->',{
 		   text:_('mxcalendars.btn_create_image')
-		   ,handler: { xtype: 'mxcalendars-window-image-create' ,blankValues: true }
+                   ,handler: function(btn,e) {
+                        this.createImageWindow = MODx.load({
+                            xtype: 'mxcalendars-window-image-create'
+                            ,blankValues: true
+                            ,listeners: {
+                                'success': {fn:this.refresh,scope:this}
+                            }
+                        });
+                        this.createImageWindow.show(e.target);
+                    }
 		}]
     });
     mxcCore.grid.Images.superclass.constructor.call(this,config)
