@@ -94,8 +94,11 @@ if ($object->xpdo) {
             $m->createObjectContainer('mxCalendarEventImages');
             $m->addField('mxCalendarCategories','parent');
             */
+            
+            // Version 1.1.10-pl
             $m = $modx->getManager();
             $m->createObjectContainer('mxCalendarEventVideos');
+            $m->addField('mxCalendarEvents','content');
             
             $success = true;
             break;

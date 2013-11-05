@@ -126,6 +126,9 @@ $_lang['mxcalendars.label_select_form_err'] = 'Select a valid form chunk';
 $_lang['mxcalendars.btn_show_past_events'] = 'Show Past Events';
 $_lang['mxcalendars.btn_show_upcoming_events'] = 'Show Upcoming Events';
 $_lang['mxcalendars.tip_repeaton'] = 'Repeat every ___ (days|weeks|months|years).<br /><br />Set the repeating date frequency for type (daily, weekly, mothly, yearly) selected above';
+
+$_lang['mxcalendars.label_content'] = 'Content';
+
 //$_lang['mxcalendars.'] = '';
 
 //-- Category Management

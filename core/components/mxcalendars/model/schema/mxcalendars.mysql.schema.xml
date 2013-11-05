@@ -3,6 +3,7 @@
     <object class="mxCalendarEvents" table="mxcalendars_events" extends="xPDOSimpleObject">
         <field key="title" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
         <field key="description" dbtype="text" phptype="string" null="false" default=""/>
+        <field key="content" dbtype="text" phptype="string" null="false" default=""/>
 	<field key="categoryid" dbtype="varchar" precision="10" phptype="string" null="true" />
 	<field key="link" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
 	<field key="linkrel" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>

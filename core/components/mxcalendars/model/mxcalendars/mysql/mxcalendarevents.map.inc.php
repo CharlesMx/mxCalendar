@@ -8,6 +8,7 @@ $xpdo_meta_map['mxCalendarEvents']= array (
   array (
     'title' => '',
     'description' => '',
+    'content' => '',
     'categoryid' => NULL,
     'link' => '',
     'linkrel' => '',
@@ -48,6 +49,13 @@ $xpdo_meta_map['mxCalendarEvents']= array (
       'default' => '',
     ),
     'description' => 
+    array (
+      'dbtype' => 'text',
+      'phptype' => 'string',
+      'null' => false,
+      'default' => '',
+    ),
+    'content' => 
     array (
       'dbtype' => 'text',
       'phptype' => 'string',
