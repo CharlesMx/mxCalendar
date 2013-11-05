@@ -11,6 +11,8 @@ $s = array(
         'mgr_timeformat'=>'g:i a',
         'mgr_log_enable'=>false,
         'mgr_time_increment'=>15,
+        'mgr_allday_start' => '8:00 am',
+        'mgr_allday_end' => '5:00 pm',
     )
 );
 

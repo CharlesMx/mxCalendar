@@ -39,6 +39,8 @@ class mxCalendars {
             'mgr_dateformat' => $this->modx->getOption('mxcalendars.mgr_dateformat', '', 'm/d/Y'),
             'mgr_timeformat' => $this->modx->getOption('mxcalendars.mgr_timeformat', '', 'g:i a'),
             'mgr_time_increment' => $this->modx->getOption('mxcalendars.mgr_time_increment', '', 15),
+            'mgr_allday_start' => $this->modx->getOption('mxcalendars.mgr_allday_start', '', '8:00 am'),
+            'mgr_allday_end' => $this->modx->getOption('mxcalendars.mgr_allday_end', '', '5:00 pm'),
             'isAdministrator' => $this->modx->user->isMember('Administrator'),
         ),$config);
         $this->modx->addPackage('mxcalendars',$this->config['modelPath']);

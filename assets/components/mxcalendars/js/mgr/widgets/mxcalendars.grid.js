@@ -335,13 +335,14 @@ mxcCore.window.CreateCal = function(config) {
                                         var ed = Ext.getCmp('cenddate_date');
                                         var sd = Ext.getCmp('cstartdate_date');
                                             
-                                        Ext.getCmp('cstartdate_fields').label.update(_('mxcalendars.startdate_col_label'));
+                                        //Ext.getCmp('cstartdate_fields').label.update(_('mxcalendars.startdate_col_label'));
                                             
                                         if(calldayFlag.getValue() === true){
 
-                                            sdt.hide().setValue('8:00 am');
-                                            Ext.getCmp('cenddate_fields').hide();
-                                            edt.setValue('5:00 pm');
+                                            sdt.hide().setValue(mxcCore.config.mgr_allday_start);
+                                            //Ext.getCmp('cenddate_fields').hide();
+                                            Ext.getCmp('cenddate_time').hide();
+                                            edt.setValue(mxcCore.config.mgr_allday_end);
 
                                             if(ed.getValue() !== sd.getValue()){
                                                 ed.setValue(sd.getValue());
@@ -349,8 +350,9 @@ mxcCore.window.CreateCal = function(config) {
                                             
                                         } else {
                                             sdt.show();
-                                            Ext.getCmp('cenddate_fields').show();
-                                            Ext.getCmp('cstartdate_fields').label.update(_('mxcalendars.label_startdate'));
+                                            //Ext.getCmp('cenddate_fields').show();
+                                            Ext.getCmp('cenddate_time').show();
+                                            //Ext.getCmp('cstartdate_fields').label.update(_('mxcalendars.label_startdate'));
                                         }
 
                                     }}}
@@ -967,20 +969,21 @@ mxcCore.window.UpdateCal = function(config) {
                                     ,checked: config.record.allday ? true : false
                                     ,listeners:{check:{fn:function(tht, value) {
 
-                                        var alldayFlag = Ext.getCmp('allday');
+                                        var calldayFlag = Ext.getCmp('allday');
                                         
                                         var edt = Ext.getCmp('enddate_time');
                                         var sdt = Ext.getCmp('startdate_time');
                                         var ed = Ext.getCmp('enddate_date');
                                         var sd = Ext.getCmp('startdate_date');
                                             
-                                        Ext.getCmp('startdate_fields').label.update(_('mxcalendars.startdate_col_label'));
+                                        //Ext.getCmp('startdate_fields').label.update(_('mxcalendars.startdate_col_label'));
                                             
-                                        if(alldayFlag.getValue() === true){
+                                        if(calldayFlag.getValue() === true){
 
-                                            sdt.hide().setValue('8:00 am');
-                                            Ext.getCmp('enddate_fields').hide();
-                                            edt.setValue('5:00 pm');
+                                            sdt.hide().setValue(mxcCore.config.mgr_allday_start);
+                                            //Ext.getCmp('cenddate_fields').hide();
+                                            Ext.getCmp('enddate_time').hide();
+                                            edt.setValue(mxcCore.config.mgr_allday_end);
 
                                             if(ed.getValue() !== sd.getValue()){
                                                 ed.setValue(sd.getValue());
@@ -988,8 +991,9 @@ mxcCore.window.UpdateCal = function(config) {
                                             
                                         } else {
                                             sdt.show();
-                                            Ext.getCmp('enddate_fields').show();
-                                            Ext.getCmp('startdate_fields').label.update(_('mxcalendars.label_startdate'));
+                                            //Ext.getCmp('cenddate_fields').show();
+                                            Ext.getCmp('enddate_time').show();
+                                            //Ext.getCmp('cstartdate_fields').label.update(_('mxcalendars.label_startdate'));
                                         }
 
                                     }}}
