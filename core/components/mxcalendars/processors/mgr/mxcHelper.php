@@ -51,7 +51,7 @@ function _getRepeatDates($frequencymode=0, $interval=1, $frequency='1',$startDat
     //-- Holder of all events
     $ar_Recur = array();
     //-- Enable the debugger (Manager)
-    $debug = false;
+    $debug = true;
 
     $x = 0;
     
@@ -125,11 +125,22 @@ function _getRepeatDates($frequencymode=0, $interval=1, $frequency='1',$startDat
         case 1: //Weekly
             $valid = true;
                             
+            
+            //-- Set new weekday values to fix mismatch in numbering of weekdays #108
+            if(is_array($onwd)){
+                $adjOnWd = array();
+                foreach(array_filter($onwd) as $dof){
+                    $adjOnWd[] = $dof + 1;
+                }
+                $onwd = $adjOnWd;
+            }
+           
+                    
             //-- Get the first repeat Day of Week if the same as start date's Day of Week
             $curWeek = $startWeek = strftime('%W',$startDate);
             $occurance = strftime('%Y-%m-%d %H:%M:%S',$startDate);
             $originalTime = strftime(' %H:%M:%S', $startDate);
-            $nextWeek = strftime('%Y-%m-%d %H:%M:%S', strtotime('next monday', $startDate));
+            $nextWeek = strftime('%Y-%m-%d %H:%M:%S', strtotime('next week', $startDate));
             if($debug) echo 'Current Week of the Start Date: '.$curWeek.'<br />';
             //-- Loop through days until the end of current week
             while($curWeek == $startWeek){
