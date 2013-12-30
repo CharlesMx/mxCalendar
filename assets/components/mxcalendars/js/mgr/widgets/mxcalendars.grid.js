@@ -581,7 +581,7 @@ mxcCore.window.CreateCal = function(config) {
 					    xtype: mxcCore.config.event_desc_type == 'htmleditor' ? 'textarea' : mxcCore.config.event_desc_type
 					    ,name: 'description'
                                             ,hiddenName: 'description'
-                                            ,id: 'cdescription-'+config.record.id
+                                            ,id: 'cdescription'
 					    ,value: config.record.description
 					}
                                         ,listeners:{
@@ -591,7 +591,7 @@ mxcCore.window.CreateCal = function(config) {
                                                     //}
                                                     
                                                     if (MODx.loadRTE) {
-                                                        MODx.loadRTE('cdescription-'+config.record.id); // Will transform the textarea with ID "description" to a RTE
+                                                        MODx.loadRTE('cdescription'); // Will transform the textarea with ID "description" to a RTE
                                                         // MODx.loadRTE(['description1','description2']);
                                                     }
 
@@ -605,13 +605,13 @@ mxcCore.window.CreateCal = function(config) {
 					    xtype: mxcCore.config.event_desc_type == 'htmleditor' ? 'textarea' : mxcCore.config.event_desc_type
 					    ,name: 'content'
                                             ,hiddenName: 'content'
-                                            ,id: 'ccontent-'+config.record.id
+                                            ,id: 'ccontent'
 					    ,value: config.record.content
 					}
                                         ,listeners:{
                                                 activate : function(tabpanel){
                                                    if (MODx.config.use_editor && MODx.loadRTE){
-                                                        MODx.loadRTE('ccontent-'+config.record.id);
+                                                        MODx.loadRTE('ccontent');
                                                     }
                                                 }
                                         }

@@ -1,0 +1,16 @@
+<?php return array (
+  'unique_key' => 'key',
+  'preserve_keys' => true,
+  'update_object' => false,
+  'namespace' => 'mxcalendars',
+  'resolve' => NULL,
+  'validate' => NULL,
+  'vehicle_package' => 'transport',
+  'vehicle_class' => 'xPDOObjectVehicle',
+  'guid' => '1c816b4a019b0b6c74db5f93ee05ed2b',
+  'package' => 'modx',
+  'class' => 'modSystemSetting',
+  'signature' => '37fb91890790b2dbe68f346d3e7a1ced',
+  'native_key' => 'mxcalendars.mgr_allday_end',
+  'object' => '{"key":"mxcalendars.mgr_allday_end","value":"5:00 pm","xtype":"textfield","namespace":"mxcalendars","area":"mxcalendars","editedon":null,"name":"mxcalendars.set_mgr_allday_end"}',
+);

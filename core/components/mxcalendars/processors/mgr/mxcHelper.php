@@ -51,7 +51,7 @@ function _getRepeatDates($frequencymode=0, $interval=1, $frequency='1',$startDat
     //-- Holder of all events
     $ar_Recur = array();
     //-- Enable the debugger (Manager)
-    $debug = true;
+    $debug = false;
 
     $x = 0;
     
