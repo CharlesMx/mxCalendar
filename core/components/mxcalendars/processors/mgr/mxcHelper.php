@@ -126,7 +126,7 @@ function _getRepeatDates($frequencymode=0, $interval=1, $frequency='1',$startDat
             $valid = true;
                             
             
-            //-- Set new weekday values to fix mismatch in numbering of weekdays #108
+            //-- Set new weekday values to fix mismatch in numbering of weekdays #108 #111
             if(is_array($onwd)){
                 $adjOnWd = array();
                 foreach(array_filter($onwd) as $dof){
