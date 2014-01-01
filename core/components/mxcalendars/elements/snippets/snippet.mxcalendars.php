@@ -356,15 +356,16 @@ if(count($arrEventDates)){
     
     $arraEventTimer = new makeProcessTime($time_start,$debug);
         
-    foreach($arrEventDates AS $e){
+    foreach($arrEventDates AS $k=>$e){
         
             $oDetails = $arrEventsDetail[$e['eventId']]; //Get original event (parent) details
             $oDetails['startdate'] = $e['date'];
             $oDetails['enddate'] = strtotime('+'.($arrEventsDetail[$e['eventId']]['durDay'] ? $arrEventsDetail[$e['eventId']]['durDay'].' days ' :'').($arrEventsDetail[$e['eventId']]['durHour'] ? $arrEventsDetail[$e['eventId']]['durHour'].' hour ' :'').($arrEventsDetail[$e['eventId']]['durMin'] ? $arrEventsDetail[$e['eventId']]['durMin'].' minute' :''), $e['date']);//$e['date'];//repeatenddate
             if(( ( ($oDetails['startdate']>=$elStartDate || $oDetails['enddate'] >= $elStartDate) && $oDetails['enddate']<=$elEndDate) || $displayType=='detail' || $elDirectional ) ){
 
-                $oDetails['startdate_fstamp'] = strtotime($oDetails['startdate_fdate'].' '.$oDetails['startdate_ftime']); 
-                $oDetails['enddate_fstamp'] = strtotime($oDetails['enddate_fdate'].' '.$oDetails['enddate_ftime']);
+                
+                $oDetails['startdate_fstamp'] = $e['date']; 
+                $oDetails['enddate_fstamp'] = $arrEventsDetail[$e['eventId']]['enddate'];
                 
                 $oDetails['detailURL'] = $modx->makeUrl((!empty($ajaxResourceId) && (bool)$modalView === true ? $ajaxResourceId : $resourceId),'',array('detail' => $e['eventId'], 'r'=>$e['repeatId']));
                 $eventsArr[strftime('%Y-%m-%d', $e['date'])][] = $oDetails;
