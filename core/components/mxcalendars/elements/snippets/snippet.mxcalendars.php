@@ -313,6 +313,16 @@ foreach ($mxcalendars as $mxc) {
             $rid++;
         }
     }
+    
+    // Add date for each day in a multiple day event ( #127 )
+    if($mxcArray['durDay'] !== null && $mxcArray['durDay'] >= 1){
+        if($debug) echo 'Multiple Day Event: '.$mxcArray['title'].'<br />';
+        for($i = 1; $i<=$mxcArray['durDay']; $i++){
+            $theSpanDate = strtotime('+'.$i.' day', $mxcArray['startdate']);
+            $arrEventDates[$mxcArray['id'].'_'.$i] = array('date'=>$theSpanDate, 'eventId'=>$mxcArray['id'],'repeatId'=>null);
+            if($debug) echo '&nbsp;&nbsp;&nbsp;++(0)&nbsp;&nbsp;'.strftime($dateFormat.' '.$timeFormat, $theSpanDate).'<br>';
+        }
+    }
    
     //$output .= $mxcal->getChunk($tpl,$mxcArray);
 }
