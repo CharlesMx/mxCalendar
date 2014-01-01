@@ -524,8 +524,6 @@ class mxCalendars {
                             } 
                             
                             $el['startdate'] = strftime('%l:%M %p', $el['startdate']);
-                            $el['startdateraw'] = $el['startdate']; //-- Add for full control via output modifier 
-                            
                             
                             /**
                              * @todo Remove this once final performance testing is completed

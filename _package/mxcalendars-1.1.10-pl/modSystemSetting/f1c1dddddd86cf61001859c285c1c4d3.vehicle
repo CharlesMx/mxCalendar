@@ -1,0 +1,16 @@
+<?php return array (
+  'unique_key' => 'key',
+  'preserve_keys' => true,
+  'update_object' => false,
+  'namespace' => 'mxcalendars',
+  'resolve' => NULL,
+  'validate' => NULL,
+  'vehicle_package' => 'transport',
+  'vehicle_class' => 'xPDOObjectVehicle',
+  'guid' => '545a98280274db7992f0b9a948a44da4',
+  'package' => 'modx',
+  'class' => 'modSystemSetting',
+  'signature' => 'f1c1dddddd86cf61001859c285c1c4d3',
+  'native_key' => 'mxcalendars.mgr_time_increment',
+  'object' => '{"key":"mxcalendars.mgr_time_increment","value":15,"xtype":"textfield","namespace":"mxcalendars","area":"mxcalendars","editedon":null,"name":"mxcalendars.set_mgr_time_increment"}',
+);
