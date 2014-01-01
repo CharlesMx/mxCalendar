@@ -110,7 +110,7 @@ Ext.extend(mxcCore.grid.Images,MODx.grid.Grid,{
 		    ,text: _('mxcalendars.cateogry_remove_confirm')
 		    ,url: this.config.url
 		    ,params: {
-		        action: 'mgr/category/remove'
+		        action: 'mgr/images/remove'
 		        ,id: this.menu.record.id
 		    }
 		    ,listeners: {
