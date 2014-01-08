@@ -1476,8 +1476,10 @@ mxcCore.window.UpdateCal = function(config) {
 			success: function(resp, opts) {
                                 // remove the RTE instances
                                 if (MODx.config.use_editor && MODx.loadRTE){
-                                    tinyMCE.execCommand('mceRemoveControl',false, 'description-'+frmData.id);
-                                    tinyMCE.execCommand('mceRemoveControl',false, 'content-'+frmData.id);
+                                    if(tinyMCE){
+                                        tinyMCE.execCommand('mceRemoveControl',false, 'description-'+frmData.id);
+                                        tinyMCE.execCommand('mceRemoveControl',false, 'content-'+frmData.id);
+                                    }
                                 }
 
                             // resp is the XmlHttpRequest object

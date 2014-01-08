@@ -2,7 +2,7 @@
 /**
  * mxCalendar 
  * 
- * version: 1.1.8-pl
+ * version: 1.1.10-pl
  *  
  */
 
@@ -317,11 +317,25 @@ foreach ($mxcalendars as $mxc) {
     // Add date for each day in a multiple day event ( #127 )
     if($mxcArray['durDay'] !== null && $mxcArray['durDay'] >= 1){
         if($debug) echo 'Multiple Day Event: '.$mxcArray['title'].'<br />';
+        
+        /*
+        $i = 1;
+        $endDate = $mxc->get('enddate');
+        while(strtotime('+'.$i.' day', $mxcArray['startdate']) < $endDate){
+            $theSpanDate = strtotime('+'.$i.' day', $mxcArray['startdate']);
+            $arrEventDates[$mxcArray['id'].'_'.$i] = array('date'=>$theSpanDate, 'eventId'=>$mxcArray['id'],'repeatId'=>null);
+            if($debug) echo '&nbsp;&nbsp;&nbsp;++('.$i.')&nbsp;&nbsp;'.strftime($dateFormat.' '.$timeFormat, $theSpanDate).'<br>';
+            $i++;
+        }
+         * 
+         */
+        
         for($i = 1; $i<=$mxcArray['durDay']; $i++){
             $theSpanDate = strtotime('+'.$i.' day', $mxcArray['startdate']);
             $arrEventDates[$mxcArray['id'].'_'.$i] = array('date'=>$theSpanDate, 'eventId'=>$mxcArray['id'],'repeatId'=>null);
-            if($debug) echo '&nbsp;&nbsp;&nbsp;++(0)&nbsp;&nbsp;'.strftime($dateFormat.' '.$timeFormat, $theSpanDate).'<br>';
+            if($debug) echo '&nbsp;&nbsp;&nbsp;++('.$i.')&nbsp;&nbsp;'.strftime($dateFormat.' '.$timeFormat, $theSpanDate).'<br>';
         }
+        
     }
    
     //$output .= $mxcal->getChunk($tpl,$mxcArray);
@@ -356,12 +370,22 @@ if(count($arrEventDates)){
     
     $arraEventTimer = new makeProcessTime($time_start,$debug);
         
+    $cnt = 1; 
     foreach($arrEventDates AS $k=>$e){
-        
+            
             $oDetails = $arrEventsDetail[$e['eventId']]; //Get original event (parent) details
             $oDetails['startdate'] = $e['date'];
             $oDetails['enddate'] = strtotime('+'.($arrEventsDetail[$e['eventId']]['durDay'] ? $arrEventsDetail[$e['eventId']]['durDay'].' days ' :'').($arrEventsDetail[$e['eventId']]['durHour'] ? $arrEventsDetail[$e['eventId']]['durHour'].' hour ' :'').($arrEventsDetail[$e['eventId']]['durMin'] ? $arrEventsDetail[$e['eventId']]['durMin'].' minute' :''), $e['date']);//$e['date'];//repeatenddate
-            if(( ( ($oDetails['startdate']>=$elStartDate || $oDetails['enddate'] >= $elStartDate) && $oDetails['enddate']<=$elEndDate) || $displayType=='detail' || $elDirectional ) ){
+            if(( 
+                    ( 
+                        ($oDetails['startdate']>=$elStartDate || $oDetails['enddate'] >= $elStartDate) && 
+                        $oDetails['enddate']<=$elEndDate
+                    ) 
+                    || 
+                    $displayType=='detail' || $displayType=='calendar' || $displayType == 'mini'
+                    || 
+                    $elDirectional 
+                )){
 
                 
                 $oDetails['startdate_fstamp'] = $e['date']; 
@@ -370,8 +394,9 @@ if(count($arrEventDates)){
                 $oDetails['detailURL'] = $modx->makeUrl((!empty($ajaxResourceId) && (bool)$modalView === true ? $ajaxResourceId : $resourceId),'',array('detail' => $e['eventId'], 'r'=>$e['repeatId']));
                 $eventsArr[strftime('%Y-%m-%d', $e['date'])][] = $oDetails;
                 $ulimit++;
-                if($debug) echo '&nbsp;&nbsp;&nbsp;&nbsp;'.$ulimit.'['.$limit.']) '.strftime($dateFormat,$e['date']).' '.$e['eventId'].'<br />';
+                if($debug) echo $cnt.')&nbsp;&nbsp;&nbsp;&nbsp;'.$ulimit.'['.$limit.']) '.strftime($dateFormat,$e['date']).' '.$e['eventId'].'<br />';
                 if($ulimit >= $limit && $displayType=='list' ) break;
+                $cnt++;
             }
     }
 
