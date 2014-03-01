@@ -1497,11 +1497,6 @@ mxcCore.window.UpdateCal = function(config) {
     });
     mxcCore.window.UpdateCal.superclass.constructor.call(this,config);
     
-    /*
-    this.on('activate',function(w,e) {
-        // moved to methods to components
-    },this);
-    */
     this.on('deactivate',function(w,e) {
         if(MODx.config.use_editor && MODx.loadRTE && typeof tinyMCE !== 'undefined'){
             tinyMCE.execCommand('mceRemoveControl',false, 'description-'+config.record.id);
