@@ -782,8 +782,6 @@ mxcCore.window.CreateCal = function(config) {
                         ,HTTP_MODAUTH: MODx.siteId
                         ,action: 'mgr/events/create'
 		};
-                
-                console.log("frmData: "+frmData);
                
 		mxcCore.ajax.request({
 			url: mxcCore.config.connectorUrl,
@@ -1475,7 +1473,7 @@ mxcCore.window.UpdateCal = function(config) {
 			scope: this,
 			success: function(resp, opts) {
                                 // remove the RTE instances
-                                if (MODx.config.use_editor && MODx.loadRTE){
+                                if (MODx.config.use_editor && MODx.loadRTE && typeof tinyMCE !== 'undefined'){
                                     if(tinyMCE){
                                         tinyMCE.execCommand('mceRemoveControl',false, 'description-'+frmData.id);
                                         tinyMCE.execCommand('mceRemoveControl',false, 'content-'+frmData.id);
@@ -1505,7 +1503,7 @@ mxcCore.window.UpdateCal = function(config) {
     },this);
     */
     this.on('deactivate',function(w,e) {
-        if(tinyMCE){
+        if(MODx.config.use_editor && MODx.loadRTE && typeof tinyMCE !== 'undefined'){
             tinyMCE.execCommand('mceRemoveControl',false, 'description-'+config.record.id);
             tinyMCE.execCommand('mceRemoveControl',false, 'content-'+config.record.id);
         }
