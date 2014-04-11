@@ -130,7 +130,7 @@ class mxCalendars {
             $gmapLocations = '';
             //-- Add google Map API
             if($address){
-                    include_once('google_geoloc.class.inc');
+                    include_once('google_geoloc.class.inc.php');
                     //-- Output the Address results
                     if(class_exists("geoLocator") && $address){
                         //-- Split addresses for multiple points on the map
