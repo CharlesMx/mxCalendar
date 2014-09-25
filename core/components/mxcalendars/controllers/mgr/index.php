@@ -57,36 +57,18 @@ if ($useRTE) {
                 });
             </script>');
         }
-    } else {
-        
-        $rte_redactor = $this->modx->getOption('redactor.core_path',$config,$this->modx->getOption('core_path').'components/redactor/');
-        require_once $rte_redactor.'model/redactor/redactor.class.php';
-        $rte = new Redactor($modx);
-        $rte->initialize();
-        
-        //$useEditor = $this->modx->getOption('use_editor');
-        //$whichEditor = $this->modx->getOption('which_editor');
-        if ($whichEditor == 'Redactor')
+    } elseif ($whichEditor == 'Redactor') {
+        /* invoke OnRichTextEditorInit event */
+        $onRichTextEditorInit = $this->modx->invokeEvent('OnRichTextEditorInit',array(
+            'editor' => $whichEditor, // Not necessary for Redactor
+            'elements' => array('cdescription'), // Not necessary for Redactor
+        ));
+        if (is_array($onRichTextEditorInit))
         {
-            /* invoke OnRichTextEditorInit event */
-            $onRichTextEditorInit = $this->modx->invokeEvent('OnRichTextEditorInit',array(
-                'editor' => $whichEditor, // Not necessary for Redactor
-                'elements' => array('cdescription'), // Not necessary for Redactor
-            ));
-            if (is_array($onRichTextEditorInit))
-            {
-                $onRichTextEditorInit = implode('', $onRichTextEditorInit);
-            }
-            $modx->setPlaceholder('onRichTextEditorInit', $onRichTextEditorInit);
+            $onRichTextEditorInit = implode('', $onRichTextEditorInit);
         }
-        
-        $rte_corePath = $this->modx->getOption('redactor.core_path',$config,$this->modx->getOption('core_path').'components/redactor/');
-        $rte_assetsUrl = $this->modx->getOption('redactor.assets_url',$config,$this->modx->getOption('assets_url').'components/redactor/');
-        $modx->regClientStartupScript($rte_assetsUrl.'redactor-1.2.3.min.js');
-        $modx->regClientCSS($rte_assetsUrl.'redactor-1.2.3.min.css');
-        
+        $modx->setPlaceholder('onRichTextEditorInit', $onRichTextEditorInit);
     }
-      
 }
 
 
