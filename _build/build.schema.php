@@ -13,6 +13,26 @@ $sources = array(
     'model' => $root.'core/components/mxcalendars/model/',
     'schema_file' => $root.'core/components/mxcalendars/model/schema/mxcalendars.mysql.schema.xml',
 );
+
+// Clean the house before build a new one :)
+$files = glob($sources['model'].'mxcalendars/mysql/*'); // get all file names
+foreach($files as $file){ // iterate files
+  if(is_file($file)){
+    unlink($file); // delete file
+    echo 'Removed old: '.$file.'<br />';
+  }
+}
+$files = glob($sources['model'].'mxcalendars/*'); // get all file names
+foreach($files as $file){ // iterate files
+  if(is_file($file) && $file !== $sources['model'].'mxcalendars/mxcalendars.class.php' 
+                    && $file !== $sources['model'].'mxcalendars/google_geoloc.class.inc.php' 
+                    && $file !== $sources['model'].'mxcalendars/mxcalendars.ics.class.php' 
+                    && $file !== $sources['model'].'mxcalendars/mxcalendars.helper.class.php'){
+    unlink($file); // delete file
+    echo 'Removed old: '.$file.'<br />';
+  }
+} 
+
 $manager= $modx->getManager();
 $generator= $manager->getGenerator();
  

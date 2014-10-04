@@ -1,0 +1,16 @@
+<?php return array (
+  'unique_key' => 'key',
+  'preserve_keys' => true,
+  'update_object' => false,
+  'namespace' => 'mxcalendars',
+  'resolve' => NULL,
+  'validate' => NULL,
+  'vehicle_package' => 'transport',
+  'vehicle_class' => 'xPDOObjectVehicle',
+  'guid' => '4cc9d3499f01707dfe34bbae718ba913',
+  'package' => 'modx',
+  'class' => 'modSystemSetting',
+  'signature' => 'cd079b5f9c2fb54c87aa2e426f795c69',
+  'native_key' => 'mxcalendars.mgr_timeformat',
+  'object' => '{"key":"mxcalendars.mgr_timeformat","value":"g:i a","xtype":"textfield","namespace":"mxcalendars","area":"mxcalendars","editedon":null,"name":"mxcalendars.set_mgr_timeformat"}',
+);
