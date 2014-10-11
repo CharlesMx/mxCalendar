@@ -1,0 +1,14 @@
+<div class="col-md-3" >
+        <div class="product-post">
+                <div class="product-post-gal">
+                        <a href="[[~[[*id]]]]/[[+pid:pider]]" title="View [[+ident]] Info"><img style="padding-top:30px;" src="[[++site_url]][[+image]]" alt="[[+site_name]] [[+ident]] [[+segment]] [[+pgroup]] – [[+series]]" title="[[+ident]] [[+segment]] [[+pgroup]] – [[+series]]" itemprop="image" /></a>
+                        <span class="price">[[+lowprice]]</span>
+                </div>
+                <div class="product-post-content">
+                        <h5><strong><a href="[[~[[*id]]]]/[[+pid:pider]]" title="View [[+ident]] Info">[[+ident]] [[+series]] [[+segment]] [[+pgroup]] [[+ptype:notempty=`- [[+ptype]]`]]</a></strong></h5><h6>[[+pid]] by [[+brand]]</h6>
+
+                </div>
+        </div>
+</div>
+
+[[!If? &subject=`[[+_idx:increment:modulus=`4`]]` &operator=`EQ` &operand=`0` &then=`<div class="clearfix"></div>`]]

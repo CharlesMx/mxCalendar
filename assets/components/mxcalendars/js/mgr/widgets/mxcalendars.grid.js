@@ -819,7 +819,7 @@ mxcCore.window.CreateCal = function(config) {
     });
     mxcCore.window.CreateCal.superclass.constructor.call(this,config);
      this.on('deactivate',function(w,e) {
-        if(tinyMCE){
+        if(MODx.config.use_editor && MODx.loadRTE && typeof tinyMCE !== 'undefined'){
             tinyMCE.execCommand('mceRemoveControl',false, 'cdescription-'+config.record.id);
             tinyMCE.execCommand('mceRemoveControl',false, 'ccontent-'+config.record.id);
         }
@@ -1474,7 +1474,7 @@ mxcCore.window.UpdateCal = function(config) {
 			success: function(resp, opts) {
                                 // remove the RTE instances
                                 if (MODx.config.use_editor && MODx.loadRTE && typeof tinyMCE !== 'undefined'){
-                                    if(tinyMCE){
+                                    if(typeof tinyMCE !== "undefined"){
                                         tinyMCE.execCommand('mceRemoveControl',false, 'description-'+frmData.id);
                                         tinyMCE.execCommand('mceRemoveControl',false, 'content-'+frmData.id);
                                     }

@@ -1,0 +1,42 @@
+
+		<p><strong>(TEST FORM) Please note: Some prices, due to competitive margin, are too low to advertise online. Submit a quote request to receive personalized pricing.</strong></p><br />
+		
+		[[!+fi.successMessage]]
+		
+		[[!If? &subject=`[[!+fi.error.name]][[!+fi.error.email]][[!+fi.error.message]]` &operator=`!=` &operand=`` &then=`<span class="error">ERROR: Some required fields were not completed or are incorrect.</span>` ]]
+		
+		<input type="hidden" name="remote_addr" id="remote_addr" value="[[!+fi.remote_addr]]">
+		<input type="hidden" name="remote_host" id="remote_host" value="[[!+fi.remote_host]]">
+		<input type="hidden" name="remote_agent" id="remote_agent" value="[[!+fi.remote_agent]]">
+
+
+	          <div class="form-group">
+                    <label for="name" [[!+fi.error.name:notempty=`class="error"`]]><strong>Full Name:</strong></label>
+                     <input type="text" value="[[!+fi.name]]" class="txt required [[!+fi.error.name:notempty=`errortxt`]]" id="name" name="name" />
+                  </div>
+                  <div class="form-group">
+                    <label for="email" [[!+fi.error.email:notempty=`class="error"`]]><strong>Email:</strong></label>
+                     <input type="text" class="txt required [[!+fi.error.email:notempty=`errortxt`]]" value="[[!+fi.email]]" id="email" name="email" />
+
+					<div class="clearfix"></div>
+                    	<label for="work-email" [[!+fi.error.workemail:notempty=`class="error"`]]><strong>Work Email:</strong></label>
+						<input type="text" id="workemail" class="work-email" name="workemail" value="" />
+                  </div>
+          	  <div class="form-group">
+		    <label for="phone" [[!+fi.error.phone:isNumber=`class="error"`]]><strong>Phone:</strong></label>
+                     <input type="text" class="txt required [[!+fi.error.phone:notempty=`errortxt`]]" value="[[!+fi.phone]]" id="phone" name="phone" />
+                  </div>
+
+		<div class="clearfix"></div>
+               <div class="form-group">
+                      <label for="message" [[!+fi.error.message:notempty=`class="error"`]]><strong>Comments/Message:</strong> </label>&nbsp; &nbsp; &nbsp;(Include location to receive a shipping quote.)
+               		<textarea name="message" class="required [[!+fi.error.message:notempty=`errortxt`]]" id="message" cols="10" rows="3" value="[[!+fi.message]]">[[!+fi.message]]</textarea>
+       		</div>
+               <div class="form-group">
+                          <p>
+                            <input type="hidden" value="send" name="sendContact" id="sendContac" />
+                            <input type="submit" value=">> Send Personalized Quote" name="submit" class="ibutton" id="submit" />
+                          </p>
+		</div>
+		
+              </form>

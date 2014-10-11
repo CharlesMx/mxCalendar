@@ -1,0 +1,53 @@
+
+		[[!+fi.successMessage]]
+		[[!If? &subject=`[[!+fi.error.name]][[!+fi.error.email]][[!+fi.error.message]]` &operator=`!=` &operand=`` &then=`<span class="error">ERROR: Some required fields were not completed or are incorrect.</span>` ]]
+
+                <h3>Request a Quote</h3>
+                <p>Our prices are often below the minimum advertiseable price. Please request a quote to receive a personalized pricing including available volume discounts</p>
+
+                [[+variations]]
+		
+		
+		<input type="hidden" name="remote_addr" id="remote_addr" value="[[!+fi.remote_addr]]">
+		<input type="hidden" name="remote_host" id="remote_host" value="[[!+fi.remote_host]]">
+		<input type="hidden" name="remote_agent" id="remote_agent" value="[[!+fi.remote_agent]]">
+
+                <div class="clearfix"></div>
+                
+                <div class="form-group">
+                  <label class="col-sm-2 control-label  [[!+fi.error.name:notempty=`error`]]" for="name">Full Name</label>
+                  <div class="col-sm-10">
+                    <input type="text" value="[[!+fi.name]]" class="form-control txt required [[!+fi.error.name:notempty=`errortxt`]]" id="name" name="name" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="email" class="col-sm-2 control-label">Email</label>
+                  <div class="col-sm-10">
+                      <input type="text" class="form-control txt required [[!+fi.error.email:notempty=`errortxt`]]" value="[[!+fi.email]]" id="email" name="email"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="workemail" class="col-sm-2 control-label">Email</label>
+                  <div class="col-sm-10">
+                      <input type="text" class="form-control txt required [[!+fi.error.workemail:notempty=`errortxt`]]" value="[[!+fi.workemail]]" id="workemail" name="workemail"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="phone" class="col-sm-2 control-label">Phone</label>
+                  <div class="col-sm-10">
+                      <input type="text" class="form-control txt required [[!+fi.error.phone:notempty=`errortxt`]]" value="[[!+fi.phone]]" id="phone" name="phone" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="message" class="col-sm-2 control-label">Message</label>
+                  <div class="col-sm-10">
+                      <textarea name="message" class="form-control required [[!+fi.error.message:notempty=`errortxt`]]" id="message" cols="10" rows="3" value="[[!+fi.message]]">[[!+fi.message]]</textarea>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary">&gt;&gt; Send Personalized Quote</button>
+                  </div>
+                </div>
+		
+</form>

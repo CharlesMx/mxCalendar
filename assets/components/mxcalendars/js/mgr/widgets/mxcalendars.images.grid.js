@@ -62,6 +62,9 @@ mxcCore.grid.Images = function(config) {
 		},'->',{
 		   text:_('mxcalendars.btn_create_image')
                    ,handler: function(btn,e) {
+                       if (this.createImageWindow) {
+                            this.createImageWindow.close();
+                        }
                         this.createImageWindow = MODx.load({
                             xtype: 'mxcalendars-window-image-create'
                             ,blankValues: true

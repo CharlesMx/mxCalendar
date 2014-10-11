@@ -130,7 +130,7 @@ class mxCalendars {
             $gmapLocations = '';
             //-- Add google Map API
             if($address){
-                    include_once('google_geoloc.class.inc');
+                    include_once('google_geoloc.class.inc.php');
                     //-- Output the Address results
                     if(class_exists("geoLocator") && $address){
                         //-- Split addresses for multiple points on the map
@@ -343,7 +343,7 @@ class mxCalendars {
         public function makeEventList($limit=5, $events=array(),$tpls=array(),$startDate=null,$endDate=null){
             $o = '';
             $tpls = (object)$tpls;
-            $output_images='';
+
             if(count($events)){
                 $preHead = '';
                 $i=0;
@@ -359,6 +359,7 @@ class mxCalendars {
                             $preHead = strftime('%b',$e[$rvar]['startdate']);
                         }
                         // check for images
+                        $output_images='';
                         $images = $this->modx->getCollection('mxCalendarEventImages', array('event_id' => $e[$rvar]['id'], 'active'=>1) );
                         $e[$rvar]['imagesTotal'] = $imgIdx = 0;
                         if($images){
@@ -366,7 +367,8 @@ class mxCalendars {
                                 $imgIdx++;
                                 $imgArr = $image->toArray();
                                 $imgArr['image_idx'] = $imgIdx;
-                                $e[$rvar]['images_'.$imgIdx] = $output_images .= $this->getChunk($tpls->tplImage, $imgArr );
+                                $output_images  .= $e[$rvar]['images_'.$imgIdx] = $this->getChunk($tpls->tplImage, $imgArr );
+
                             }
                         } else {
                             //echo 'no images for '.$e[$rvar]['id'].'<br />';
