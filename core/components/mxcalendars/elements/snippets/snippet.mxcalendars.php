@@ -89,11 +89,24 @@ $debug = $modx->getOption('debug',$scriptProperties,0);
 $setFeedTZ = $modx->getOption('setFeedTZ', $scriptProperties, null); // Example: FeedId=2; TargetTimeZone=New York; would result in =>  `{"2":"America/New_York"}`
 
 //++ Calendar Options (ver >= 1.1.6d-pr)
-$categoryFilter = urldecode(isset($_REQUEST['cid']) ? $_REQUEST['cid'] : $modx->getOption('categoryFilter', $scriptProperties, null)); //-- Defaults to show all categories
+// Defaults to blank (ie show all categories).
+if ($categoryFilter = urldecode(isset($_REQUEST['cid']) ? $_REQUEST['cid'] : $modx->getOption('categoryFilter', $scriptProperties, null))) {
+    // Adding comma for retrieving events that are category-agnostic (ie have blank category).
+    $categoryFilter = ",{$categoryFilter}";
+}
 //++ Calendar Options (ver >= 1.1.0-pl)
-$calendarFilter = isset($_REQUEST['calf']) ? $_REQUEST['calf'] : $modx->getOption('calendarFilter', $scriptProperties, null); //-- Defaults to show all calendars
+// Defaults to blank (ie show all calendars).
+if ($calendarFilter = (isset($_REQUEST['calf']) ? $_REQUEST['calf'] : $modx->getOption('calendarFilter', $scriptProperties, null))) {
+    // Adding comma for retrieving events that are calendar-agnostic (ie have blank calendar).
+    $calendarFilter = ",{$calendarFilter}";
+};
 //++ Context Options (ver >= 1.1.0-pl)
-$contextFilter = isset($_REQUEST['conf']) ? $_REQUEST['conf'] : $modx->getOption('contextFilter',$scriptProperties, ','.$modx->context->key);//-- Defaults to current context + (blank for all)
+// Defaults to current context.
+// Could be blank (ie show all contexts).
+if ($contextFilter = ','.(isset($_REQUEST['conf']) ? $_REQUEST['conf'] : $modx->getOption('contextFilter',$scriptProperties, $modx->context->key))) {
+    // Adding comma for retrieving events that are context-agnostic (ie have blank context).
+    $contextFilter = ",{$contextFilter}";
+}
 //++ Form Chunk Filter match name
 $formFilter = $modx->getOption('formFilter',$scriptProperties,'form_');
 
@@ -231,19 +244,28 @@ switch ($displayType){
 }
 
 //-- ADD IN THE CONTEXT AND CALENDAR PROPERTY FILTERS
-$whereArr['AND:context:IN'] = explode(',',$contextFilter);
-if(!empty($calendarFilter))
+if (!empty($contextFilter)) {
+    $whereArr['AND:context:IN'] = explode(',',$contextFilter);
+}
+if (!empty($calendarFilter)) {
     $whereArr['AND:calendar_id:IN'] = explode(',',$calendarFilter);
-
-                        
-if($categoryFilter && ($displayType == 'calendar' || $displayType == 'mini' || $displayType == 'list'))
-        $whereArr[] = array(
-            array('categoryid' => $categoryFilter),
-            array('OR:categoryid:LIKE' => '%,'.$categoryFilter.',%'),
-            array('OR:categoryid:LIKE' => '%,'.$categoryFilter),
-            array('OR:categoryid:LIKE' => $categoryFilter.',%'),
+}
+if (!empty($categoryFilter)) {
+    foreach (explode(',',$categoryFilter) as $category) {
+        if (empty($category)) {
+            // For blank just show all.
+            break;
+        }
+        if($displayType == 'calendar' || $displayType == 'mini' || $displayType == 'list') {
+            $whereArr[] = array(
+                array('categoryid' => $category),
+                array('OR:categoryid:LIKE' => '%,'.$category.',%'),
+                array('OR:categoryid:LIKE' => '%,'.$category),
+                array('OR:categoryid:LIKE' => $category.',%'),
             );
-
+        }
+    }
+}
 $whereArr['mxCalendarEvents.active'] = 1;
 
 $c->where($whereArr);
