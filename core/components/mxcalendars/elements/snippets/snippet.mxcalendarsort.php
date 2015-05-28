@@ -13,7 +13,7 @@
  *   'events',      // sorted array of events
  *   'debugOutput', // string, containing information, valuable for debugging
  */
-$mxCal = $modx->runSnippet('mxCalendar.init', $scriptProperties);
+$mxCal = $modx->runSnippet('mxCalendarInit', $scriptProperties);
 
 $debugOutput = '';
 $debug = $modx->getOption('debug', $scriptProperties);

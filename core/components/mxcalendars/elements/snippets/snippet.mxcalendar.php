@@ -8,7 +8,7 @@
  * @var $scriptProperties array
  */
 /** @var $mxCal mxCalendars */
-$mxCal = $modx->runSnippet('mxCalendar.init', $scriptProperties);
+$mxCal = $modx->runSnippet('mxCalendarInit', $scriptProperties);
 
 /* setup default properties */
 $theme = $modx->getOption('theme',$scriptProperties,'default');// default, traditional
@@ -255,14 +255,14 @@ if($displayType != 'detail')
 $c->limit($limit,$limitstart);
 
 // Get events.
-list($events, $debugOutputTemp) = $modx->runSnippet('mxCalendar.getEvents', array_merge($scriptProperties, array(
+list($events, $debugOutputTemp) = $modx->runSnippet('mxCalendarGetEvents', array_merge($scriptProperties, array(
 	'criteria' => $c,
 	'debug' => $debug,
 )));
 $debugOutput .= $debugOutputTemp;
 
 // Sort.
-list($events, $debugOutputTemp) = $modx->runSnippet('mxCalendar.sort', array_merge($scriptProperties, array(
+list($events, $debugOutputTemp) = $modx->runSnippet('mxCalendarSort', array_merge($scriptProperties, array(
 	'events' => $events,
 	'direction' => $dir,
 	'debug' => $debug,
@@ -270,7 +270,7 @@ list($events, $debugOutputTemp) = $modx->runSnippet('mxCalendar.sort', array_mer
 $debugOutput .= $debugOutputTemp;
 
 // Prepare for render.
-list($events, $debugOutputTemp) = $modx->runSnippet('mxCalendar.prerender', array_merge($scriptProperties, array(
+list($events, $debugOutputTemp) = $modx->runSnippet('mxCalendarPrerender', array_merge($scriptProperties, array(
 	'events' => $events,
 	'elStartDate' => $elStartDate,
 	'elEndDate' => $elEndDate,
