@@ -1,11 +1,13 @@
 <?php
-// SAMPLE EVENT SUBMISSION HOOK FOR mxFormBuilder
+/**
+ * SAMPLE EVENT SUBMISSION HOOK FOR mxFormBuilder
+ *
+ * @var $modx modX
+ * @var $scriptProperties array
+ */
 
-
-$mxcal = $modx->getService('mxcalendars','mxCalendars',$modx->getOption('mxcalendars.core_path',null,$modx->getOption('core_path').'components/mxcalendars/').'model/mxcalendars/',$scriptProperties);
-if (!($mxcal instanceof mxCalendars)) return 'Error loading instance of mxCalendars.';
-
-include_once($modx->getOption('mxcalendars.core_path',null,$modx->getOption('core_path').'components/mxcalendars/').'processors/mgr/mxcHelper.php');
+/** @var $mxCal mxCalendars */
+$mxCal = $modx->runSnippet('mxCalendar.init', $scriptProperties);
 
 
 $allFormFields = $hook->getProperties();
