@@ -1,2 +1,6 @@
 .idea/*
 .project
+
+_package/*
+!_package/*.zip
+
