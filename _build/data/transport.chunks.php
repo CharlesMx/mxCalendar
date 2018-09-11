@@ -26,7 +26,7 @@ $chunks[2]= $modx->newObject('modChunk');
 $chunks[2]->fromArray(array(
     'id' => 1,
     'name' => 'tplListHeading',
-    'description' => 'This template is used to set a split between months in the event list. It returns the start date so you can apply the date output modifier to adjust. To remove this make this entry empty (null).',
+    'description' => 'This template is used to set a split between months in the event list. To remove this make this entry empty (null).',
     'snippet' => getChunkContent($sources['elements'].'chunks/el.listheading.chunk.tpl'),
 ),'',true,true);
 
@@ -80,7 +80,7 @@ $chunks[8]= $modx->newObject('modChunk');
 $chunks[8]->fromArray(array(
     'id' => 1,
     'name' => 'tplHeading',
-    'description' => 'The template to use as the calendar heading and navigation controls. This could set to empty in order to return a fixed calendar whereby the user would not have direct navigation of other months.',
+    'description' => 'The template to use as the calendar heading and navigation controls. Set to empty to return a fixed calendar (no month-control).',
     'snippet' => getChunkContent($sources['elements'].'chunks/month.inner.container.row.heading.chunk.tpl'),
 ),'',true,true);
 
