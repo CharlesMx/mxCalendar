@@ -57,7 +57,6 @@ $_lang['mxcalendars.label_dow_3'] = 'Mittwoch';
 $_lang['mxcalendars.label_dow_4'] = 'Donnerstag';
 $_lang['mxcalendars.label_dow_5'] = 'Freitag';
 $_lang['mxcalendars.label_dow_6'] = 'Samstag';
-$_lang['mxcalendars.label_dow_7'] = 'Sonntag';
 $_lang['mxcalendars.label_allday'] = 'All Day Event';
 $_lang['mxcalendars.label_daily'] = 'Täglich';
 $_lang['mxcalendars.label_weekly'] = 'Wöchentlich';
