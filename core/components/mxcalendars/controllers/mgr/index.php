@@ -71,7 +71,4 @@ if ($useRTE) {
     }
 }
 
-
 return '<div id="mxcalendars-panel-home-div"></div><!-- RTE -->'.$onRichTextEditorInit.'<!-- End RTE -->';
-
-?>

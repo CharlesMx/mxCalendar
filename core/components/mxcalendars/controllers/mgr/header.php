@@ -7,5 +7,3 @@ Ext.onReady(function() {
 });
 </script>');
 return '<style>.valign-center{vertical-align:bottom;}</style>';
-
-?>
