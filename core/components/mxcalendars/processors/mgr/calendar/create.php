@@ -29,5 +29,3 @@ if ($mxcalendar->save() == false) {
 
 //-- If no errors return success 
 return $modx->error->success('',$mxcalendar);
-
-?>

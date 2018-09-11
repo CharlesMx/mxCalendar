@@ -1,6 +1,12 @@
 Changelog file for mxCalendar component.
 
 ====================================
+mxCalendar 1.1.12-pl
+====================================
+- Temporarily patch save-error to restore functionality
+- Update German lexicon
+
+====================================
 mxCalendar 1.1.11-pl
 ====================================
 - Shorten chunk description so installation works

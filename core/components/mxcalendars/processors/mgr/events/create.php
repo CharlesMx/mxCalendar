@@ -1,4 +1,5 @@
 <?php
+
 //-- A little date helper function
 if(!@file_exists(dirname(dirname(__FILE__)).'/mxcHelper.php') ) {
     echo 'can not include mxcHelper file.';
@@ -27,17 +28,19 @@ $scriptProperties['enddate'] = tstamptotime($scriptProperties['enddate_date'],$s
 $scriptProperties['repeatenddate'] = !empty($scriptProperties['repeatenddate'])?tstamptotime($scriptProperties['repeatenddate'],$scriptProperties['enddate_time'],true):null;
 
 
-if($scriptProperties['repeating']==1){
+if ($scriptProperties['repeating'] == 1) {
+
     //-- Do some error checking just for repeating dates
-    if( !isset($scriptProperties['repeattype']) )
+    if (!isset($scriptProperties['repeattype']))
         $modx->error->addField('repeattype', $modx->lexicon('mxcalendars.err_event_req_repeattype'));
     else
-        if(empty($scriptProperties['repeaton']) && (int)$scriptProperties['repeattype'] === 1)
+        if (empty($scriptProperties['repeaton']) && (int)$scriptProperties['repeattype'] === 1)
             $modx->error->addField('repeaton', $modx->lexicon('mxcalendars.err_event_req_repeaton'));
-        
-    if(empty($scriptProperties['repeatfrequency']))
+
+    if (empty($scriptProperties['repeatfrequency']))
         $modx->error->addField('repeatfrequency', $modx->lexicon('mxcalendars.err_event_req_repeatfrequency'));
-    if(empty($scriptProperties['repeatenddate']))
+
+    if (empty($scriptProperties['repeatenddate']))
         $modx->error->addField('repeatenddate', $modx->lexicon('mxcalendars.err_event_req_repeatenddate'));
 }
 
@@ -94,6 +97,12 @@ if ($modx->error->hasError()) {
     return $modx->error->failure($modx->lexicon('mxcalendars.err_pre_save'));
 }
 
+
+// Hotfix for FE changing default values
+if (is_string($scriptProperties['repeatfrequency'])) {
+    $scriptProperties['repeatfrequency'] = null;
+}
+
  
 //-- Get the mxCalendar object and set the values from form
 $mxcalendar = $modx->newObject('mxCalendarEvents');
@@ -115,4 +124,4 @@ if ($mxcalendar->save() == false) {
 }
 
 //-- If no errors return success 
-return $modx->error->success('',$mxcalendar);
+return $modx->error->success('', $mxcalendar);

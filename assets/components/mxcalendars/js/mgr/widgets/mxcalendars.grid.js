@@ -118,7 +118,7 @@ Ext.extend(mxcCore.grid.events,MODx.grid.Grid,{
                     xtype: 'mxcalendars-window-mxcalendar-create'
                     ,record: {'repeaton':''}
                 });
-		
+
                 this.createCalWindow.show(e.target);
                 //this.createCalWindow.center();
 	},updateCal: function(btn,e) {
@@ -133,7 +133,7 @@ Ext.extend(mxcCore.grid.events,MODx.grid.Grid,{
                         'success': {fn:this.refresh,scope:this}
                     }
                 });
-		
+
                 this.updateCalWindow.show(e.target);
                 //this.updateCalWindow.center();
 	},removeCal: function() {
@@ -220,7 +220,7 @@ mxcCore.window.CreateCal = function(config) {
                                       idProperty: 'key',
                                       url: mxcCore.config.connectorUrl,
                                       baseParams: {
-                                            action: 'stores/getcontexts' 
+                                            action: 'stores/getcontexts'
                                       },
                                       fields: [
                                             'key',
@@ -239,7 +239,7 @@ mxcCore.window.CreateCal = function(config) {
                               valueNotFoundText:_('mxcalendars.label_select_context_err'),
                               anchor:'100%',
                               value: config.record.context
-                            },{	
+                            },{
 			    fieldLabel: _('mxcalendars.label_title'),
 			    name: 'title',
                             hiddenname: 'title',
@@ -257,7 +257,7 @@ mxcCore.window.CreateCal = function(config) {
 				      idProperty: 'id',
 				      url: mxcCore.config.connectorUrl,
 				      baseParams: {
-					    action: 'stores/getcategories' 
+					    action: 'stores/getcategories'
 				      },
 				      fields: [
 					    'id', 'name'
@@ -290,7 +290,7 @@ mxcCore.window.CreateCal = function(config) {
                                       idProperty: 'id',
                                       url: mxcCore.config.connectorUrl,
                                       baseParams: {
-                                            action: 'stores/getcalendars' 
+                                            action: 'stores/getcalendars'
                                       },
                                       fields: [
                                             'id', 'name'
@@ -329,14 +329,14 @@ mxcCore.window.CreateCal = function(config) {
                                     ,listeners:{check:{fn:function(tht, value) {
 
                                         var calldayFlag = Ext.getCmp('callday');
-                                        
+
                                         var edt = Ext.getCmp('cenddate_time');
                                         var sdt = Ext.getCmp('cstartdate_time');
                                         var ed = Ext.getCmp('cenddate_date');
                                         var sd = Ext.getCmp('cstartdate_date');
-                                            
+
                                         //Ext.getCmp('cstartdate_fields').label.update(_('mxcalendars.startdate_col_label'));
-                                            
+
                                         if(calldayFlag.getValue() === true){
 
                                             sdt.hide().setValue(mxcCore.config.mgr_allday_start);
@@ -347,7 +347,7 @@ mxcCore.window.CreateCal = function(config) {
                                             if(ed.getValue() !== sd.getValue()){
                                                 ed.setValue(sd.getValue());
                                             }
-                                            
+
                                         } else {
                                             sdt.show();
                                             //Ext.getCmp('cenddate_fields').show();
@@ -357,7 +357,7 @@ mxcCore.window.CreateCal = function(config) {
 
                                     }}}
                                     }
-				
+
                                 ]
                             },{
 			    xtype: 'container',
@@ -387,15 +387,15 @@ mxcCore.window.CreateCal = function(config) {
                                         if(ed.getValue() === ''){
                                             ed.setValue(value);
                                         }
-                                        
+
                                         var alldayFlag = Ext.getCmp('callday');
                                         if(alldayFlag.getValue() === true){
                                             Ext.getCmp('cenddate_date').setValue(value);
                                         }
-                                        
+
                                         }}
                                     }
-                                    
+
 				},
 				{
 				    xtype     : 'timefield',
@@ -462,7 +462,7 @@ mxcCore.window.CreateCal = function(config) {
                         },
                         listeners: {
                             'beforecollapse' :  function(panel,ani) {
-                                // Hide all the form fields you need to hide 
+                                // Hide all the form fields you need to hide
                                 Ext.getCmp('crepeating').setValue(0);
                                 return true; // this will avoid collapse of the field set
                             },
@@ -470,7 +470,7 @@ mxcCore.window.CreateCal = function(config) {
                                 // Display all the fields
                                 Ext.getCmp('crepeating').setValue(1);
                                 return true; // this will avoid the default expand behaviour
-                            } 
+                            }
                         },
                         layout: 'form',
 			items :[{name: 'repeating',id: 'crepeating',xtype:'hidden',value:config.record.repeating?1:0},{
@@ -504,25 +504,24 @@ mxcCore.window.CreateCal = function(config) {
 			},{
 			    fieldLabel: _('mxcalendars.label_repeaton')
 			    ,name: 'repeaton'
-                            ,id: 'crepeaton'
+                ,id: 'crepeaton'
 			    ,xtype: 'checkboxgroup'
-                            ,hidden: config.record.repeattype == 1 ? false : true // hide on load
+                ,hidden: config.record.repeattype == 1 ? false : true // hide on load
 			    ,items: [
-				{boxLabel: _('mxcalendars.label_sunday'), name: 'cb-auto-1', value: -1, checked: config.record.repeaton.indexOf(',-1,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_monday'), name: 'cb-auto-2', value: 0, checked: config.record.repeaton.indexOf(',0,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_tuesday'), name: 'cb-auto-3', value: 1, checked: config.record.repeaton.indexOf(',1,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_wednesday'), name: 'cb-auto-4', value: 2, checked: config.record.repeaton.indexOf(',2,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_thursday'), name: 'cb-auto-5', value: 3, checked: config.record.repeaton.indexOf(',3,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_friday'), name: 'cb-auto-6', value: 4, checked: config.record.repeaton.indexOf(',4,')!=-1 ? true : false },
-				{boxLabel: _('mxcalendars.label_saturday'), name: 'cb-auto-7', value: 5, checked: config.record.repeaton.indexOf(',5,')!=-1 ? true : false }
+                    {boxLabel: _('mxcalendars.label_sunday'), name: 'cb-auto-1', value: -1, checked: config.record.repeaton.indexOf(',-1,')!=-1 ? true : false },
+                    {boxLabel: _('mxcalendars.label_monday'), name: 'cb-auto-2', value: 0, checked: config.record.repeaton.indexOf(',0,')!=-1 ? true : false },
+                    {boxLabel: _('mxcalendars.label_tuesday'), name: 'cb-auto-3', value: 1, checked: config.record.repeaton.indexOf(',1,')!=-1 ? true : false },
+                    {boxLabel: _('mxcalendars.label_wednesday'), name: 'cb-auto-4', value: 2, checked: config.record.repeaton.indexOf(',2,')!=-1 ? true : false },
+                    {boxLabel: _('mxcalendars.label_thursday'), name: 'cb-auto-5', value: 3, checked: config.record.repeaton.indexOf(',3,')!=-1 ? true : false },
+                    {boxLabel: _('mxcalendars.label_friday'), name: 'cb-auto-6', value: 4, checked: config.record.repeaton.indexOf(',4,')!=-1 ? true : false },
+                    {boxLabel: _('mxcalendars.label_saturday'), name: 'cb-auto-7', value: 5, checked: config.record.repeaton.indexOf(',5,')!=-1 ? true : false }
 			    ]
-                            ,value: config.record.repeaton
+                ,value: config.record.repeaton
 			},{
 			    fieldLabel: _('mxcalendars.label_repeat_frequency')
 			    ,name: 'repeatfrequency'
-                            ,id: 'crepeatfrequency'
+                ,id: 'crepeatfrequency'
 			    ,xtype: 'combo'
-                            
 			    ,mode: 'local'
 			    ,store: new Ext.data.ArrayStore({
 				    id: 0,
@@ -532,32 +531,32 @@ mxcCore.window.CreateCal = function(config) {
 			    ,displayField: 'counter'
 			    ,valueField: 'counter'
 			    ,editable: true
-			    ,width: 50
-                            ,layout:'anchor'
-                            ,anchor: '100% 100%'
-                            ,value: config.record.repeatfrequency
-                            ,msgTarget : 'crepeatfrequency'
-                            ,msgDisplay: 'block'
-                            ,listeners: {
-                                render: function(c) {
-                                  Ext.QuickTips.register({
-                                    target: c.getEl(),
-                                    text: _('mxcalendars.tip_repeaton')
-                                  });
-                                }
-                            }
+			    ,width: 100
+                ,layout:'anchor'
+                ,anchor: '100% 100%'
+                ,value: config.record.repeatfrequency
+                ,msgTarget : 'crepeatfrequency'
+                ,msgDisplay: 'block'
+                ,listeners: {
+                    render: function(c) {
+                      Ext.QuickTips.register({
+                        target: c.getEl(),
+                        text: _('mxcalendars.tip_repeaton')
+                      });
+                    }
+                }
 			},{
 			    fieldLabel: _('mxcalendars.label_repeat_last_occurance')
 			    ,name: 'repeatenddate'
-                            ,id: 'crepeatenddate'
-                            ,width:120
-                            ,layout:'anchor'
-                            ,anchor: '100% 100%'
-                            ,format    : mxcCore.config.mgr_dateformat
+                ,id: 'crepeatenddate'
+                ,width: 120
+                ,layout:'anchor'
+                ,anchor: '100% 100%'
+                ,format    : mxcCore.config.mgr_dateformat
 			    ,allowBlank:false
 			    ,xtype: 'datefield'
-                            ,value: config.record.repeatenddate
-                            ,submitValue: false
+                ,value: config.record.repeatenddate
+                ,submitValue: false
 			}]
 		    },{
 			xtype: 'container'
@@ -589,7 +588,7 @@ mxcCore.window.CreateCal = function(config) {
                                                     //if(MODx.config.use_editor && MODx.loadRTE && mxcCore.config.event_desc_type == 'htmleditor'){
                                                     //    MODx.loadRTE('description-'+config.record.id);
                                                     //}
-                                                    
+
                                                     if (MODx.loadRTE) {
                                                         MODx.loadRTE('cdescription'); // Will transform the textarea with ID "description" to a RTE
                                                         // MODx.loadRTE(['description1','description2']);
@@ -699,7 +698,7 @@ mxcCore.window.CreateCal = function(config) {
                                                       idProperty: 'id',
                                                       url: mxcCore.config.connectorUrl,
                                                       baseParams: {
-                                                            action: 'stores/getformchunks' 
+                                                            action: 'stores/getformchunks'
                                                       },
                                                       fields: [
                                                             'id','name','description',
@@ -733,7 +732,7 @@ mxcCore.window.CreateCal = function(config) {
                         ,value: 1
                     }
 		]
-                
+
         ,buttons: [{
 	    text: _('mxcalendars.label_cancel')
 	    ,type: 'close'
@@ -744,7 +743,7 @@ mxcCore.window.CreateCal = function(config) {
 	 },{
 	    text: _('mxcalendars.label_save')
 	    ,handler: function(){
-		
+
                 var repeatDOW = '';
                 var rawRepeatOn = Ext.getCmp('crepeaton').getValue();
                 ////console.log("RepeatOn: "+rawRepeatOn.join(","));
@@ -782,7 +781,7 @@ mxcCore.window.CreateCal = function(config) {
                         ,HTTP_MODAUTH: MODx.siteId
                         ,action: 'mgr/events/create'
 		};
-               
+
 		mxcCore.ajax.request({
 			url: mxcCore.config.connectorUrl,
                         extraParams: {
@@ -806,22 +805,24 @@ mxcCore.window.CreateCal = function(config) {
                                 } else {
                                     //Ext.Msg.alert('Update Event', 'Your event data is: ');
                                     Ext.getCmp('CreateCal').hide();
-                                    Ext.getCmp('mxcalendars-grid-events').refresh();                                    
+                                    Ext.getCmp('mxcalendars-grid-events').refresh();
                                 }
 			},
                         failure: function(resp, opts) {
                            ////console.log('server-side failure with status code ' + resp.status);
-                        }                        
+                        }
 		});
-		
+
 	    }
 	}]
     });
     mxcCore.window.CreateCal.superclass.constructor.call(this,config);
      this.on('deactivate',function(w,e) {
-        if(MODx.config.use_editor && MODx.loadRTE && typeof tinyMCE !== 'undefined'){
-            tinyMCE.execCommand('mceRemoveControl',false, 'cdescription-'+config.record.id);
-            tinyMCE.execCommand('mceRemoveControl',false, 'ccontent-'+config.record.id);
+        if(MODx.config.use_editor && MODx.loadRTE) {
+            if (typeof tinyMCE !== 'undefined') {
+                tinyMCE.execCommand('mceRemoveControl',false, 'cdescription-'+config.record.id);
+                tinyMCE.execCommand('mceRemoveControl',false, 'ccontent-'+config.record.id);
+            }
         }
     },this);
 
@@ -839,7 +840,7 @@ mxcCore.window.UpdateCal = function(config) {
         ,autoScroll: true
         ,xtype: 'form'
         ,layout: 'form'
-        ,id: 'UpdateCal'    
+        ,id: 'UpdateCal'
         ,url: mxcCore.config.connectorUrl
         ,width: 870
         ,baseParams: {
@@ -886,7 +887,7 @@ mxcCore.window.UpdateCal = function(config) {
                                       idProperty: 'key',
                                       url: mxcCore.config.connectorUrl,
                                       baseParams: {
-                                            action: 'stores/getcontexts' 
+                                            action: 'stores/getcontexts'
                                       },
                                       fields: [
                                             'key',
@@ -915,7 +916,7 @@ mxcCore.window.UpdateCal = function(config) {
 			    ,name:'source'
                             ,id: 'source'
                             ,value: config.record.source
-			  },{	
+			  },{
 			    fieldLabel: _('mxcalendars.label_title'),
 			    name: 'title',
                             hiddenname: 'title',
@@ -933,7 +934,7 @@ mxcCore.window.UpdateCal = function(config) {
 				      idProperty: 'id',
 				      url: mxcCore.config.connectorUrl,
 				      baseParams: {
-					    action: 'stores/getcategories' 
+					    action: 'stores/getcategories'
 				      },
 				      fields: [
 					    'id', 'name'
@@ -966,7 +967,7 @@ mxcCore.window.UpdateCal = function(config) {
                                       idProperty: 'id',
                                       url: mxcCore.config.connectorUrl,
                                       baseParams: {
-                                            action: 'stores/getcalendars' 
+                                            action: 'stores/getcalendars'
                                       },
                                       fields: [
                                             'id', 'name'
@@ -1005,14 +1006,14 @@ mxcCore.window.UpdateCal = function(config) {
                                     ,listeners:{check:{fn:function(tht, value) {
 
                                         var calldayFlag = Ext.getCmp('allday');
-                                        
+
                                         var edt = Ext.getCmp('enddate_time');
                                         var sdt = Ext.getCmp('startdate_time');
                                         var ed = Ext.getCmp('enddate_date');
                                         var sd = Ext.getCmp('startdate_date');
-                                            
+
                                         //Ext.getCmp('startdate_fields').label.update(_('mxcalendars.startdate_col_label'));
-                                            
+
                                         if(calldayFlag.getValue() === true){
 
                                             sdt.hide().setValue(mxcCore.config.mgr_allday_start);
@@ -1023,7 +1024,7 @@ mxcCore.window.UpdateCal = function(config) {
                                             if(ed.getValue() !== sd.getValue()){
                                                 ed.setValue(sd.getValue());
                                             }
-                                            
+
                                         } else {
                                             sdt.show();
                                             //Ext.getCmp('cenddate_fields').show();
@@ -1033,7 +1034,7 @@ mxcCore.window.UpdateCal = function(config) {
 
                                     }}}
                                     }
-				
+
                                 ]
                             },{
 			    xtype: 'container',
@@ -1063,7 +1064,7 @@ mxcCore.window.UpdateCal = function(config) {
                                         if(edf.getValue() == ''){
                                             edf.setValue(value);
                                         }
-                                        
+
                                         var alldayFlag = Ext.getCmp('allday');
                                         if(alldayFlag.getValue() === true){
                                             Ext.getCmp('enddate_date').setValue(value);
@@ -1142,7 +1143,7 @@ mxcCore.window.UpdateCal = function(config) {
                         },
                         listeners: {
                             'beforecollapse' :  function(panel,ani) {
-                                // Hide all the form fields you need to hide 
+                                // Hide all the form fields you need to hide
                                 Ext.getCmp('repeating').setValue(0);
                                 return true; // this will avoid collapse of the field set
                             },
@@ -1150,7 +1151,7 @@ mxcCore.window.UpdateCal = function(config) {
                                 // Display all the fields
                                 Ext.getCmp('repeating').setValue(1);
                                 return true; // this will avoid the default expand behaviour
-                            } 
+                            }
                         },
                         layout: 'form',
 			items :[{name: 'repeating',id: 'repeating',xtype:'hidden',value:config.record.repeating?1:0},{
@@ -1265,7 +1266,7 @@ mxcCore.window.UpdateCal = function(config) {
                                                     //if(MODx.config.use_editor && MODx.loadRTE && mxcCore.config.event_desc_type == 'htmleditor'){
                                                     //    MODx.loadRTE('description-'+config.record.id);
                                                     //}
-                                                    
+
                                                     if (MODx.loadRTE) {
                                                         MODx.loadRTE('description-'+config.record.id); // Will transform the textarea with ID "description" to a RTE
                                                         // MODx.loadRTE(['description1','description2']);
@@ -1375,7 +1376,7 @@ mxcCore.window.UpdateCal = function(config) {
                                                       idProperty: 'name',
                                                       url: mxcCore.config.connectorUrl,
                                                       baseParams: {
-                                                            action: 'stores/getformchunks' 
+                                                            action: 'stores/getformchunks'
                                                       },
                                                       fields: [
                                                             'id','name','description',
@@ -1393,7 +1394,7 @@ mxcCore.window.UpdateCal = function(config) {
                                               emptyText:_('mxcalendars.label_select_form'),
                                               valueNotFoundText:_('mxcalendars.label_select_form_err'),
                                               anchor:'100%',
-                                              value: config.record.form_chunk                                              
+                                              value: config.record.form_chunk
                                             }]
                                     }
 				]
@@ -1409,7 +1410,7 @@ mxcCore.window.UpdateCal = function(config) {
                         ,value: 1
                     }
 		]
-                
+
         ,buttons: [{
 	    text: _('mxcalendars.label_cancel')
 	    ,type: 'close'
@@ -1461,20 +1462,20 @@ mxcCore.window.UpdateCal = function(config) {
                         ,HTTP_MODAUTH: MODx.siteId
                         ,action: 'mgr/events/update'
 		};
-                
+
                 //console.log("frmData: "+frmData);
-               
+
 		mxcCore.ajax.request({
-			url: mxcCore.config.connectorUrl,
-                        extraParams: {
-			    //action: 'mgr/events/update'
-			},
+            url: mxcCore.config.connectorUrl,
+            extraParams: {
+                //action: 'mgr/events/update'
+            },
 			params: frmData,
 			scope: this,
 			success: function(resp, opts) {
                                 // remove the RTE instances
-                                if (MODx.config.use_editor && MODx.loadRTE && typeof tinyMCE !== 'undefined'){
-                                    if(typeof tinyMCE !== "undefined"){
+                                if (MODx.config.use_editor && MODx.loadRTE) {
+                                    if (typeof tinyMCE !== 'undefined') {
                                         tinyMCE.execCommand('mceRemoveControl',false, 'description-'+frmData.id);
                                         tinyMCE.execCommand('mceRemoveControl',false, 'content-'+frmData.id);
                                     }
@@ -1487,24 +1488,26 @@ mxcCore.window.UpdateCal = function(config) {
                                 } else {
                                     //Ext.Msg.alert('Update Event', 'Your event data is: ');
                                     Ext.getCmp('UpdateCal').hide();
-                                    Ext.getCmp('mxcalendars-grid-events').refresh();                                    
+                                    Ext.getCmp('mxcalendars-grid-events').refresh();
                                 }
-			},                        
+			},
 		});
-		
+
 	    }
 	}]
     });
     mxcCore.window.UpdateCal.superclass.constructor.call(this,config);
-    
+
     this.on('deactivate',function(w,e) {
-        if(MODx.config.use_editor && MODx.loadRTE && typeof tinyMCE !== 'undefined'){
-            tinyMCE.execCommand('mceRemoveControl',false, 'description-'+config.record.id);
-            tinyMCE.execCommand('mceRemoveControl',false, 'content-'+config.record.id);
+        if(MODx.config.use_editor && MODx.loadRTE) {
+            if (typeof tinyMCE !== 'undefined') {
+                tinyMCE.execCommand('mceRemoveControl',false, 'description-'+config.record.id);
+                tinyMCE.execCommand('mceRemoveControl',false, 'content-'+config.record.id);
+            }
         }
     },this);
-    
-    
+
+
 };
 Ext.extend(mxcCore.window.UpdateCal,Ext.Window);
 Ext.reg('mxcalendars-window-mxcalendar-update',mxcCore.window.UpdateCal);

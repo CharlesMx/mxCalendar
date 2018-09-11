@@ -1,11 +1,11 @@
 <?php
 $_lang['mxcalendars'] = 'mxCalendar';
-$_lang['mxcalendars.desc'] = 'Verwalten sie ihre Kalendereinträge.';
+$_lang['mxcalendars.desc'] = 'Verwalten Sie ihre Kalendereinträge.';
 $_lang['mxcalendars.name'] = 'Name';
 $_lang['mxcalendars.description'] = 'Beschreibung';
 $_lang['mxcalendars.management'] = 'mxCalendar Manager';
 $_lang['mxcalendars.management_desc'] = 'Verwalten Sie Ihre Kalendereinträge hier. Sie können entweder durch Doppelklicken auf das Raster oder durch Rechtsklicken auf die entsprechende Zeile weitere Optionen aufrufen.';
-$_lang['mxcalendars.event_title_create'] = 'Neues Ereignis anlegen';
+$_lang['mxcalendars.event_title_create'] = 'Neues Ereignis';
 $_lang['mxcalendars.event_title_update'] = 'Ereignis aktualisieren';
 $_lang['mxcalendars.event_title_duplicate'] = 'Ereignis duplizieren';
 $_lang['mxcalendars.event_title_remove'] = 'Ereignis löschen';
