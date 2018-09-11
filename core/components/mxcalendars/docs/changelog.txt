@@ -1,6 +1,15 @@
 Changelog file for mxCalendar component.
 
-==================================== 
+====================================
+mxCalendar 1.1.11-pl
+====================================
+- Shorten chunk description so installation works
+- Fix translated label_dow keys
+- Update German lexicon
+- Add readme
+- Delete obsolete files
+
+====================================
 mxCalendar 1.1.10-pl
 ==================================== 
 Bug fixes for the following: 
@@ -38,7 +47,7 @@ mxCalendar 1.1.8-pl
 
 ==================================== 
 mxCalendar 1.1.7-pl
-
+====================================
 mxCalendar enhancements for this release are provided courtesy of Anstey Hodge Advertising Group. They have generously agreed to allow distribution of their custom build as a free public release - many thanks. Visit them at http://ansteyhodge.com 
 ====================================
 - mxcalendar.js file jQuery live functions updated to the "on" event handler
