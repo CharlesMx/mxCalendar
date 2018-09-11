@@ -1,8 +1,10 @@
 <?php
 /**
-* @package modular
-* @subpackage build
-*/
+ * @package modular
+ * @subpackage build
+ * @param $filename
+ * @return bool|string
+ */
 function getChunkContent($filename) {
     $o = file_get_contents(strtolower($filename));
     $o = trim(str_replace(array('<?php','?>'),'',$o));
@@ -24,7 +26,7 @@ $chunks[2]= $modx->newObject('modChunk');
 $chunks[2]->fromArray(array(
     'id' => 1,
     'name' => 'tplListHeading',
-    'description' => 'This template is used to set a split between months in the event list. It returns the start date so you can apply the date output modifier to adjust. In order to remove this simply make this entry empty (null).',
+    'description' => 'This template is used to set a split between months in the event list. It returns the start date so you can apply the date output modifier to adjust. To remove this make this entry empty (null).',
     'snippet' => getChunkContent($sources['elements'].'chunks/el.listheading.chunk.tpl'),
 ),'',true,true);
 
@@ -69,7 +71,7 @@ $chunks[7]= $modx->newObject('modChunk');
 $chunks[7]->fromArray(array(
     'id' => 1,
     'name' => 'tplMonth',
-    'description' => 'The template to use as the outter most wrapper of the weeks results.',
+    'description' => 'The template to use as the outer most wrapper of the weeks results.',
     'snippet' => getChunkContent($sources['elements'].'chunks/month.inner.container.chunk.tpl'),
 ),'',true,true);
 
@@ -114,7 +116,7 @@ $chunks[12]= $modx->newObject('modChunk');
 $chunks[12]->fromArray(array(
     'id' => 1,
     'name' => 'tplCategoryWrap',
-    'description' => 'The outer container for the cateogry listing when enabled for the calendar display.',
+    'description' => 'The outer container for the category listing when enabled for the calendar display.',
     'snippet' => getChunkContent($sources['elements'].'chunks/category.container.chunk.tpl'),
 ),'',true,true);
 
