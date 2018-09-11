@@ -92,7 +92,6 @@ $scriptProperties['createdon'] = time();
 //-- Check for any errors
 if ($modx->error->hasError()) {
     return $modx->error->failure($modx->lexicon('mxcalendars.err_pre_save'));
-    //return $modx->error->failure();
 }
 
  
@@ -117,5 +116,3 @@ if ($mxcalendar->save() == false) {
 
 //-- If no errors return success 
 return $modx->error->success('',$mxcalendar);
-
-?>
