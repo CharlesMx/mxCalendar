@@ -6,8 +6,6 @@ mxCalendar 1.1.11-pl
 - Shorten chunk description so installation works
 - Fix translated label_dow keys
 - Update German lexicon
-- Add readme
-- Delete obsolete files
 
 ====================================
 mxCalendar 1.1.10-pl
