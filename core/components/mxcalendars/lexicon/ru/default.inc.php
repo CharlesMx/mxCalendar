@@ -50,13 +50,14 @@ $_lang['mxcalendars.label_wednesday'] = 'Среда';
 $_lang['mxcalendars.label_thursday'] = 'Четверг';
 $_lang['mxcalendars.label_friday'] = 'Пятница';
 $_lang['mxcalendars.label_saturday'] = 'Суббота';
-$_lang['mxcalendars.label_dow_7'] = 'вс';
+$_lang['mxcalendars.label_dow_0'] = 'вс';
 $_lang['mxcalendars.label_dow_1'] = 'пн';
 $_lang['mxcalendars.label_dow_2'] = 'вт';
 $_lang['mxcalendars.label_dow_3'] = 'ср';
 $_lang['mxcalendars.label_dow_4'] = 'чт';
 $_lang['mxcalendars.label_dow_5'] = 'пт';
 $_lang['mxcalendars.label_dow_6'] = 'сб';
+$_lang['mxcalendars.label_dow_7'] = 'вс';
 $_lang['mxcalendars.label_allday'] = 'Весь день';
 $_lang['mxcalendars.label_daily'] = 'Каждый день';
 $_lang['mxcalendars.label_weekly'] = 'Каждую неделю';
@@ -196,5 +197,3 @@ $_lang['mxcalendars.label_feedmeasurementtype'] = 'Тип таймера';
 
 $_lang['mxcalendars.feed_type_label_select_empty'] = '--выберите--';
 $_lang['mxcalendars.measurement_type_label_select_empty'] = '--выберите--';
-
-?>
