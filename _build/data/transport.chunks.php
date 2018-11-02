@@ -4,7 +4,7 @@
 * @subpackage build
 */
 function getChunkContent($filename) {
-    $o = file_get_contents(strtolower($filename));
+    $o = file_get_contents($filename);
     $o = trim(str_replace(array('<?php','?>'),'',$o));
     return $o;
 }
