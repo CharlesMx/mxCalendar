@@ -1,5 +1,15 @@
 Changelog file for mxCalendar component.
 
+
+==================================== 
+mxCalendar 1.1.11-pl
+==================================== 
+Bug fixes for the following:
+#161 - Support versions of Modx 2.3 upto 2.6
+#169 - Duplicate of #161
+#171 - Repeating event display issue on Modx version >= 2.3  
+#174 - Support of version Modx.2.4 
+
 ==================================== 
 mxCalendar 1.1.10-pl
 ==================================== 
