@@ -134,7 +134,7 @@ mxcCore.window.UpdateImage = function(config) {
     Ext.applyIf(config,{
         title: _('mxcalendars.label_update')+' '+_('mxcalendars.label_select_image')
         ,url: mxcCore.config.connectorUrl
-        ,width: 'auto'
+        ,width: 650
         ,baseParams: {
             action: 'mgr/images/update'
         }

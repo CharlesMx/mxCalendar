@@ -49,6 +49,7 @@ Ext.extend(mxcCore.combo.Categories,MODx.combo.ComboBox);
 Ext.reg('mxc-combo-categories',mxcCore.combo.Categories);
 
 
+
 mxcCore.combo.Section = function(config) {
     config = config || {};
     Ext.applyIf(config,{
@@ -124,3 +125,22 @@ mxcCore.combo.MeasuremenType = function(config) {
 };
 Ext.extend(mxcCore.combo.MeasuremenType,MODx.combo.ComboBox);
 Ext.reg('mxc-combo-measurementtype',mxcCore.combo.MeasuremenType);
+
+
+
+mxcCore.combo.Frequency = function(config) {
+    config = config || {};
+    Ext.applyIf(config,{
+        store: [[],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26],[27],[28],[29],[30]]
+        ,fields: [
+            'key'
+        ]
+        ,mode: 'local'
+        ,emptyText:''
+        ,displayField: 'key'
+        ,valueField: 'key'
+    });
+    mxcCore.combo.Frequency.superclass.constructor.call(this,config);
+};
+Ext.extend(mxcCore.combo.Frequency,MODx.combo.ComboBox);
+Ext.reg('mxc-combo-frequency',mxcCore.combo.Frequency);
