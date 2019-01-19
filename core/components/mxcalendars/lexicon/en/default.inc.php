@@ -57,6 +57,7 @@ $_lang['mxcalendars.label_dow_3'] = 'Wednesday';
 $_lang['mxcalendars.label_dow_4'] = 'Thursday';
 $_lang['mxcalendars.label_dow_5'] = 'Friday';
 $_lang['mxcalendars.label_dow_6'] = 'Saturday';
+$_lang['mxcalendars.label_dow_7'] = 'Sunday';
 $_lang['mxcalendars.label_allday'] = 'All Day Event';
 $_lang['mxcalendars.label_daily'] = 'Daily';
 $_lang['mxcalendars.label_weekly'] = 'Weekly';
@@ -70,7 +71,7 @@ $_lang['mxcalendars.image_filepath'] = 'File Path';
 $_lang['mxcalendars.label_videos'] = 'Videos';
 $_lang['mxcalendars.label_select_video'] = 'Video';
 $_lang['mxcalendars.btn_create_video'] = 'Add Video';
-$_lang['mxcalendars.video_filepath'] = 'Vido Path';
+$_lang['mxcalendars.video_filepath'] = 'Video Path';
 $_lang['mxcalendars.label_create'] = 'Create';
 $_lang['mxcalendars.menu_update'] = 'Update';
 $_lang['mxcalendars.menu_remove'] = 'Remove';
@@ -125,11 +126,9 @@ $_lang['mxcalendars.label_select_form_err'] = 'Select a valid form chunk';
 
 $_lang['mxcalendars.btn_show_past_events'] = 'Show Past Events';
 $_lang['mxcalendars.btn_show_upcoming_events'] = 'Show Upcoming Events';
-$_lang['mxcalendars.tip_repeaton'] = 'Repeat every ___ (days|weeks|months|years).<br /><br />Set the repeating date frequency for type (daily, weekly, mothly, yearly) selected above';
+$_lang['mxcalendars.tip_repeaton'] = 'Repeat every ___ (days|weeks|months|years).<br/><br/>Set the repeating date frequency for type (daily, weekly, mothly, yearly) selected above';
 
 $_lang['mxcalendars.label_content'] = 'Content';
-
-//$_lang['mxcalendars.'] = '';
 
 //-- Category Management
 $_lang['mxcalendars.category_desc'] = 'Manage the categories that each calendar item could be assigned to. You can also create custom colors for the foreground and background of each category.';
@@ -175,8 +174,8 @@ $_lang['mxcalendars.label_select_calendar_err'] = 'Calendar not found';
 $_lang['mxcalendars.grid_col_calendar'] = 'Calendar';
 
 //-- Feed lexicon entries
-$_lang['mxcalendars.tab_feed'] = 'Feeds'; 
-$_lang['mxcalendars.feed_desc'] = 'Enter an external site iCalendar or XML feed url that is public accessible via your server.'; 
+$_lang['mxcalendars.tab_feed'] = 'Feeds';
+$_lang['mxcalendars.feed_desc'] = 'Enter an external site iCalendar or XML feed url that is public accessible via your server.';
 
 $_lang['mxcalendars.default_feed_search'] = 'Search Feeds';
 $_lang['mxcalendars.feed_btn_create'] = 'Create New Feed';

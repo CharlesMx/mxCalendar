@@ -57,6 +57,7 @@ $_lang['mxcalendars.label_dow_3'] = 'ср';
 $_lang['mxcalendars.label_dow_4'] = 'чт';
 $_lang['mxcalendars.label_dow_5'] = 'пт';
 $_lang['mxcalendars.label_dow_6'] = 'сб';
+$_lang['mxcalendars.label_dow_7'] = 'вс';
 $_lang['mxcalendars.label_allday'] = 'Весь день';
 $_lang['mxcalendars.label_daily'] = 'Каждый день';
 $_lang['mxcalendars.label_weekly'] = 'Каждую неделю';
@@ -128,8 +129,6 @@ $_lang['mxcalendars.btn_show_upcoming_events'] = 'Показать предст�
 $_lang['mxcalendars.tip_repeaton'] = 'Повторять каждые ___ (дней|недель|месяцев|лет).<br /><br />Задайте соответствующую типу частоту повторений';
 
 $_lang['mxcalendars.label_content'] = 'Контент';
-
-//$_lang['mxcalendars.'] = '';
 
 //-- Category Management
 $_lang['mxcalendars.category_desc'] = 'Управление категориями событий. Каждая категория может иметь собственные цвета.';

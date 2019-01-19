@@ -57,7 +57,8 @@ $_lang['mxcalendars.label_dow_3'] = 'Mittwoch';
 $_lang['mxcalendars.label_dow_4'] = 'Donnerstag';
 $_lang['mxcalendars.label_dow_5'] = 'Freitag';
 $_lang['mxcalendars.label_dow_6'] = 'Samstag';
-$_lang['mxcalendars.label_allday'] = 'All Day Event';
+$_lang['mxcalendars.label_dow_7'] = 'Sonntag';
+$_lang['mxcalendars.label_allday'] = 'Ganztägige Veranstaltung';
 $_lang['mxcalendars.label_daily'] = 'Täglich';
 $_lang['mxcalendars.label_weekly'] = 'Wöchentlich';
 $_lang['mxcalendars.label_monthly'] = 'Monatlich';
@@ -129,8 +130,6 @@ $_lang['mxcalendars.tip_repeaton'] = 'Wiederholen jede ___ (Tage|Wochen|Monate|J
 
 $_lang['mxcalendars.label_content'] = 'Inhalt';
 
-//$_lang['mxcalendars.'] = '';
-
 //-- Category Management
 $_lang['mxcalendars.category_desc'] = 'Verwalten Sie die Kategorien, die jedem Kalenderereignis zugewiesen werden sollen / können. Sie können auch Farben für den Vordergrund / den Hintergrund jeder Kategorie wählen.';
 $_lang['mxcalendars.label_window_create'] = 'Neue Kategorie erstellen';
@@ -178,7 +177,7 @@ $_lang['mxcalendars.grid_col_calendar'] = 'Kalender';
 $_lang['mxcalendars.tab_feed'] = 'Feeds';
 $_lang['mxcalendars.feed_desc'] = 'Geben Sie eine externe iCalendar oder XML-Feed-URL ein, die von Ihren Server aus öffentlich zugänglich ist.';
 
-$_lang['mxcalendars.default_feed_search'] = 'Search Feeds';
+$_lang['mxcalendars.default_feed_search'] = 'Feeds durchsuchen';
 $_lang['mxcalendars.feed_btn_create'] = 'Neuen Feed erstellen';
 $_lang['mxcalendars.feed_menu_update'] = 'Feed bearbeiten';
 $_lang['mxcalendars.feed_menu_remove'] = 'Feed entfernen';
