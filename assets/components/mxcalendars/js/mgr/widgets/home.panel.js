@@ -3,6 +3,7 @@ mxcCore.panel.Home = function(config) {
     Ext.apply(config,{
         border: false
         ,baseCls: 'modx-formpanel'
+        ,cls: 'container'
         ,items: [{
             html: '<img src="'+mxcCore.config.assetsUrl+'images/mxcalendar.png" alt="'+_('mxcalendars.management')+'" />'
             ,border: false
