@@ -10,37 +10,37 @@ mxcCore.grid.events = function(config) {
         ,anchor: '97%'
         ,autoExpandColumn: 'name'
         ,save_action: 'mgr/events/updatefromgrid' // Support the inline editing
-	,autosave: true // Support the inline editing
+	    ,autosave: true // Support the inline editing
         ,columns: [
 			// add the grid columns to the display
 			 {header: _('id'),dataIndex: 'id',sortable: true,width:40}
-                        ,{header: _('mxcalendars.source'),dataIndex: 'source',sortable: true,width:50}
-			,{header: _('mxcalendars.name'),dataIndex: 'title',sortable: true,width:110,editor: {xtype: 'textfield'}}
-                        ,{header: _('mxcalendars.grid_col_context'), dataIndex:'context',editor: { xtype: 'mxc-combo-context', renderer: true }}
-                        ,{header: _('mxcalendars.grid_col_calendar'), dataIndex:'calendar_id',editor: { xtype: 'mxc-combo-calendar', renderer: true }}
-                        ,{header: _('mxcalendars.categoryid_col_label'),dataIndex: 'catfriendly',sortable: true,width:80}
+            ,{header: _('mxcalendars.source'),dataIndex: 'source',sortable: true,width:40}
+			,{header: _('mxcalendars.name'),dataIndex: 'title',sortable: true,width:150,editor: {xtype: 'textfield'}}
+            ,{header: _('mxcalendars.grid_col_context'), dataIndex:'context',editor: { xtype: 'mxc-combo-context', renderer: true }}
+            ,{header: _('mxcalendars.grid_col_calendar'), dataIndex:'calendar_id',editor: { xtype: 'mxc-combo-calendar', renderer: true }}
+            ,{header: _('mxcalendars.categoryid_col_label'),dataIndex: 'catfriendly',sortable: true,width:80}
 			//,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate',sortable: true}
 			,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate',sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat, editable:false, editor:{xtype:'datefield', format:mxcCore.config.mgr_dateformat}}
 			,{header: _('mxcalendars.starttime_col_label'), dataIndex: 'startdate_time', sortable:false,width:60, editor:{ xtype:'timefield', format: mxcCore.config.mgr_timeformat}}
 			,{header: _('mxcalendars.enddate_col_label'),dataIndex: 'enddate',sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat, editable:false, editor:{xtype:'datefield',format:mxcCore.config.mgr_dateformat}}
 			,{header: _('mxcalendars.endtime_col_label'),dataIndex: 'enddate_time',sortable: false,width:60, editor:{ xtype:'timefield', format: mxcCore.config.mgr_timeformat}}
 			,{header: _('mxcalendars.repeating_col_label'),dataIndex: 'repeating',sortable: true,width:30}
-                        ,{header: _('mxcalendars.repeating_last_occ_col_label'),dataIndex: 'repeatenddate', sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat}
-                        ,{header: _('mxcalendars.category_active_col_label'),dataIndex: 'active', sortable: true,width:30,editor: { xtype: 'modx-combo-boolean', renderer: true}}
-                        ,{hidden:true, header: _('mxcalendars.label_content'), dataIndex:'content'}
-                        ,{hidden:true, header: _('mxcalendars.label_forms'), dataIndex:'form_chunk'}
-                        ,{hidden:true, header: _('mxcalendars.label_repeating_event'), dataIndex:'repeating'}
-                        ,{hidden:true, header: _('mxcalendars.label_repeat_type'), dataIndex:'repeattype'}
-                        ,{hidden:true, header: _('mxcalendars.label_repeaton'), dataIndex:'repeaton'}
-                        ,{hidden:true, header: _('mxcalendars.label_repeat_frequency'), dataIndex:'repeatfrequency'}
-                        ,{hidden:true, header: _('mxcalendars.label_display_map'), dataIndex:'map'}
-                        ,{hidden:true, header: _('mxcalendars.label_link'), dataIndex:'link'}
-                        ,{hidden:true, header: _('mxcalendars.label_link_rel'), dataIndex:'linkrel'}
-                        ,{hidden:true, header: _('mxcalendars.label_link_target'), dataIndex:'linktarget'}
-                        ,{hidden:true, header: _('mxcalendars.label_location')+' '+_('mxcalendars.label_name'), dataIndex:'location_name'}
-                        ,{hidden:true, header: _('mxcalendars.label_address'), dataIndex:'location_address'}
-                        ,{hidden:true, header: _('mxcalendars.label_location')+' '+_('mxcalendars.label_address'), dataIndex:'address'}
-                        ,{hidden:true, header: _('mxcalendars.label_allday'), dataIndex:'allday',editable:false,editor: { xtype: 'modx-combo-boolean', renderer: true}}
+            ,{header: _('mxcalendars.repeating_last_occ_col_label'),dataIndex: 'repeatenddate', sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat}
+            ,{header: _('mxcalendars.category_active_col_label'),dataIndex: 'active', sortable: true,width:30,editor: { xtype: 'modx-combo-boolean', renderer: true}}
+            ,{hidden:true, header: _('mxcalendars.label_content'), dataIndex:'content'}
+            ,{hidden:true, header: _('mxcalendars.label_forms'), dataIndex:'form_chunk'}
+            ,{hidden:true, header: _('mxcalendars.label_repeating_event'), dataIndex:'repeating'}
+            ,{hidden:true, header: _('mxcalendars.label_repeat_type'), dataIndex:'repeattype'}
+            ,{hidden:true, header: _('mxcalendars.label_repeaton'), dataIndex:'repeaton'}
+            ,{hidden:true, header: _('mxcalendars.label_repeat_frequency'), dataIndex:'repeatfrequency'}
+            ,{hidden:true, header: _('mxcalendars.label_display_map'), dataIndex:'map'}
+            ,{hidden:true, header: _('mxcalendars.label_link'), dataIndex:'link'}
+            ,{hidden:true, header: _('mxcalendars.label_link_rel'), dataIndex:'linkrel'}
+            ,{hidden:true, header: _('mxcalendars.label_link_target'), dataIndex:'linktarget'}
+            ,{hidden:true, header: _('mxcalendars.label_location')+' '+_('mxcalendars.label_name'), dataIndex:'location_name'}
+            ,{hidden:true, header: _('mxcalendars.label_address'), dataIndex:'location_address'}
+            ,{hidden:true, header: _('mxcalendars.label_location')+' '+_('mxcalendars.label_address'), dataIndex:'address'}
+            ,{hidden:true, header: _('mxcalendars.label_allday'), dataIndex:'allday',editable:false,editor: { xtype: 'modx-combo-boolean', renderer: true}}
 		],tbar:[{
 			xtype: 'textfield'
 			,id: 'mxcalendars-search-filter'
@@ -400,8 +400,8 @@ mxcCore.window.CreateCal = function(config) {
 				{
 				    xtype     : 'timefield',
 				    name      : 'startdate_time',
-                                    id        : 'cstartdate_time',
-                                    format    : mxcCore.config.mgr_timeformat,
+                    id        : 'cstartdate_time',
+                    format    : mxcCore.config.mgr_timeformat,
 				    fieldLabel: 'Time',
 				    margin: '0 5 0 0',
 				    allowBlank: false,
@@ -414,52 +414,50 @@ mxcCore.window.CreateCal = function(config) {
 			    xtype: 'container',
 			    fieldLabel: _('mxcalendars.label_enddate'),
 			    combineErrors: true,
-                            id: 'cenddate_fields',
+                id: 'cenddate_fields',
 			    msgTarget : 'side',
 			    layout: 'hbox',
 			    defaults: {
-				flex: 1,
-				hideLabel: true
+                    flex: 1,
+                    hideLabel: true
 			    },
 			    items: [
-				{
-				    xtype     : 'datefield',
-				    name      : 'enddate_date',
-                                    id: 'cenddate_date',
-                                    format    : mxcCore.config.mgr_dateformat,
-				    fieldLabel: 'End',
-				    padding: '0 5 0 0',
-				    allowBlank: false,
-				    width: 150,
-                                    value: config.record.enddate_date,
-                                    hidden: config.record.allday ? true : false
-				},
-				{
-				    xtype     : 'timefield',
-				    name      : 'enddate_time',
-                                    id        : 'cenddate_time',
-                                    format    : mxcCore.config.mgr_timeformat,
-				    fieldLabel: 'End Time',
-				    margin: '0 5 0 0',
-				    allowBlank: false,
-				    width: 120,
-				    value: config.record.enddate_time,
-                                    hidden: config.record.allday ? true : false
-				}
+                    {
+                        xtype     : 'datefield',
+                        name      : 'enddate_date',
+                        id: 'cenddate_date',
+                        format    : mxcCore.config.mgr_dateformat,
+                        fieldLabel: 'End',
+                        padding: '0 5 0 0',
+                        allowBlank: false,
+                        width: 150,
+                        value: config.record.enddate_date,
+                        hidden: config.record.allday ? true : false
+                    },
+                    {
+                        xtype     : 'timefield',
+                        name      : 'enddate_time',
+                        id        : 'cenddate_time',
+                        format    : mxcCore.config.mgr_timeformat,
+                        fieldLabel: 'End Time',
+                        margin: '0 5 0 0',
+                        allowBlank: false,
+                        width: 120,
+                        value: config.record.enddate_time,
+                                        hidden: config.record.allday ? true : false
+                    }
 			    ]
 			  }]
 		    }]
-		    },
-		    {
-			xtype:'fieldset',
-			checkboxToggle:true,
-			title: _('mxcalendars.label_repeating_event'),
-			defaultType: 'textfield',
-			collapsed: config.record.repeating ? false : true,
-			autoHeight: true,
-			defaults: {
-                            layout:'fill'
-                        },
+		    },{name: 'repeating',id: 'crepeating',xtype:'hidden',value:config.record.repeating?1:0}
+            ,{
+                        xtype:'fieldset',
+                        checkboxToggle:true,
+                        title: _('mxcalendars.label_repeating_event'),
+                        collapsed: config.record.repeating ? false : true,
+                        autoHeight: true,
+                        layout: 'column',
+                        border: 'false',
                         listeners: {
                             'beforecollapse' :  function(panel,ani) {
                                 // Hide all the form fields you need to hide
@@ -472,97 +470,110 @@ mxcCore.window.CreateCal = function(config) {
                                 return true; // this will avoid the default expand behaviour
                             }
                         },
-                        layout: 'form',
-			items :[{name: 'repeating',id: 'crepeating',xtype:'hidden',value:config.record.repeating?1:0},{
-			    fieldLabel: 'Occurs'
-			    ,name: 'repeattype'
-                            ,id: 'crepeattype'
-			    ,xtype:'combo'
-			    ,mode: 'local'
-			    ,store: new Ext.data.ArrayStore({
-				    id: 0,
-				    fields: ['v', 'measure'],
-				    data: [[0, _('mxcalendars.label_daily')],[1, _('mxcalendars.label_weekly')],[2, _('mxcalendars.label_monthly')],[3, _('mxcalendars.label_yearly')]]
-			    })
-			    ,triggerAction: 'all'
-			    ,displayField: 'measure'
-			    ,valueField: 'v'
-			    ,editable: true
-			    ,width: 150
-                            ,layout:'anchor'
-                            ,anchor: '100% 100%'
-                            ,value: config.record.repeattype
-                            ,listeners:{select:{fn:function(combo, value) {
-                                var rt = Ext.getCmp('crepeattype');
-                                if(rt.getValue() === 1){
-                                    Ext.getCmp('crepeaton').show();
-									Ext.getCmp('crepeaton').doLayout();
-                                } else { Ext.getCmp('crepeaton').hide(); }
-                                }}
+                        items :[
+                            {
+                                columnWidth: .9,
+                                border: false,
+                                layout: 'form',
+                                hideMode: 'offsets',
+                                items: [
+                                    {
+                                        fieldLabel: 'Occurs'
+                                        ,name: 'repeattype'
+                                        ,id: 'crepeattype'
+                                        ,xtype:'combo'
+                                        ,mode: 'local'
+                                        ,anchor: '100%'
+                                        ,hideLabel: false
+                                        ,labelWidth: 100
+                                        ,store: new Ext.data.ArrayStore({
+                                            id: 0,
+                                            fields: ['v', 'measure'],
+                                            data: [[0, _('mxcalendars.label_daily')],[1, _('mxcalendars.label_weekly')],[2, _('mxcalendars.label_monthly')],[3, _('mxcalendars.label_yearly')]]
+                                        })
+                                        ,triggerAction: 'all'
+                                        ,displayField: 'measure'
+                                        ,valueField: 'v'
+                                        ,editable: true
+                                        ,cls: 'mxcFloat'
+                                        ,value: config.record.repeattype
+                                        ,listeners:{select:{fn:function(combo, value) {
+                                            var rt = Ext.getCmp('crepeattype');
+                                            if(rt.getValue() === 1){
+                                                Ext.getCmp('crepeaton').show();
+                                                Ext.getCmp('crepeaton').doLayout();
+                                            } else { Ext.getCmp('crepeaton').hide(); }
+                                            }}
+                                        }
+                                        ,value: config.record.repeattype
+                                    },{
+                                        fieldLabel: _('mxcalendars.label_repeaton')
+                                        ,name: 'repeaton'
+                                        ,id: 'crepeaton'
+                                        ,xtype: 'checkboxgroup'
+                                        ,anchor: '100%'
+                                        ,hideLabel: false
+                                        ,labelWidth: 100
+                                        ,hidden: config.record.repeattype == 1 ? false : true // hide on load
+                                        ,items: [
+                                        {boxLabel: _('mxcalendars.label_sunday'), name: 'cb-auto-1', value: -1, checked: config.record.repeaton.indexOf(',-1,')!=-1 ? true : false },
+                                        {boxLabel: _('mxcalendars.label_monday'), name: 'cb-auto-2', value: 0, checked: config.record.repeaton.indexOf(',0,')!=-1 ? true : false },
+                                        {boxLabel: _('mxcalendars.label_tuesday'), name: 'cb-auto-3', value: 1, checked: config.record.repeaton.indexOf(',1,')!=-1 ? true : false },
+                                        {boxLabel: _('mxcalendars.label_wednesday'), name: 'cb-auto-4', value: 2, checked: config.record.repeaton.indexOf(',2,')!=-1 ? true : false },
+                                        {boxLabel: _('mxcalendars.label_thursday'), name: 'cb-auto-5', value: 3, checked: config.record.repeaton.indexOf(',3,')!=-1 ? true : false },
+                                        {boxLabel: _('mxcalendars.label_friday'), name: 'cb-auto-6', value: 4, checked: config.record.repeaton.indexOf(',4,')!=-1 ? true : false },
+                                        {boxLabel: _('mxcalendars.label_saturday'), name: 'cb-auto-7', value: 5, checked: config.record.repeaton.indexOf(',5,')!=-1 ? true : false }
+                                        ]
+                                        ,value: config.record.repeaton
+                                    },
+                                    {
+                                        fieldLabel: _('mxcalendars.label_repeat_frequency')
+                                        ,name: 'repeatfrequency'
+                                        ,id: 'crepeatfrequency'
+                                        ,xtype: 'combo'
+                                        ,mode: 'local'
+                                        ,hideLabel: false
+                                        ,labelWidth: 100
+                                        ,anchor: '100%'
+                                        ,store: new Ext.data.ArrayStore({
+                                            id: 0,
+                                            fields: ['counter'],
+                                            data: [[],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26],[27],[28],[29],[30]]
+                                        })
+                                        ,triggerAction: 'all'
+                                        ,displayField: 'counter'
+                                        ,valueField: 'counter'
+                                        ,editable: true
+                                        ,value: config.record.repeatfrequency
+                                        ,listeners: {
+                                            render: function(c) {
+                                            Ext.QuickTips.register({
+                                                target: c.getEl(),
+                                                text: _('mxcalendars.tip_repeaton')
+                                            });
+                                            }
+                                        }
+                                    },{
+                                        fieldLabel: _('mxcalendars.label_repeat_last_occurance')
+                                        ,name: 'repeatenddate'
+                                        ,id: 'crepeatenddate'
+                                        ,hideLabel: false
+                                        ,labelWidth: 100
+                                        ,anchor: '100% 100%'
+                                        ,format    : mxcCore.config.mgr_dateformat
+                                        ,allowBlank:false
+                                        ,xtype: 'datefield'
+                                        ,value: config.record.repeatenddate
+                                        ,submitValue: false
+                                    }
+                                ]
                             }
-                            ,value: config.record.repeattype
-			},{
-			    fieldLabel: _('mxcalendars.label_repeaton')
-			    ,name: 'repeaton'
-                ,id: 'crepeaton'
-			    ,xtype: 'checkboxgroup'
-                ,hidden: config.record.repeattype == 1 ? false : true // hide on load
-			    ,items: [
-                    {boxLabel: _('mxcalendars.label_sunday'), name: 'cb-auto-1', value: -1, checked: config.record.repeaton.indexOf(',-1,')!=-1 ? true : false },
-                    {boxLabel: _('mxcalendars.label_monday'), name: 'cb-auto-2', value: 0, checked: config.record.repeaton.indexOf(',0,')!=-1 ? true : false },
-                    {boxLabel: _('mxcalendars.label_tuesday'), name: 'cb-auto-3', value: 1, checked: config.record.repeaton.indexOf(',1,')!=-1 ? true : false },
-                    {boxLabel: _('mxcalendars.label_wednesday'), name: 'cb-auto-4', value: 2, checked: config.record.repeaton.indexOf(',2,')!=-1 ? true : false },
-                    {boxLabel: _('mxcalendars.label_thursday'), name: 'cb-auto-5', value: 3, checked: config.record.repeaton.indexOf(',3,')!=-1 ? true : false },
-                    {boxLabel: _('mxcalendars.label_friday'), name: 'cb-auto-6', value: 4, checked: config.record.repeaton.indexOf(',4,')!=-1 ? true : false },
-                    {boxLabel: _('mxcalendars.label_saturday'), name: 'cb-auto-7', value: 5, checked: config.record.repeaton.indexOf(',5,')!=-1 ? true : false }
-			    ]
-                ,value: config.record.repeaton
-			},{
-			    fieldLabel: _('mxcalendars.label_repeat_frequency')
-			    ,name: 'repeatfrequency'
-                ,id: 'crepeatfrequency'
-			    ,xtype: 'combo'
-			    ,mode: 'local'
-			    ,store: new Ext.data.ArrayStore({
-				    id: 0,
-				    fields: ['counter'],
-				    data: [[],[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26],[27],[28],[29],[30]]
-			    })
-			    ,displayField: 'counter'
-			    ,valueField: 'counter'
-			    ,editable: true
-			    ,width: 100
-                ,layout:'anchor'
-                ,anchor: '100% 100%'
-                ,value: config.record.repeatfrequency
-                ,msgTarget : 'crepeatfrequency'
-                ,msgDisplay: 'block'
-                ,listeners: {
-                    render: function(c) {
-                      Ext.QuickTips.register({
-                        target: c.getEl(),
-                        text: _('mxcalendars.tip_repeaton')
-                      });
-                    }
-                }
-			},{
-			    fieldLabel: _('mxcalendars.label_repeat_last_occurance')
-			    ,name: 'repeatenddate'
-                ,id: 'crepeatenddate'
-                ,width: 120
-                ,layout:'anchor'
-                ,anchor: '100% 100%'
-                ,format    : mxcCore.config.mgr_dateformat
-			    ,allowBlank:false
-			    ,xtype: 'datefield'
-                ,value: config.record.repeatenddate
-                ,submitValue: false
-			}]
+                        ]
 		    },{
-			xtype: 'container'
-			,anchor: '100%'
-			,layout: 'form'
-			,items: [
+                xtype: 'container'
+                ,anchor: '100%'
+                ,layout: 'form'
+                ,items: [
 			    {
 				xtype:'tabpanel'
 				,plain:true
@@ -818,11 +829,9 @@ mxcCore.window.CreateCal = function(config) {
     });
     mxcCore.window.CreateCal.superclass.constructor.call(this,config);
      this.on('deactivate',function(w,e) {
-        if(MODx.config.use_editor && MODx.loadRTE) {
-            if (typeof tinyMCE !== 'undefined') {
-                tinyMCE.execCommand('mceRemoveControl',false, 'cdescription-'+config.record.id);
-                tinyMCE.execCommand('mceRemoveControl',false, 'ccontent-'+config.record.id);
-            }
+        if(MODx.config.use_editor && MODx.loadRTE && typeof tinyMCE !== 'undefined'){
+            tinyMCE.execCommand('mceRemoveControl',false, 'cdescription-'+config.record.id);
+            tinyMCE.execCommand('mceRemoveControl',false, 'ccontent-'+config.record.id);
         }
     },this);
 
@@ -1466,16 +1475,16 @@ mxcCore.window.UpdateCal = function(config) {
                 //console.log("frmData: "+frmData);
 
 		mxcCore.ajax.request({
-            url: mxcCore.config.connectorUrl,
-            extraParams: {
-                //action: 'mgr/events/update'
-            },
+			url: mxcCore.config.connectorUrl,
+                        extraParams: {
+			    //action: 'mgr/events/update'
+			},
 			params: frmData,
 			scope: this,
 			success: function(resp, opts) {
                                 // remove the RTE instances
-                                if (MODx.config.use_editor && MODx.loadRTE) {
-                                    if (typeof tinyMCE !== 'undefined') {
+                                if (MODx.config.use_editor && MODx.loadRTE && typeof tinyMCE !== 'undefined'){
+                                    if(typeof tinyMCE !== "undefined"){
                                         tinyMCE.execCommand('mceRemoveControl',false, 'description-'+frmData.id);
                                         tinyMCE.execCommand('mceRemoveControl',false, 'content-'+frmData.id);
                                     }
@@ -1499,11 +1508,9 @@ mxcCore.window.UpdateCal = function(config) {
     mxcCore.window.UpdateCal.superclass.constructor.call(this,config);
 
     this.on('deactivate',function(w,e) {
-        if(MODx.config.use_editor && MODx.loadRTE) {
-            if (typeof tinyMCE !== 'undefined') {
-                tinyMCE.execCommand('mceRemoveControl',false, 'description-'+config.record.id);
-                tinyMCE.execCommand('mceRemoveControl',false, 'content-'+config.record.id);
-            }
+        if(MODx.config.use_editor && MODx.loadRTE && typeof tinyMCE !== 'undefined'){
+            tinyMCE.execCommand('mceRemoveControl',false, 'description-'+config.record.id);
+            tinyMCE.execCommand('mceRemoveControl',false, 'content-'+config.record.id);
         }
     },this);
 
