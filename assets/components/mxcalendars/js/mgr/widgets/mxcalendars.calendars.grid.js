@@ -65,7 +65,7 @@ mxcCore.grid.calendars = function(config) {
     mxcCore.grid.calendars.superclass.constructor.call(this,config)
 };
 Ext.extend(mxcCore.grid.calendars,MODx.grid.Grid,{
-    search: function(tf,nv,ov) {textfield
+    search: function(tf,nv,ov) {
         var s = this.getStore();
         s.baseParams.query = tf.getValue();
         this.getBottomToolbar().changePage(1);

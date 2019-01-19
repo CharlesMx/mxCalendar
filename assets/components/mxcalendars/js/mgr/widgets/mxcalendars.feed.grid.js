@@ -85,7 +85,7 @@ mxcCore.grid.feeds = function(config) {
     mxcCore.grid.feeds.superclass.constructor.call(this,config)
 };
 Ext.extend(mxcCore.grid.feeds,MODx.grid.Grid,{
-    search: function(tf,nv,ov) {textfield
+    search: function(tf,nv,ov) {
         var s = this.getStore();
         s.baseParams.query = tf.getValue();
         this.getBottomToolbar().changePage(1);

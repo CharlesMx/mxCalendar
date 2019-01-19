@@ -76,7 +76,7 @@ mxcCore.grid.categories = function(config) {
     mxcCore.grid.categories.superclass.constructor.call(this,config)
 };
 Ext.extend(mxcCore.grid.categories,MODx.grid.Grid,{
-    search: function(tf,nv,ov) {textfield
+    search: function(tf,nv,ov) {
         var s = this.getStore();
         s.baseParams.query = tf.getValue();
         this.getBottomToolbar().changePage(1);
