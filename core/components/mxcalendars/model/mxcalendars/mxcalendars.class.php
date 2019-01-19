@@ -19,9 +19,11 @@ class mxCalendars {
         
         $basePath = $this->modx->getOption('mxcalendars.core_path',$config,$this->modx->getOption('core_path').'components/mxcalendars/');
         $assetsUrl = $this->modx->getOption('mxcalendars.assets_url',$config,$this->modx->getOption('assets_url').'components/mxcalendars/');
+
         $descriptionEditorMode = $this->modx->getOption('mxcalendars.event_desc_type','htmleditor');
         $categoryRequired = $this->modx->getOption('mxcalendars.category_required','true');
         $this->loggingEnabled = $this->modx->getOption('mxcalendars.mgr_log_enable', 0);
+
         $this->config = array_merge(array(
             'basePath' => $basePath,
             'corePath' => $basePath,
@@ -431,9 +433,9 @@ class mxCalendars {
             //------//
             $headingLabel = strtotime($mStartDate);
             $globalParams = array('conf'=>$conFilter, 'calf'=>$calFilter);
-            $todayLink = $this->modx->makeUrl($ajaxMonthResourceId,'', array_merge($globalParams, array('dt' => strftime('%Y-%m'), 'cid'=>$_REQUEST['cid'])));
-            $prevLink = $this->modx->makeUrl($ajaxMonthResourceId,'', array_merge($globalParams, array('dt' => $prevMonth, 'cid'=>$_REQUEST['cid'])));
-            $nextLink = $this->modx->makeUrl($ajaxMonthResourceId,'', array_merge($globalParams, array('dt' => $nextMonth, 'cid'=>$_REQUEST['cid'])));
+            $todayLink = $this->modx->makeUrl($ajaxMonthResourceId,'', array_merge($globalParams, array('dt' => strftime('%Y-%m'), 'cid'=>$_REQUEST['cid'])), 'full');
+            $prevLink = $this->modx->makeUrl($ajaxMonthResourceId,'', array_merge($globalParams, array('dt' => $prevMonth, 'cid'=>$_REQUEST['cid'])), 'full');
+            $nextLink = $this->modx->makeUrl($ajaxMonthResourceId,'', array_merge($globalParams, array('dt' => $nextMonth, 'cid'=>$_REQUEST['cid'])), 'full');
             
             $chunkEvent = $this->loadChunk($tpls->event);
             $chunkDay = $this->loadChunk($tpls->day);
@@ -441,7 +443,7 @@ class mxCalendars {
             $chunkMonth = $this->loadChunk($tpls->month);
             
             $heading = '';
-	        $startDOW = $this->modx->getOption('mxcalendars.start_monday') ? 1 : 0;
+		    $startDOW = $this->modx->getOption('mxcalendars.start_monday') ? 1 : 0;
             for($i=0;$i<7;$i++){
 	                $numberDOW = $startDOW + $i;
                     if($this->debug) echo '&nbsp;&nbsp;'.strftime('%A', strtotime("+ {$numberDOW} day", $startMonthCalDate)).'<br />';
@@ -608,16 +610,16 @@ class mxCalendars {
             $mxcalendarsCats = $this->modx->getCollection('mxCalendarCategories', $c);
             // iterate
             // $list = array();
-            // $output .= '<ul><li class="'.(!$filteredCategoryId ? 'mxcactivecat' : '').'"><a href="'.$this->modx->makeUrl($resourceId,'','' ).'">View All</a></li>';
+            // $output .= '<ul><li class="'.(!$filteredCategoryId ? 'mxcactivecat' : '').'"><a href="'.$this->modx->makeUrl($resourceId,'','' , 'full').'">View All</a></li>';
             $name = $this->modx->lexicon('mxcalendars.label_category_viewAll');
             $catClass = (!$filteredCategoryId ? 'mxcactivecat' : '');
-            $link = $this->modx->makeUrl($resourceId,'','');
+            $link = $this->modx->makeUrl($resourceId,'','', 'full');
             $output .= $this->getChunk($tpls->tplCategoryItem, array('class'=> $catClass,'link'=>$link, 'name'=>$name) );
             foreach ($mxcalendarsCats as $mxc) {
                 // $list[] = $mxc->toArray();
                 $id = $mxc->get('id');;
                 $vals = $mxc->toArray();
-                $vals['link'] = $this->modx->makeUrl($resourceId,'',array('cid' => $id ) );
+                $vals['link'] = $this->modx->makeUrl($resourceId,'',array('cid' => $id ), 'full');
                 $vals['class'] = ($filteredCategoryId == $id ? 'mxcactivecat' : '');
                 $output .= $this->getChunk($tpls->tplCategoryItem, $vals );
                 // $output .= '<li class="'.($filteredCategoryId == $id ? 'mxcactivecat' : '').'"><a href="'.$catURL.'">'.$mxc->get('name').'</a></li>';

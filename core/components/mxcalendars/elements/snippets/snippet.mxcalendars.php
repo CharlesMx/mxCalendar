@@ -411,7 +411,8 @@ if(count($arrEventDates)){
                 $oDetails['startdate_fstamp'] = $e['date']; 
                 $oDetails['enddate_fstamp'] = $arrEventsDetail[$e['eventId']]['enddate'];
                 
-                $oDetails['detailURL'] = $modx->makeUrl((!empty($ajaxResourceId) && (bool)$modalView === true ? $ajaxResourceId : $resourceId),'',array('detail' => $e['eventId'], 'r'=>$e['repeatId']));
+                $isAjax = ((bool)$modalView === true && !empty($ajaxResourceId)) || (isset($_REQUEST['imajax']) && $_REQUEST['imajax'] == 1);
+                $oDetails['detailURL'] = $modx->makeUrl(($isAjax ? $ajaxResourceId : $resourceId),'',array('detail' => $e['eventId'], 'r'=>$e['repeatId'], 'imajax' => ($isAjax ? 1 : 0)), 'full');
                 $eventsArr[strftime('%Y-%m-%d', $e['date'])][] = $oDetails;
                 $ulimit++;
                 if($debug) echo $cnt.')&nbsp;&nbsp;&nbsp;&nbsp;'.$ulimit.'['.$limit.']) '.strftime($dateFormat,$e['date']).' '.$e['eventId'].'<br />';
