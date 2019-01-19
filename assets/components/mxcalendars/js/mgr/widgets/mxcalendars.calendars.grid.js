@@ -42,7 +42,7 @@ mxcCore.grid.calendars = function(config) {
         }],tbar:[{
                 xtype: 'textfield'
                 ,id: 'mxcalendars-search-calendars-filter'
-                ,emptyText:_('mxcalendars.default_calendar_search')
+                ,emptyText:_('mxcalendars.calendar_default_calendar_search')
                 ,listeners: {
                         'change': {fn:this.search,scope:this}
                         ,'render': {fn: function(cmp) {
