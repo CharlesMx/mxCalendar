@@ -73,7 +73,7 @@ $modalSetWidth = $modx->getOption('modalSetWidth', $scriptProperties,null); //--
 $modalSetHeight =$modx->getOption('modalSetHeight', $scriptProperties,null); //-- Ver > 0.0.3-beta
 //@TODO Possibly add to the properties set
 //++Location Specific options for Google Maps v3.x
-$gmapLib = $modx->getOption('gmapLib', $scriptProperties, 'http://maps.google.com/maps/api/js?sensor=false');
+$gmapLib = $modx->getOption('gmapLib', $scriptProperties, 'https://maps.google.com/maps/api/js');
 $gmapId = $modx->getOption('gmapId',$scriptProperties, 'map');
 $gmapDefaultZoom = $modx->getOption('gmapDefaultZoom', $scriptProperties, '13');
 $gmapAPIKey = $modx->getOption('gmapAPIKey', $scriptProperties, 'null');

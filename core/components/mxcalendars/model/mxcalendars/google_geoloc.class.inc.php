@@ -34,18 +34,23 @@ if(!class_exists("geoLocator")){
         
         public function getGEO($address = '')
         {
-            if(empty($address)){
+            if(empty($address)) {
                 //-- Couuld place Default address here 
                 //echo '<br />No address provided.<br />';
                 exit;
-            }
-            else
+            } else {
                 $this->address = $address;
-                
-                
+
+            }
+
             // Desired address
-            $fullurl = 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($address).'&sensor=true'. (!empty($this->region) ? '&region='.$this->region : '');
-            $string .= file_get_contents($fullurl); // get json content
+            $fullurl = 'https://maps.googleapis.com/maps/api/geocode/json?key='.$this->apikey.'&address='.urlencode($address). (!empty($this->region) ? '&region='.$this->region : '');
+            $string = file_get_contents($fullurl); // get json content
+
+//            echo "geo fullURL: " . $fullurl;
+//            echo "geoCODING RESPONSE: ";
+//            var_dump($string);
+
             $json_a = json_decode($string); //json decoder
 
                 if($this->debug){

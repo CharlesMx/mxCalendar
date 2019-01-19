@@ -42,12 +42,13 @@ class mxCalendars {
             'mgr_allday_start' => $this->modx->getOption('mxcalendars.mgr_allday_start', '', '8:00 am'),
             'mgr_allday_end' => $this->modx->getOption('mxcalendars.mgr_allday_end', '', '5:00 pm'),
             'isAdministrator' => $this->modx->user->isMember('Administrator'),
-        ),$config);
+            'gmapAPIKey' => $this->modx->getOption('gmapAPIKey', '', 'null'),
+        ), $config);
+
         $this->modx->addPackage('mxcalendars',$this->config['modelPath']);
         $this->modx->getService('lexicon','modLexicon');
         $this->modx->lexicon->load('mxcalendars:default');
-        
-        
+
     }
     
 	/*
@@ -124,48 +125,46 @@ class mxCalendars {
 		}
 		return $chunk;
 	}
-        
-        private function _getMap($address=null,$gmapRegion='',$width='500px',$height='500px', $gmapLib='http://maps.google.com/maps/api/js?sensor=false'){
-            $googleMap = '';
-            $gmapLocations = '';
-            //-- Add google Map API
-            if($address){
-                    include_once('google_geoloc.class.inc');
-                    //-- Output the Address results
-                    if(class_exists("geoLocator") && $address){
-                        //-- Split addresses for multiple points on the map
-                        $addressList = explode('|', $address);
 
-                        $mygeoloc = new geoLocator;
-                        $mygeoloc->region = $gmapRegion;
-                        //$mygeoloc->host = $this->config['GOOGLE_MAP_HOST'];
-                        //$mygeoloc->apikey = $this->config['GOOGLE_MAP_KEY'];
-                        //$mygeoloc->canvas = $this->config['mxcGoogleMapDisplayCanvasID'];
-                        //$mygeoloc->autofitmap = (count($addressList) > 1 ? true : false);
+    private function _getMap($address = null, $gmapRegion = '', $width = '500px', $height = '500px', $gmapLib = 'https://maps.google.com/maps/api/js')
+    {
+        $googleMap = '';
+        $gmapLocations = '';
+        //-- Add google Map API
+        if ($address) {
+            include_once('google_geoloc.class.inc.php');
 
-                        foreach($addressList as $loc){
-                            $mygeoloc->getGEO($loc);
-                        }
+            //-- Output the Address results
+            if (class_exists("geoLocator")) {
+                //-- Split addresses for multiple points on the map
+                $addressList = explode('|', $address);
 
-                        $googleMap = '<div id="map_canvas" style="width:'.$width.'; height:'.$height.';"></div>';
-                        $gmapLocations = $mygeoloc->mapJSv3;  
-                    } else {
-                        $googleMap = 'No class found.';
-                    }
-                    return $googleMap.'<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-                        <script type="text/javascript">
-                                // -- mxCalendar :: location map -- //
-                                function initialize() {
-                                    //'.$gmapLocations.'
-                                };
+                $mygeoloc = new geoLocator;
+                $mygeoloc->region = $gmapRegion;
+                $mygeoloc->apikey = $this->config['gmapAPIKey'];
 
-                                if (window.attachEvent) {window.attachEvent(\'onload\', initialize);}
-                                else if (window.addEventListener) {window.addEventListener(\'load\', initialize, false);}
-                                else {document.addEventListener(\'load\', initialize, false);}
+                foreach ($addressList as $loc) {
+                    $mygeoloc->getGEO($loc);
+                }
 
-                        </script>';
+                $googleMap = '<div id="map_canvas" style="width:' . $width . '; height:' . $height . ';"></div>';
+                $gmapLocations = $mygeoloc->mapJSv3;
+            } else {
+                $googleMap = 'No class found.';
             }
+
+            return $googleMap . '
+                                <script type="text/javascript">
+                                    // -- mxCalendar :: location map -- //
+                                    var map;
+                                    function initMap() {
+                                        ' . $gmapLocations . '
+                                    }
+                                </script>
+                                <script src="https://maps.googleapis.com/maps/api/js?key='.$this->config['gmapAPIKey'].'&callback=initMap" async defer></script>';
         }
+        return null;
+    }
         
         public function addShadowBox($initialWidth,$initialHeight){
             $shadowPath = $this->config['assetsUrl'].'js/web/shadowbox/sa/';
