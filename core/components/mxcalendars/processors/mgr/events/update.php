@@ -104,12 +104,17 @@ if ($modx->error->hasError()) {
     return $modx->error->failure($modx->lexicon('mxcalendars.err_pre_save'));
 }
 
+// Hotfix for FE changing default values
+if (is_string($scriptProperties['repeatfrequency'])) {
+    $scriptProperties['repeatfrequency'] = null;
+}
+
 //-- Set mxcalendar fields
 $mxcalendar->fromArray($scriptProperties);
  
 //-- Try to update calendar item
 if ($mxcalendar->save() == false) {
-    return $modx->error->failure('bb: '.$modx->lexicon('mxcalendars.err_save'));
+    return $modx->error->failure($modx->lexicon('mxcalendars.err_save'));
 }
 
 //-- Return success message if no error was found on update (save)
