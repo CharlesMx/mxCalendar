@@ -9,7 +9,7 @@ $tstart = explode(' ', microtime());
 $tstart = $tstart[1] + $tstart[0];
 set_time_limit(0);
 
-/* define package names */
+/* Define package names */
 define('PKG_EXTRA_NAME', 'mxCalendars');
 define('PKG_NAME', 'mxCalendars');
 define('PKG_NAME_LOWER', 'mxcalendars');
@@ -34,7 +34,6 @@ $sources = array(
 );
 unset($root);
 
-/* override with your own defines here (see build.config.sample.php) */
 require_once $sources['build'] . 'build.config.php';
 require_once MODX_CORE_PATH . 'model/modx/modx.class.php';
 
@@ -45,32 +44,47 @@ $modx->setLogLevel(modX::LOG_LEVEL_INFO);
 $modx->setLogTarget('ECHO');
 
 $modx->loadClass('transport.modPackageBuilder', '', false, true);
+
+/* Builder */
 $builder = new modPackageBuilder($modx);
 $builder->directory = dirname(dirname(__FILE__)) . '/_package/';
 $builder->createPackage(PKG_EXTRA_NAME, PKG_VERSION, PKG_RELEASE);
 $builder->registerNamespace(PKG_NAME_LOWER, false, true, '{core_path}components/' . PKG_NAME_LOWER . '/');
 
+
 //-- CREATE THE CATEGORY OBJECT
+
 $category = $modx->newObject('modCategory');
 $category->set('id', 1);
 $category->set('category', PKG_NAME);
 
-/* add snippets */
+/* Add snippets */
+
 $modx->log(modX::LOG_LEVEL_INFO, 'Packaging in snippets...');
 $snippets = include $sources['data'] . 'transport.snippets.php';
 if (empty($snippets)) $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in snippets.');
-$category->addMany($snippets);
+if (is_array($snippets)) {
+    $category->addMany($snippets);
+} else {
+    $modx->log(modX::LOG_LEVEL_ERROR, 'Adding snippets failed.');
+}
+$modx->log(modX::LOG_LEVEL_INFO,'... packaged in '.count($snippets).' snippet(s).');
+flush();
 
-/* add chunks */
+/* Add chunks */
+
+$modx->log(modX::LOG_LEVEL_INFO,'Packaging in chunks...');
 $chunks = include $sources['data'] . 'transport.chunks.php';
 if (is_array($chunks)) {
     $category->addMany($chunks);
 } else {
     $modx->log(modX::LOG_LEVEL_ERROR, 'Adding chunks failed.');
 }
+$modx->log(modX::LOG_LEVEL_INFO,'... packaged in '.count($chunks).' chunk(s).');
+flush();
 
+/* Create category vehicle */
 
-/* create category vehicle */
 $attr = array(
     xPDOTransport::UNIQUE_KEY => 'category',
     xPDOTransport::PRESERVE_KEYS => false,
@@ -89,9 +103,12 @@ $attr = array(
         ),
     ),
 );
+
 $vehicle = $builder->createVehicle($category, $attr);
+
 //-- Add file resolvers to get actual files added to the category
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding file resolvers to category...');
+
 $vehicle->resolve('file', array(
     'source' => $sources['source_assets'],
     'target' => "return MODX_ASSETS_PATH . 'components/';",
@@ -100,9 +117,11 @@ $vehicle->resolve('file', array(
     'source' => $sources['source_core'],
     'target' => "return MODX_CORE_PATH . 'components/';",
 ));
+
 $builder->putVehicle($vehicle);
 
 /* Settings */
+
 $settings = include $sources['data'] . 'transport.settings.php';
 if (!is_array($settings)) {
     $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in settings.');
@@ -121,7 +140,8 @@ if (!is_array($settings)) {
 unset($settings, $setting, $attributes);
 
 
-//-- ADD IN THE CONTEXT MENU ITEMS 
+//-- ADD IN THE CONTEXT MENU ITEMS
+
 $modx->log(modX::LOG_LEVEL_INFO, 'Packaging in menu...');
 $menu = include $sources['data'] . 'transport.menu.php';
 if (empty($menu)) $modx->log(modX::LOG_LEVEL_ERROR, 'Could not package in menu.');
@@ -139,31 +159,39 @@ $vehicle = $builder->createVehicle($menu, array(
     ),
 ));
 
-
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding in PHP resolvers...');
+
 $vehicle->resolve('php', array(
     'source' => $sources['resolvers'] . 'resolve.tables.php',
 ));
+
 $builder->putVehicle($vehicle);
 unset($vehicle, $menu);
 
+
 //-- ADD DOCS (changelog, license) TO THE PACKAGE
+
 $modx->log(modX::LOG_LEVEL_INFO, 'Adding package attributes and setup options...');
+
 $builder->setPackageAttributes(array(
     'license' => file_get_contents($sources['docs'] . 'license.txt'),
-    'readme' => file_get_contents($sources['docs'] . 'readme.txt'),
+    'readme' => file_get_contents($sources['docs'] . 'readme.md'),
     'changelog' => file_get_contents($sources['docs'] . 'changelog.txt'),
     'setup-options' => array(
         'source' => $sources['build'] . 'setup.options.php',
     ),
 ));
 
-/* zip up package */
+/* Zip up package */
+
 $modx->log(modX::LOG_LEVEL_INFO, 'Packing up transport package zip...');
+
 $builder->pack();
 
 $tend = explode(" ", microtime());
 $tend = $tend[1] + $tend[0];
 $totalTime = sprintf("%2.4f s", ($tend - $tstart));
+
 $modx->log(modX::LOG_LEVEL_INFO, "\n<br />Package Built.<br />\nExecution time: {$totalTime}\n");
+
 exit ();
