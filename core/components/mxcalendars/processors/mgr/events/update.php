@@ -114,4 +114,3 @@ if ($mxcalendar->save() == false) {
 
 //-- Return success message if no error was found on update (save)
 return $modx->error->success('',$mxcalendar);
-?>

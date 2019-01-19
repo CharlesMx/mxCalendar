@@ -139,5 +139,3 @@ foreach ($mxcalendars as $mxc) {
     $list[]= $mxcArray;
 }
 return $this->outputArray($list,$count);
-
-?>

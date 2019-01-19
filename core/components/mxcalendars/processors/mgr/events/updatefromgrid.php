@@ -101,5 +101,3 @@ if ($mxcalendar->save() == false) {
 }
  
 return $modx->error->success('',$mxcalendar);
-
-?>

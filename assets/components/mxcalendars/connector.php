@@ -16,5 +16,3 @@ $modx->request->handleRequest(array(
     'processors_path' => $path,
     'location' => '',
 )); 
-
-?>
