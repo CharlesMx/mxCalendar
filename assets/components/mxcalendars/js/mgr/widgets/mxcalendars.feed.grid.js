@@ -139,7 +139,7 @@ mxcCore.window.UpdateFeed = function(config) {
     Ext.applyIf(config,{
         title: _('mxcalendars.feed_menu_update')
         ,url: mxcCore.config.connectorUrl
-        ,width: 'auto'
+        ,width: 400
         ,baseParams: {
             action: 'mgr/feed/update'
         }
@@ -217,7 +217,7 @@ mxcCore.window.CreateFeed = function(config) {
     Ext.applyIf(config,{
         title: _('mxcalendars.feed_btn_create')
         ,url: mxcCore.config.connectorUrl
-        ,width: 'auto'
+        ,width: 400
         ,baseParams: {
             action: 'mgr/feed/create'
         }

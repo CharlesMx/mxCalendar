@@ -139,7 +139,7 @@ mxcCore.window.UpdateCat = function(config) {
     Ext.applyIf(config,{
         title: ''+_('mxcalendars.label_window_create')
         ,url: mxcCore.config.connectorUrl
-        ,width: 'auto'
+        ,width: 650
         ,baseParams: {
             action: 'mgr/calendar/update'
         }
@@ -169,7 +169,7 @@ mxcCore.window.CreateCal = function(config) {
     Ext.applyIf(config,{
         title: ''+_('mxcalendars.label_window_create')
         ,url: mxcCore.config.connectorUrl
-        ,width: 'auto'
+        ,width: 650
         ,baseParams: {
             action: 'mgr/calendar/create'
         }
