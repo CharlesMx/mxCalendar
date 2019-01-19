@@ -6,14 +6,16 @@ mxCalendar 1.1.12-pl
 - Temporarily patch save-error to restore functionality
 - Update German lexicon
 
-====================================
+==================================== 
 mxCalendar 1.1.11-pl
-====================================
-- Shorten chunk description so installation works
-- Fix translated label_dow keys
-- Update German lexicon
+==================================== 
+Bug fixes for the following:
+#161 - Support versions of Modx 2.3 upto 2.6
+#169 - Duplicate of #161
+#171 - Repeating event display issue on Modx version >= 2.3  
+#174 - Support of version Modx.2.4 
 
-====================================
+==================================== 
 mxCalendar 1.1.10-pl
 ==================================== 
 Bug fixes for the following: 
