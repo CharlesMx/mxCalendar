@@ -130,7 +130,7 @@ $results = $modx->cacheManager->get($cacheElementKey, $cacheOptions);
  $feed = $modx->getObject('mxCalendarFeed', 10);
  if($feed){
      $feed->set('nextrunon', 0);
-     $feed-save();
+     $feed->save();
  }
 $mxcal->processFeeds($setFeedTZ);
 
@@ -434,34 +434,35 @@ switch ($displayType){
     case 'daily':
     case 'ical':
     case 'rss':
-        $output = $mxcal->makeEventList($eventListLimit, $eventsArr, array('tplElItem'=>$tplElItem, 'tplElMonthHeading'=>$tplElMonthHeading, 'tplElWrap'=>$tplElWrap, 'tplImage'=>$tplImageItem, 'tplVideo'=>$tplVIdeoItem, 'tplNoEvents'=>$tplNoEvents),$elStartDate,$elEndDate);
+        $output = $mxcal->makeEventList($eventListLimit, $eventsArr, array('tplElItem'=>$tplElItem, 'tplElMonthHeading'=>$tplElMonthHeading, 'tplElWrap'=>$tplElWrap, 'tplImage'=>$tplImageItem, 'tplVideo'=>$tplVideoItem, 'tplNoEvents'=>$tplNoEvents),$elStartDate,$elEndDate);
         break;
     case 'calendar':
     case 'mini':
     default:
         $timer_10 = new makeProcessTime($time_start,$debug);
-        $output = $mxcal->makeEventCalendar($eventsArr,(!empty($ajaxResourceId) && $modalView? $ajaxResourceId : $resourceId),(!empty( $ajaxMonthResourceId) ?  $ajaxMonthResourceId : (!empty($ajaxResourceId) ? $ajaxResourceId : $resourceId) ),array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading, 'tplImage'=>$tplImageItem, 'tplVideo'=>$tplVIdeoItem), $contextFilter, $calendarFilter, $highlightToday);
+        $output = $mxcal->makeEventCalendar($eventsArr,(!empty($ajaxResourceId) && $modalView? $ajaxResourceId : $resourceId),(!empty( $ajaxMonthResourceId) ?  $ajaxMonthResourceId : (!empty($ajaxResourceId) ? $ajaxResourceId : $resourceId) ),array('event'=>$tplEvent,'day'=>$tplDay,'week'=>$tplWeek,'month'=>$tplMonth,'heading'=>$tplHeading, 'tplImage'=>$tplImageItem, 'tplVideo'=>$tplVideoItem), $contextFilter, $calendarFilter, $highlightToday);
         $timer_10->end('UI Rendering');
         break;
     case 'year':
         break;
     case 'detail':
-        if($debug) $output .= 'Total Occurances: '.count($eventsArr).' for Event ID: '.$_REQUEST['detail'].'<br />';
-        if(isset($resourceId) && $modx->resource->get('id') != $resourceId)
-                $tplDetail = $tplDetailModal;
-        $output .= $mxcal->makeEventDetail($eventsArr,($occurance=$_REQUEST['r']?$_REQUEST['r']:0) , array('tplDetail'=>$tplDetail, 'tplImage'=>$tplImageItem, 'tplVideo'=>$tplVIdeoItem),$mapWidth,$mapHeight,$gmapRegion);
+        if ($debug) $output .= 'Total Occurances: ' . count($eventsArr) . ' for Event ID: ' . $_REQUEST['detail'] . '<br />';
+        if (isset($resourceId) && $modx->resource->get('id') != $resourceId) {
+            $tplDetail = $tplDetailModal;
+        }
+        $output .= $mxcal->makeEventDetail($eventsArr, ($occurance = $_REQUEST['r'] ? $_REQUEST['r'] : 0), array('tplDetail' => $tplDetail, 'tplImage' => $tplImageItem, 'tplVideo' => $tplVideoItem), $mapWidth, $mapHeight, $gmapRegion);
         //$whereArr[0]['AND:id:='] = (int)$_REQUEST['detail']; //@TODO Make filter for single events repeating dates
         break;
 }
 
 //-- Always allow the category list placeholder to be set
-if($showCategories == true)
-    $modx->setPlaceholder('categories', $mxcal->makeCategoryList($labelCategoryHeading, ($_REQUEST['cid'] ? $_REQUEST['cid'] : null),$resourceId, array('tplCategoryWrap'=>$tplCategoryWrap, 'tplCategoryItem'=>$tplCategoryItem)));
+if ($showCategories == true)
+    $modx->setPlaceholder('categories', $mxcal->makeCategoryList($labelCategoryHeading, ($_REQUEST['cid'] ? $_REQUEST['cid'] : null), $resourceId, array('tplCategoryWrap' => $tplCategoryWrap, 'tplCategoryItem' => $tplCategoryItem)));
 
 $mxcal->restoreTimeZone($debugTimezone);
 $time_end = microtime(true);
 $time = $time_end - $time_start;
-if($debug) echo "<br /><small>mxCalendar processed in $time seconds</small><br /><br />\n";
+if ($debug) echo "<br /><small>mxCalendar processed in $time seconds</small><br /><br />\n";
 
 
 $modx->cacheManager->set($cacheElementKey, $output, $cacheExpires, $cacheOptions);
