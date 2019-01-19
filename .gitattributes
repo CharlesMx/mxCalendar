@@ -1,0 +1,20 @@
+# Autodetect text files
+* text=auto
+
+# Force the following filetypes to have unix eols, so Windows does not break them
+*.* text eol=lf
+
+# Leave Media alone
+*.jpg -text diff
+*.jpeg -text diff
+*.gif -text diff
+*.png -text diff
+*.pdf -text diff
+
+# Leave Webfonts alone
+*.otf -text diff
+*.eot -text diff
+*.svg -text diff
+*.ttf -text diff
+*.woff -text diff
+*.woff2 -text diff
