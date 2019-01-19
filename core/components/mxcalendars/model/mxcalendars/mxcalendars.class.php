@@ -1,8 +1,6 @@
 <?php
 /**
- * mxCalendar
- * 
- * Version: 1.1.10-beta1
+ * mxCalendar Class
  *  
  */
 

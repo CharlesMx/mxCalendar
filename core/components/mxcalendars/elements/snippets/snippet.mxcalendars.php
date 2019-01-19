@@ -1,8 +1,6 @@
 <?php
 /**
- * mxCalendar 
- * 
- * version: 1.1.10-pl
+ * mxCalendar Snippet
  *  
  */
 
