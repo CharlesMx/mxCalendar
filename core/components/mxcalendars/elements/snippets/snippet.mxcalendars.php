@@ -103,8 +103,17 @@ if ($calendarFilter = (isset($_REQUEST['calf']) ? $_REQUEST['calf'] : $modx->get
 // Could be blank (ie show all contexts).
 if ($contextFilter = ','.(isset($_REQUEST['conf']) ? $_REQUEST['conf'] : $modx->getOption('contextFilter',$scriptProperties, $modx->context->key))) {
     // Adding comma for retrieving events that are context-agnostic (ie have blank context).
+    if ($debug) {
+        echo 'Adding contextFilter from conf-request <br>';
+    }
     $contextFilter = ",{$contextFilter}";
 }
+if ($debug) {
+    echo 'New contextFilter: <br>';
+    var_dump($contextFilter);
+    echo '<br><br>';
+}
+
 //++ Form Chunk Filter match name
 $formFilter = $modx->getOption('formFilter',$scriptProperties,'form_');
 
@@ -410,9 +419,19 @@ if(count($arrEventDates)){
                 
                 $oDetails['startdate_fstamp'] = $e['date']; 
                 $oDetails['enddate_fstamp'] = $arrEventsDetail[$e['eventId']]['enddate'];
-                
+
                 $isAjax = ((bool)$modalView === true && !empty($ajaxResourceId)) || (isset($_REQUEST['imajax']) && $_REQUEST['imajax'] == 1);
+                if ($debug) echo 'Is Ajax? ' . var_export($isAjax, true);
+                if ($debug) {
+                    echo 'modalView? ' . var_export($modalView, true);
+                    echo 'isset imajax? ' . var_export(isset($_REQUEST['imajax']), true);
+                    echo 'imajax = 1? ' . var_export($_REQUEST['imajax'] == 1, true);
+                }
                 $oDetails['detailURL'] = $modx->makeUrl(($isAjax ? $ajaxResourceId : $resourceId),'',array('detail' => $e['eventId'], 'r'=>$e['repeatId'], 'imajax' => ($isAjax ? 1 : 0)), 'full');
+
+                if ($debug) {
+                    echo '<br>Generated detailURL: ' . var_export($oDetails['detailURL'], true) . '<br>';
+                }
                 $eventsArr[strftime('%Y-%m-%d', $e['date'])][] = $oDetails;
                 $ulimit++;
                 if($debug) echo $cnt.')&nbsp;&nbsp;&nbsp;&nbsp;'.$ulimit.'['.$limit.']) '.strftime($dateFormat,$e['date']).' '.$e['eventId'].'<br />';
