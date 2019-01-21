@@ -1,10 +1,19 @@
 Changelog file for mxCalendar component.
 
 ====================================
-mxCalendar 1.1.12-pl
+mxCalendar 1.1.12-rc
 ====================================
 - Temporarily patch save-error to restore functionality
 - Update German lexicon
+- Shorten chunk description so installation works
+- Fix translated label_dow keys
+- Fix some JS errors
+- Add month labels to lexica
+- Add french and italian lexica
+- Fix tiny/editor settings
+- Set widths on grids
+- Fix Google-Maps/-Geolocation
+- Generate URLs fully, for multi-context support
 
 ==================================== 
 mxCalendar 1.1.11-pl
