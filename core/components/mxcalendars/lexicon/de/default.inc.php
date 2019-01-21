@@ -126,6 +126,7 @@ $_lang['mxcalendars.repeating_last_occ_col_label'] = 'Letzte Wiederholung';
 
 $_lang['mxcalendars.label_startdate'] = 'Start Datum/Zeit';
 $_lang['mxcalendars.label_starttime'] = 'Startzeit';
+$_lang['mxcalendars.starttime_strftime_format'] = '%R';
 $_lang['mxcalendars.label_title'] = 'Name / Titel';
 $_lang['mxcalendars.label_enddate'] = 'Ende Datum/Zeit';
 $_lang['mxcalendars.label_duplicate'] = 'Duplizieren';

@@ -14,6 +14,7 @@ mxCalendar 1.1.12-rc
 - Set widths on grids
 - Fix Google-Maps/-Geolocation
 - Generate URLs fully, for multi-context support
+- Add time-format to lexicon
 
 ==================================== 
 mxCalendar 1.1.11-pl
