@@ -525,7 +525,7 @@ class mxCalendars {
                                 $el['imagesTotal'] = $imgIdx;
                             } 
                             
-                            $el['startdate'] = strftime('%l:%M %p', $el['startdate']);
+                            $el['startdate'] = strftime($this->modx->lexicon('mxcalendars.starttime_strftime_format'), $el['startdate']);
                             $el['startdateraw'] = $el['startdate']; //-- Add for full control via output modifier 
                             
                             
@@ -549,7 +549,7 @@ class mxCalendars {
                     $isToday = (strftime('%m-%d') == strftime('%m-%d', $iDay) && $highlightToday==true ? 'today ' : '');
                     $dayMonthName = strftime('%b',$iDay);
                     $dayMonthDay =  strftime('%d',$iDay);
-                    $dayMonthDay = (strftime('%d',$iDay) == 1 ? strftime('%b ',$iDay).( substr($dayMonthDay,0,1) == '0' ? ' '.substr($dayMonthDay,1) : $dayMonthDay ) : ( substr($dayMonthDay,0,1) == '0' ? ' '.substr($dayMonthDay,1) : $dayMonthDay ));
+                    $dayMonthDay = (strftime('%d',$iDay) == 1 ? $this->modx->lexicon('mxcalendars.label_month_'.strftime('%m',$iDay).'_short'). ' ' .( substr($dayMonthDay,0,1) == '0' ? ' '.substr($dayMonthDay,1) : $dayMonthDay ) : ( substr($dayMonthDay,0,1) == '0' ? ' '.substr($dayMonthDay,1) : $dayMonthDay ));
                     $phDay = array(
                         //'dayOfMonth'=> str_replace('0', ' ', (strftime('%d',$iDay) == 1 ? strftime('%b %d',$iDay) : strftime('%d',$iDay)))
                         'dayOfMonth' => $dayMonthDay

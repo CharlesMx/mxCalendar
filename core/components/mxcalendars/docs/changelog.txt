@@ -15,6 +15,7 @@ mxCalendar 1.1.12-rc
 - Fix Google-Maps/-Geolocation
 - Generate URLs fully, for multi-context support
 - Add time-format to lexicon
+- Add short month-name to lexicon
 
 ==================================== 
 mxCalendar 1.1.11-pl
