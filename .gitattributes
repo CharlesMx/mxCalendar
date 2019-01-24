@@ -9,12 +9,3 @@
 *.jpeg -text diff
 *.gif -text diff
 *.png -text diff
-*.pdf -text diff
-
-# Leave Webfonts alone
-*.otf -text diff
-*.eot -text diff
-*.svg -text diff
-*.ttf -text diff
-*.woff -text diff
-*.woff2 -text diff
