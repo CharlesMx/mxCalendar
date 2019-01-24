@@ -11,6 +11,8 @@ mxcCore.grid.events = function(config) {
         ,autoExpandColumn: 'name'
         ,save_action: 'mgr/events/updatefromgrid' // Support the inline editing
 	    ,autosave: true // Support the inline editing
+        ,stateful: true
+        ,stateId: 'mxcGridEvents'
         ,columns: [
 			// add the grid columns to the display
 			 {header: _('id'),dataIndex: 'id',sortable: true,width:40}
@@ -19,7 +21,6 @@ mxcCore.grid.events = function(config) {
             ,{header: _('mxcalendars.grid_col_context'), dataIndex:'context',editor: { xtype: 'mxc-combo-context', renderer: true }}
             ,{header: _('mxcalendars.grid_col_calendar'), dataIndex:'calendar_id',editor: { xtype: 'mxc-combo-calendar', renderer: true }}
             ,{header: _('mxcalendars.categoryid_col_label'),dataIndex: 'catfriendly',sortable: true,width:80}
-			//,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate',sortable: true}
 			,{header: _('mxcalendars.startdate_col_label'),dataIndex: 'startdate',sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat, editable:false, editor:{xtype:'datefield', format:mxcCore.config.mgr_dateformat}}
 			,{header: _('mxcalendars.starttime_col_label'), dataIndex: 'startdate_time', sortable:false,width:60, editor:{ xtype:'timefield', format: mxcCore.config.mgr_timeformat}}
 			,{header: _('mxcalendars.enddate_col_label'),dataIndex: 'enddate',sortable: true,width:60, xtype : 'datecolumn',format:mxcCore.config.mgr_dateformat, editable:false, editor:{xtype:'datefield',format:mxcCore.config.mgr_dateformat}}
