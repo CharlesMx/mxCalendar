@@ -16,6 +16,8 @@ mxCalendar 1.1.12-rc
 - Generate URLs fully, for multi-context support
 - Add time-format to lexicon
 - Add short month-name to lexicon
+- Make event-grid stateful
+- Add start_monday setting
 
 ==================================== 
 mxCalendar 1.1.11-pl
