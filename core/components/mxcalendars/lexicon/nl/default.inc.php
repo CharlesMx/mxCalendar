@@ -1,5 +1,6 @@
 <?php
 $_lang['mxcalendars'] = 'mxCalendar';
+$_lang['mxcalendars.component_title'] = 'mxCalendar';
 $_lang['mxcalendars.desc'] = 'Beheer hier je agenda\'s.';
 $_lang['mxcalendars.name'] = 'Naam';
 $_lang['mxcalendars.description'] = 'Omschrijving';
@@ -37,6 +38,10 @@ $_lang['mxcalendars.label_description'] = 'Omschrijving';
 $_lang['mxcalendars.label_location'] = 'Locatie';
 $_lang['mxcalendars.label_name'] = 'Naam';
 $_lang['mxcalendars.label_address'] = 'Adres';
+$_lang['mxcalendars.label_price'] = 'Price';
+$_lang['mxcalendars.label_food'] = 'Food';
+$_lang['mxcalendars.label_age'] = 'Age';
+$_lang['mxcalendars.label_capacity'] = 'Capacity';
 $_lang['mxcalendars.label_display_map'] = 'Toon kaart';
 $_lang['mxcalendars.label_link'] = 'Link';
 $_lang['mxcalendars.label_link_rel'] = 'Link Rel';
@@ -58,19 +63,31 @@ $_lang['mxcalendars.label_dow_4'] = 'Donderdag';
 $_lang['mxcalendars.label_dow_5'] = 'Vrijdag';
 $_lang['mxcalendars.label_dow_6'] = 'Zaterdag';
 $_lang['mxcalendars.label_dow_7'] = 'Zondag';
+$_lang['mxcalendars.label_allday'] = 'All Day Event';
 $_lang['mxcalendars.label_daily'] = 'Dagelijks';
 $_lang['mxcalendars.label_weekly'] = 'Weeklijks';
 $_lang['mxcalendars.label_monthly'] = 'Maandelijks';
 $_lang['mxcalendars.label_yearly'] = 'Jaarlijks';
 $_lang['mxcalendars.label_forms'] = 'Formulier';
 $_lang['mxcalendars.label_images'] = 'Images';
+$_lang['mxcalendars.label_select_image'] = 'Image';
+$_lang['mxcalendars.btn_create_image'] = 'Add Image';
 $_lang['mxcalendars.image_filepath'] = 'File Path';
+$_lang['mxcalendars.label_videos'] = 'Videos';
+$_lang['mxcalendars.label_select_video'] = 'Video';
+$_lang['mxcalendars.btn_create_video'] = 'Add Video';
+$_lang['mxcalendars.video_filepath'] = 'Video Path';
+$_lang['mxcalendars.label_create'] = 'Create';
+$_lang['mxcalendars.menu_update'] = 'Update';
+$_lang['mxcalendars.menu_remove'] = 'Remove';
+$_lang['mxcalendars.default_search'] = 'Search ...';
 $_lang['mxcalendars.err_ae'] = 'Een agenda item met deze naam bestaat al.';
 $_lang['mxcalendars.err_nf'] = 'Agendapunt id niet gevonden.';
 $_lang['mxcalendars.err_ns'] = 'Record niet gevonden voor update.';
 $_lang['mxcalendars.err_ns_name'] = 'Geef aub een naam voor het agendapunt.';
 $_lang['mxcalendars.err_ns_title'] = 'Geef aub een titel voor het agendpunt.';
 $_lang['mxcalendars.err_remove'] = 'Bij verwijdering van agendapunt heeft zich een fout voorgedaan.';
+$_lang['mxcalendars.err_pre_save'] = 'There are errors that need to be fixed prior to saving.';
 $_lang['mxcalendars.err_save'] = 'Bij het opslaan van het agendapunt heeft zich een fout voorgedaan.';
 $_lang['mxcalendars.err_event_req_name'] = 'Naam is noodzakelijk';
 $_lang['mxcalendars.err_event_req_category'] = 'Categorie is noodzakelijk';
@@ -78,13 +95,14 @@ $_lang['mxcalendars.err_event_req_startdate'] = 'Begindatum is noodzakelijk';
 $_lang['mxcalendars.err_event_req_starttime'] = 'Begintijd is noodzakelijk';
 $_lang['mxcalendars.err_event_req_enddate'] = 'Einddatum is noodzakelijk';
 $_lang['mxcalendars.err_event_req_endtime'] = 'Eindtijd is noodzakelijk';
+$_lang['mxcalendars.err_event_req_context'] = 'Context is required';
 $_lang['mxcalendars.label_select_context_err'] = 'Alle sites';
 $_lang['mxcalendars.err_event_req_repeattype'] = 'Herhalingstype is noodzakelijk voor een zich herhalend agendapunt';
 $_lang['mxcalendars.err_event_req_repeatfrequency'] = 'Herhaal elke, frequentie, is noodzakelijk voor een zich herhalend agendapunt';
 $_lang['mxcalendars.err_event_req_repeatenddate'] = 'Een einddatum is noodzakelijk voor een zich herhalend agendapunt.';
 $_lang['mxcalendars.err_event_req_repeaton'] = 'Vindt plaats op (selectie) is noodzakelijk voor wekelijks herhalende agendapunten.';
 $_lang['mxcalendars.err_event_req_validcat'] = 'Er is geen geldige id gevonden voor de standaard of gepubliceerde categorie, zorg er aub voor dat een geldige categorie is aangemaakt.';
-
+$_lang['mxcalendars.notice_no_events'] = 'No events found';
 
 $_lang['mxcalendars.mxcalendars_remove_confirm'] = 'Weet je zeker dat je dit agendapunt wilt verwijderen?';
 $_lang['mxcalendars.downloads'] = 'Downloads';
@@ -114,10 +132,14 @@ $_lang['mxcalendars.label_select_form_err'] = 'Selecteer een geldig formulier ch
 $_lang['mxcalendars.btn_show_past_events'] = 'Terugblik';
 $_lang['mxcalendars.btn_show_upcoming_events'] = 'Vooruitblik';
 $_lang['mxcalendars.tip_repeaton'] = 'Herhaal elke ___ (dagen|weken|maanden|jaren).<br /><br />Stel de herhalingsfrequentie in voor het type (dagelijks, weeklijks, maandelijks, jaarlijks) zoals hierboven gekozen.';
+
+$_lang['mxcalendars.label_content'] = 'Content';
+
 //$_lang['mxcalendars.'] = '';
 
 //-- Category Management
 $_lang['mxcalendars.category_desc'] = 'Beheer de categorieën waar elk agendapunt aan gekoppeld kan worden. Voor elke categorie is een voor- en achtergrond kleur in te stellen';
+$_lang['mxcalendars.err_category_ac'] = 'Category with the same name allready exists, please enter another name.';
 $_lang['mxcalendars.label_window_create'] = 'Maak een nieuwe categorie';
 $_lang['mxcalendars.category_name_col_label'] = 'Naam';
 $_lang['mxcalendars.category_isdefault_col_label'] = 'Is standaard';
@@ -132,7 +154,6 @@ $_lang['mxcalendars.btn_create_cat'] = 'Maak een nieuwe categorie';
 $_lang['mxcalendars.default_category_search'] = "Zoek categorie...";
 $_lang['mxcalendars.menu_update_category'] = 'Update categorie';
 $_lang['mxcalendars.menu_remove_category'] = 'Verwijder categorie';
-
 $_lang['mxcalendars.label_category_heading'] = 'Categorieën:';
 $_lang['mxcalendars.label_category_viewAll'] = 'Laat allen zien';
 
@@ -144,13 +165,13 @@ $_lang['mxcalendars.set_mgr_timeformat'] = 'Tijd formaat';
 
 //-- Calendar Management
 $_lang['mxcalendars.calendar_desc'] = 'Beheer agenda\'s waar evenementen aan toegevoegd kunnen worden, maak er zoveel als nodig.';
-
 $_lang['mxcalendars.err_ac'] = 'Fout bij opslaan agenda, probeer opnieuw.';
 $_lang['mxcalendars.calendar_name_col_label'] = 'Naam';
 $_lang['mxcalendars.calendar_name_col_active'] = 'Actief';
 $_lang['mxcalendars.calendar_default_calendar_search'] = 'Zoek ...';
 $_lang['mxcalendars.calendar_btn_create'] = 'Maak nieuwe agenda';
-
+$_lang['mxcalendars.calendar_remove_title'] = 'Remove calendar.';
+$_lang['mxcalendars.calendar_remove_confirm'] = 'Do you realy want to remove selected calendar?';
 
 $_lang['mxcalendars.calendar_context_menu_update'] = 'Update';
 $_lang['mxcalendars.calendar_context_menu_remove'] = 'Verwijder';
@@ -159,6 +180,46 @@ $_lang['mxcalendars.label_select_calendar'] = 'Selecteer agenda';
 $_lang['mxcalendars.label_select_calendar_err'] = 'Agenda niet gevonden';
 $_lang['mxcalendars.grid_col_calendar'] = 'Agenda';
 
+//-- Feed lexicon entries
+$_lang['mxcalendars.tab_feed'] = 'Feeds';
+$_lang['mxcalendars.feed_desc'] = 'Enter an external site iCalendar or XML feed url that is public accessible via your server.';
+$_lang['mxcalendars.default_feed_search'] = 'Search Feeds';
+$_lang['mxcalendars.feed_btn_create'] = 'Create New Feed';
+$_lang['mxcalendars.feed_menu_update'] = 'Update Feed';
+$_lang['mxcalendars.feed_menu_remove'] = 'Remove Feed';
+$_lang['mxcalendars.feed_remove_title'] = 'Confirm Removal of Feed';
+$_lang['mxcalendars.feed_remove_confirm'] = 'This will remove the feed completely from the database and no further import actions will take place.';
+$_lang['mxcalendars.feed_col_feed'] = 'Feed URL';
+$_lang['mxcalendars.feed_col_active'] = 'Active';
+$_lang['mxcalendars.feed_col_type'] = 'Type';
+$_lang['mxcalendars.lastrunon_col_label'] = 'Last Update';
+$_lang['mxcalendars.nextrunon_col_label'] = 'Next Update';
+$_lang['mxcalendars.label_default'] = 'Default';
+$_lang['mxcalendars.source'] = 'Source';
+$_lang['mxcalendars.label_feedmeasurementtime'] = 'Enter number of units';
+$_lang['mxcalendars.label_feedmeasurementtype'] = 'Timer type';
+$_lang['mxcalendars.err_feed_req_feed'] = 'Please enter Feed URL';
+$_lang['mxcalendars.err_feed_req_default_category'] = 'Please select category';
+$_lang['mxcalendars.err_feed_req_type'] = 'Please enter Feed type';
 
+$_lang['mxcalendars.feed_type_label_select_empty'] = '--select--';
+$_lang['mxcalendars.measurement_type_label_select_empty'] = '--select--';
 
-?>
+//-- Event Images
+$_lang['mxcalendars.err_event_image_req_name'] = 'Please enter image title.';
+$_lang['mxcalendars.err_event_image_req_filepath'] = 'Please enter image path.';
+$_lang['mxcalendars.image_remove_title'] = 'Delete image.';
+$_lang['mxcalendars.image_remove_confirm'] = 'Do you realy want to delete selected image?';
+
+//-- Event Videos
+$_lang['mxcalendars.err_event_video_req_name'] = 'Please enter video title.';
+$_lang['mxcalendars.err_event_video_req_video'] = 'Please enter video path.';
+$_lang['mxcalendars.video_remove_title'] = 'Delete video.';
+$_lang['mxcalendars.video_remove_confirm'] = 'Do you realy want to delete selected video?';
+
+//-- System settings
+$_lang['setting_mxcalendars.tiny.buttons1'] = '1. row of TinyMCE buttons';
+$_lang['setting_mxcalendars.tiny.buttons2'] = '2. row of TinyMCE buttons';
+$_lang['setting_mxcalendars.tiny.buttons3'] = '3. row of TinyMCE buttons';
+$_lang['setting_mxcalendars.tiny.buttons4'] = '4. row of TinyMCE buttons';
+$_lang['setting_mxcalendars.tiny.buttons5'] = '5. row of TinyMCE buttons';

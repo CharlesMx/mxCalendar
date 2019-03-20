@@ -11,6 +11,10 @@
 	<field key="location_name" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
         <field key="location_address" dbtype="text" phptype="string" null="false" default=""/>
 	<field key="map" dbtype="boolean" phptype="boolean" null="false" default="0"/>
+        <field key="price" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="food" dbtype="text" phptype="string" null="true" />
+        <field key="age" dbtype="varchar" precision="255" phptype="string" null="false" default=""/>
+        <field key="capacity" dbtype="int" precision="3" phptype="string" null="false" default=""/>
 	<field key="allday" dbtype="boolean" phptype="boolean" null="false" default="0"/>
         <field key="startdate" dbtype="int" precision="20" phptype="integer" null="true"/>
 	<field key="enddate" dbtype="int" precision="20" phptype="integer" null="true"/>
