@@ -1,5 +1,6 @@
 <?php
 $_lang['mxcalendars'] = 'mxCalendar';
+$_lang['mxcalendars.component_title'] = 'mxCalendar';
 $_lang['mxcalendars.desc'] = 'Manage your calendar items here.';
 $_lang['mxcalendars.name'] = 'Name';
 $_lang['mxcalendars.description'] = 'Description';
@@ -37,6 +38,10 @@ $_lang['mxcalendars.label_description'] = 'Description';
 $_lang['mxcalendars.label_location'] = 'Location';
 $_lang['mxcalendars.label_name'] = 'Name';
 $_lang['mxcalendars.label_address'] = 'Address';
+$_lang['mxcalendars.label_price'] = 'Price';
+$_lang['mxcalendars.label_food'] = 'Food';
+$_lang['mxcalendars.label_age'] = 'Age';
+$_lang['mxcalendars.label_capacity'] = 'Capacity';
 $_lang['mxcalendars.label_display_map'] = 'Display Map';
 $_lang['mxcalendars.label_link'] = 'Link';
 $_lang['mxcalendars.label_link_rel'] = 'Link Rel';
@@ -134,6 +139,7 @@ $_lang['mxcalendars.label_content'] = 'Content';
 
 //-- Category Management
 $_lang['mxcalendars.category_desc'] = 'Manage the categories that each calendar item could be assigned to. You can also create custom colors for the foreground and background of each category.';
+$_lang['mxcalendars.err_category_ac'] = 'Category with the same name allready exists, please enter another name.';
 $_lang['mxcalendars.label_window_create'] = 'Create New Category';
 $_lang['mxcalendars.category_name_col_label'] = 'Name';
 $_lang['mxcalendars.category_isdefault_col_label'] = 'Is Default';
@@ -145,10 +151,9 @@ $_lang['mxcalendars.category_active_col_label'] = 'Active';
 $_lang['mxcalendars.cateogry_remove_title'] = 'Remove Category';
 $_lang['mxcalendars.cateogry_remove_confirm'] = 'Are you sure you want to remove this category?';
 $_lang['mxcalendars.btn_create_cat'] = 'Create New Category';
-$_lang['mxcalendars.default_category_search'] = "Search categories...";
+$_lang['mxcalendars.default_category_search'] = 'Search categories...';
 $_lang['mxcalendars.menu_update_category'] = 'Update Category';
 $_lang['mxcalendars.menu_remove_category'] = 'Remove Category';
-
 $_lang['mxcalendars.label_category_heading'] = 'Categories:';
 $_lang['mxcalendars.label_category_viewAll'] = 'View All';
 
@@ -160,13 +165,13 @@ $_lang['mxcalendars.set_mgr_timeformat'] = 'Time Format';
 
 //-- Calendar Management
 $_lang['mxcalendars.calendar_desc'] = 'Manage calendar\'s that events can be assigned to, create as many as you need.';
-
 $_lang['mxcalendars.err_ac'] = 'Error saving the calendar, please try again.';
 $_lang['mxcalendars.calendar_name_col_label'] = 'Name';
 $_lang['mxcalendars.calendar_name_col_active'] = 'Active';
 $_lang['mxcalendars.calendar_default_calendar_search'] = 'Search ...';
 $_lang['mxcalendars.calendar_btn_create'] = 'Create New Calendar';
-
+$_lang['mxcalendars.calendar_remove_title'] = 'Remove calendar.';
+$_lang['mxcalendars.calendar_remove_confirm'] = 'Do you realy want to remove selected calendar?';
 
 $_lang['mxcalendars.calendar_context_menu_update'] = 'Update';
 $_lang['mxcalendars.calendar_context_menu_remove'] = 'Remove';
@@ -178,7 +183,6 @@ $_lang['mxcalendars.grid_col_calendar'] = 'Calendar';
 //-- Feed lexicon entries
 $_lang['mxcalendars.tab_feed'] = 'Feeds';
 $_lang['mxcalendars.feed_desc'] = 'Enter an external site iCalendar or XML feed url that is public accessible via your server.';
-
 $_lang['mxcalendars.default_feed_search'] = 'Search Feeds';
 $_lang['mxcalendars.feed_btn_create'] = 'Create New Feed';
 $_lang['mxcalendars.feed_menu_update'] = 'Update Feed';
@@ -194,6 +198,28 @@ $_lang['mxcalendars.label_default'] = 'Default';
 $_lang['mxcalendars.source'] = 'Source';
 $_lang['mxcalendars.label_feedmeasurementtime'] = 'Enter number of units';
 $_lang['mxcalendars.label_feedmeasurementtype'] = 'Timer type';
+$_lang['mxcalendars.err_feed_req_feed'] = 'Please enter Feed URL';
+$_lang['mxcalendars.err_feed_req_default_category'] = 'Please select category';
+$_lang['mxcalendars.err_feed_req_type'] = 'Please enter Feed type';
 
 $_lang['mxcalendars.feed_type_label_select_empty'] = '--select--';
 $_lang['mxcalendars.measurement_type_label_select_empty'] = '--select--';
+
+//-- Event Images
+$_lang['mxcalendars.err_event_image_req_name'] = 'Please enter image title.';
+$_lang['mxcalendars.err_event_image_req_filepath'] = 'Please enter image path.';
+$_lang['mxcalendars.image_remove_title'] = 'Delete image.';
+$_lang['mxcalendars.image_remove_confirm'] = 'Do you realy want to delete selected image?';
+
+//-- Event Videos
+$_lang['mxcalendars.err_event_video_req_name'] = 'Please enter video title.';
+$_lang['mxcalendars.err_event_video_req_video'] = 'Please enter video path.';
+$_lang['mxcalendars.video_remove_title'] = 'Delete video.';
+$_lang['mxcalendars.video_remove_confirm'] = 'Do you realy want to delete selected video?';
+
+//-- System settings
+$_lang['setting_mxcalendars.tiny.buttons1'] = '1. row of TinyMCE buttons';
+$_lang['setting_mxcalendars.tiny.buttons2'] = '2. row of TinyMCE buttons';
+$_lang['setting_mxcalendars.tiny.buttons3'] = '3. row of TinyMCE buttons';
+$_lang['setting_mxcalendars.tiny.buttons4'] = '4. row of TinyMCE buttons';
+$_lang['setting_mxcalendars.tiny.buttons5'] = '5. row of TinyMCE buttons';
