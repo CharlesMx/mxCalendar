@@ -492,7 +492,7 @@ switch ($displayType){
                 'tplElWrap' => $tplElWrap,
                 'tplImage' => $tplImageItem,
                 'tplVideo' => $tplVideoItem,
-                'tplNoEvents' => $tplElItem
+                'tplNoEvents' => $tplNoEvents
             ),
             $elStartDate,
             $elEndDate
