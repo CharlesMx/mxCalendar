@@ -35,7 +35,7 @@ $eventListLimit = $modx->getOption('eventListlimit',$scriptProperties,'5');
 $sort = $modx->getOption('mxc.sort',$scriptProperties,'startdate');
 $dir = $modx->getOption('mxc.dir',$scriptProperties,'ASC');
 $limit = $modx->getOption('limit',$scriptProperties,'99');
-$limitstart = $modx->getOption('limitstart', $scriptProperties, 0);
+$offset = $modx->getOption('offset',$scriptProperties,0);
 //++ Text|Date Formatting properties
 $dateFormat = $modx->getOption('dateformat', $scriptProperties, '%Y-%m-%d');
 $timeFormat = $modx->getOption('timeformat', $scriptProperties, '%H:%M %p');
@@ -294,7 +294,13 @@ $c->where($whereArr);
 if($displayType !== 'detail') {
     $c->sortby($sort, $dir);
 }
-$c->limit($limit,$limitstart);
+
+$total = $modx->getCount('mxCalendarEvents',$c);
+$totalVar = $modx->getOption('totalVar', $scriptProperties, 'total');
+$modx->setPlaceholder($totalVar,$total);
+$offset = $modx->getOption('offset',$scriptProperties,0);
+
+$c->limit($limit, $offset);
 
 $c->prepare();
 if($debug) {
